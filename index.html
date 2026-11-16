@@ -118,7 +118,6 @@
       margin-bottom: 1.5rem;
     }
 
-    /* Quick Jump / Filter Buttons */
     .hero-actions {
       display: flex;
       justify-content: center;
@@ -380,8 +379,135 @@
       <nav>
         <a href="#simulations">Simulations</a>
         <a href="#practice">Practice Problems</a>
-        <a href="/about.html">About</a>
-        <a href="/privacy.html">Privacy Policy</a>
+        <a href="/about">About</a>
+        <a href="/privacy">Privacy Policy</a>
       </nav>
     </div>
   </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-inner">
+      <h1>Interactive Science Simulations &amp; Practice</h1>
+      <p>Visual browser-based laboratories and self-checking practice modules designed for students and educators.</p>
+      <div class="hero-actions">
+        <a href="#simulations" class="jump-link">Interactive Simulations (1)</a>
+        <a href="#practice" class="jump-link">Practice Problems (1)</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Hub Content -->
+  <main class="container">
+
+    <!-- Top Leaderboard Ad Slot -->
+    <div class="ad-banner-wrapper">
+      <span class="ad-label">Advertisement</span>
+      <div class="ad-banner-slot">
+        <!-- Replace data-ad-client and data-ad-slot with your AdSense unit values -->
+        <ins class="adsbygoogle"
+             style="display:block; width:100%;"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+             data-ad-slot="1234567890"
+             data-ad-format="horizontal"
+             data-full-width-responsive="true"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      </div>
+    </div>
+
+    <!-- SECTION 1: INTERACTIVE SIMULATIONS -->
+    <section id="simulations" class="library-section">
+      <div class="section-header">
+        <h2>Interactive Simulations</h2>
+        <span>Hands-on visual models and sandbox tools</span>
+      </div>
+
+      <div class="card-grid">
+        <!-- SIMULATION: Electron Configuration -->
+        <article class="card">
+          <div class="card-preview">
+            <svg viewBox="0 0 320 170">
+              <circle cx="160" cy="85" r="12" fill="#facc15"/>
+              <circle cx="160" cy="85" r="34" fill="none" stroke="#475569" stroke-width="1.5"/>
+              <circle cx="160" cy="51" r="5" fill="#38bdf8"/>
+              <circle cx="160" cy="119" r="5" fill="#38bdf8"/>
+              <circle cx="160" cy="85" r="62" fill="none" stroke="#475569" stroke-dasharray="4 3" stroke-width="1.5"/>
+              <circle cx="98" cy="85" r="5" fill="#4ade80"/>
+              <circle cx="222" cy="85" r="5" fill="#4ade80"/>
+              <circle cx="116" cy="41" r="5" fill="#4ade80"/>
+              <circle cx="204" cy="129" r="5" fill="#4ade80"/>
+            </svg>
+          </div>
+          <div class="card-body">
+            <div class="badge-row">
+              <span class="badge sim">Simulation</span>
+              <span class="badge subject">Chemistry</span>
+            </div>
+            <h3>Electron Configuration</h3>
+            <p>Build atoms across the periodic table and visualize orbital filling order, Aufbau principle, Hund's rule, and valence shells.</p>
+            <a href="/simulations/electron-configuration" class="btn-sim">Launch Simulation</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- SECTION 2: PRACTICE PROBLEMS -->
+    <section id="practice" class="library-section">
+      <div class="section-header">
+        <h2>Practice Problems</h2>
+        <span>Interactive drills and instant-feedback exercises</span>
+      </div>
+
+      <div class="card-grid">
+        <!-- PRACTICE: 5 Types of Reactions -->
+        <article class="card">
+          <div class="card-preview">
+            <svg viewBox="0 0 320 170">
+              <circle cx="70" cy="85" r="18" fill="#2dd4bf"/>
+              <text x="70" y="90" text-anchor="middle" fill="#0f172a" font-weight="bold" font-size="14" font-family="sans-serif">A</text>
+              
+              <text x="108" y="91" text-anchor="middle" fill="#94a3b8" font-weight="bold" font-size="18" font-family="sans-serif">+</text>
+              
+              <circle cx="145" cy="85" r="18" fill="#f472b6"/>
+              <text x="145" y="90" text-anchor="middle" fill="#0f172a" font-weight="bold" font-size="14" font-family="sans-serif">B</text>
+
+              <line x1="178" y1="85" x2="205" y2="85" stroke="#e2e8f0" stroke-width="2.5"/>
+              <polygon points="205,80 214,85 205,90" fill="#e2e8f0"/>
+
+              <circle cx="242" cy="85" r="18" fill="#2dd4bf"/>
+              <text x="242" y="90" text-anchor="middle" fill="#0f172a" font-weight="bold" font-size="14" font-family="sans-serif">A</text>
+              <circle cx="274" cy="85" r="18" fill="#f472b6"/>
+              <text x="274" y="90" text-anchor="middle" fill="#0f172a" font-weight="bold" font-size="14" font-family="sans-serif">B</text>
+            </svg>
+          </div>
+          <div class="card-body">
+            <div class="badge-row">
+              <span class="badge practice">Practice Set</span>
+              <span class="badge subject">Chemistry</span>
+            </div>
+            <h3>5 Types of Chemical Reactions</h3>
+            <p>Practice identifying synthesis, decomposition, single replacement, double replacement, and combustion equations with instant feedback.</p>
+            <a href="/practice/reactions" class="btn-practice">Start Practice</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-inner">
+      <div>&copy; 2026 STEMSimulators.org. All rights reserved.</div>
+      <div class="footer-links">
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        <a href="/privacy">Privacy Policy</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
