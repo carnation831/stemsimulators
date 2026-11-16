@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>STEM Simulators | Interactive Science &amp; Chemistry Demonstrations</title>
+  <meta name="description" content="Explore free interactive chemistry and science simulations in your browser. Visualize chemical reactions and electron configurations in real time.">
+
+  <!-- GLOBAL ADSENSE SCRIPT -->
+  <!-- Replace ca-pub-XXXXXXXXXXXXXXXX with your actual Google AdSense Publisher ID once approved -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+     crossorigin="anonymous"></script>
+
+  <style>
+    :root {
+      --bg-color: #f8fafc;
+      --surface-color: #ffffff;
+      --border-color: #e2e8f0;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --accent-color: #2563eb;
+      --accent-hover: #1d4ed8;
+      --badge-chem: #e0e7ff;
+      --badge-chem-text: #3730a3;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-primary);
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Navigation Header */
+    header {
+      background-color: var(--surface-color);
+      border-bottom: 1px solid var(--border-color);
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      text-decoration: none;
+      color: var(--text-primary);
+      font-weight: 800;
+      font-size: 1.25rem;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo span {
+      color: var(--accent-color);
+    }
+
+    nav {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: color 0.15s;
+    }
+
+    nav a:hover, nav a.active {
+      color: var(--accent-color);
+    }
+
+    /* Hero Banner */
+    .hero {
+      background-color: var(--surface-color);
+      border-bottom: 1px solid var(--border-color);
+      padding: 3.5rem 1.5rem;
+      text-align: center;
+    }
+
+    .hero-inner {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .hero h1 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.75rem;
+      color: var(--text-primary);
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+    }
+
+    /* Main Content Container */
+    .container {
+      max-width: 1100px;
+      width: 100%;
+      margin: 2.5rem auto;
+      padding: 0 1.5rem;
+      flex: 1;
+    }
+
+    /* Responsive Horizontal Leaderboard Ad Banner */
+    .ad-banner-wrapper {
+      margin-bottom: 2.5rem;
+      text-align: center;
+    }
+
+    .ad-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #94a3b8;
+      margin-bottom: 0.35rem;
+      display: block;
+    }
+
+    .ad-banner-slot {
+      background-color: #f1f5f9;
+      border: 1px dashed #cbd5e1;
+      border-radius: 8px;
+      min-height: 90px;
+      max-width: 970px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* Simulation Library Grid (2-Column Balanced Layout) */
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+      color: var(--text-primary);
+    }
+
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+    }
+
+    .demo-card {
+      background-color: var(--surface-color);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .demo-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px -5px rgba(15, 23, 42, 0.08);
+    }
+
+    .card-preview {
+      height: 180px;
+      background-color: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-preview svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .card-body {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .badge-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.65rem;
+    }
+
+    .badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .badge.chemistry {
+      background-color: var(--badge-chem);
+      color: var(--badge-chem-text);
+    }
+
+    .card-body h2 {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+    }
+
+    .card-body p {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+      flex: 1;
+    }
+
+    .btn-launch {
+      display: inline-block;
+      text-align: center;
+      background-color: var(--accent-color);
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 0.7rem 1rem;
+      border-radius: 6px;
+      transition: background-color 0.15s;
+    }
+
+    .btn-launch:hover {
+      background-color: var(--accent-hover);
+    }
+
+    /* Footer */
+    footer {
+      background-color: var(--surface-color);
+      border-top: 1px solid var(--border-color);
+      padding: 2rem 1.5rem;
+      margin-top: 4rem;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    .footer-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .footer-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+
+    .footer-links a:hover {
+      color: var(--accent-color);
+      text-decoration: underline;
+    }
+
+    @media (max-width: 640px) {
+      .hero h1 {
+        font-size: 1.75rem;
+      }
+      header {
+        padding: 1rem;
+      }
+      .footer-inner {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <header>
+    <div class="header-inner">
+      <a href="/" class="logo">STEM<span>Simulators</span>.org</a>
+      <nav>
+        <a href="/" class="active">Simulations</a>
+        <a href="/about.html">About</a>
+        <a href="/privacy.html">Privacy Policy</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-inner">
+      <h1>Interactive Science &amp; Chemistry Simulations</h1>
+      <p>Visual, browser-based laboratories designed to help students and educators explore scientific principles in real time.</p>
+    </div>
+  </section>
+
+  <!-- Main Hub Content -->
+  <main class="container">
+
+    <!-- Top Leaderboard Ad Slot -->
+    <div class="ad-banner-wrapper">
+      <span class="ad-label">Advertisement</span>
+      <div class="ad-banner-slot">
+        <!-- Replace data-ad-client and data-ad-slot with your AdSense unit values -->
+        <ins class="adsbygoogle"
+             style="display:block; width:100%;"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+             data-ad-slot="1234567890"
+             data-ad-format="horizontal"
+             data-full-width-responsive="true"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      </div>
+    </div>
+
+    <h2 class="section-title">Simulation Library</h2>
+
+    <!-- 2-Simulation Cards Grid -->
+    <div class="demo-grid">
+
+      <!-- SIMULATION 1: 5 Types of Reactions -->
+      <article class="demo-card">
+        <div class="card-preview">
+          <!-- Custom SVG Graphic representing Synthesis / Bond Rearrangement (A + B -> AB) -->
+          <svg viewBox="0 0 320 180">
+            <!-- Reactants A + B -->
+            <circle cx="70" cy="90" r="18" fill="#38bdf8"/>
+            <text x="70" y="95" text-anchor="middle" fill="#0f172a" font-weight="bold" font-size="14" font-family="sans-serif">A</text>
+            
+            <text x="108" y="96" text-anchor="middle" fill="#94a3b8" font-weight="bold" font-size="18" font-family="sans-serif">+</text>
+            
+            <circle cx="145" cy="90" r="18" fill="#f472b6"/>
+            <text x="145" y="95" text-anchor="middle" fill="#0f172a" font-weight="bold" font-size="14" font-family="sans-serif">B</text>
+
+            <!-- Reaction Arrow -->
+            <line x1="178" y1="90" x2="205" y2="90" stroke="#e2e8f0" stroke-width="2.5"/>
+            <polygon points="205,85 214,90 205,95" fill="#e2e8f0"/>
+
+            <!-- Product AB -->
+            <circle cx="242" cy="90" r="18" fill="#38bdf8"/>
+            <text x="242" y="95" text-anchor="middle" fill="#0f172a" font-weight="bold" font-size="14" font-family="sans-serif">A</text>
+            <circle cx="274" cy="90" r="18" fill="#f472b6"/>
+            <text x="274" y="95" text-anchor="middle" fill="#0f172a" font-weight="bold" font-size="14" font-family="sans-serif">B</text>
+          </svg>
+        </div>
+        <div class="card-body">
+          <div class="badge-row">
+            <span class="badge chemistry">Chemistry</span>
+          </div>
+          <h2>5 Types of Chemical Reactions</h2>
+          <p>Visualize synthesis, decomposition, single replacement, double replacement, and combustion reactions at the molecular level.</p>
+          <!-- Update href if your folder name differs -->
+          <a href="/demos/reactions/" class="btn-launch">Launch Simulation</a>
+        </div>
+      </article>
+
+      <!-- SIMULATION 2: Electron Configuration -->
+      <article class="demo-card">
+        <div class="card-preview">
+          <!-- Custom SVG Graphic representing Bohr Shells & Orbitals -->
+          <svg viewBox="0 0 320 180">
+            <!-- Nucleus -->
+            <circle cx="160" cy="90" r="12" fill="#facc15"/>
+            <!-- Inner Shell (1s) -->
+            <circle cx="160" cy="90" r="36" fill="none" stroke="#475569" stroke-width="1.5"/>
+            <circle cx="160" cy="54" r="5" fill="#38bdf8"/>
+            <circle cx="160" cy="126" r="5" fill="#38bdf8"/>
+            <!-- Outer Shell (2s/2p) -->
+            <circle cx="160" cy="90" r="66" fill="none" stroke="#475569" stroke-dasharray="4 3" stroke-width="1.5"/>
+            <circle cx="94" cy="90" r="5" fill="#4ade80"/>
+            <circle cx="226" cy="90" r="5" fill="#4ade80"/>
+            <circle cx="113" cy="43" r="5" fill="#4ade80"/>
+            <circle cx="207" cy="137" r="5" fill="#4ade80"/>
+          </svg>
+        </div>
+        <div class="card-body">
+          <div class="badge-row">
+            <span class="badge chemistry">Chemistry</span>
+          </div>
+          <h2>Electron Configuration</h2>
+          <p>Build atoms across the periodic table and explore orbital filling order, Aufbau principle, Hund's rule, and valence shells.</p>
+          <!-- Update href if your folder name differs -->
+          <a href="/demos/electron-configuration/" class="btn-launch">Launch Simulation</a>
+        </div>
+      </article>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-inner">
+      <div>&copy; 2026 STEMSimulators.org. All rights reserved.</div>
+      <div class="footer-links">
+        <a href="/">Home</a>
+        <a href="/about.html">About</a>
+        <a href="/privacy.html">Privacy Policy</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
