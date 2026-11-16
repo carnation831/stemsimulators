@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Electron Configuration & Orbital Builder (n = 1 to 4)</title>
+  <!-- Load Tailwind CSS for responsive, mobile-first styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f1f5f9;
+      color: #0f172a;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .font-mono-code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    /* Arrow drop-in animation for newly added electron */
+    @keyframes arrowPop {
+      0% { opacity: 0; transform: translateY(-10px) scale(0.75); }
+      70% { opacity: 1; transform: translateY(2px) scale(1.12); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .animate-arrow-pop {
+      animation: arrowPop 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    /* Subtle pulsing glow for active orbital box */
+    @keyframes boxGlow {
+      0%, 100% { box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.35); }
+      50% { box-shadow: 0 0 0 5px rgba(59, 130, 246, 0.15); }
+    }
+    .active-orbital-box {
+      border-color: #2563eb !important;
+      background-color: #eff6ff !important;
+      animation: boxGlow 2s infinite;
+    }
+    /* Spin rotation badge animation */
+    @keyframes spinClockwise {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes spinCounterClockwise {
+      from { transform: rotate(360deg); }
+      to { transform: rotate(0deg); }
+    }
+    .spin-up-ring {
+      animation: spinClockwise 4s linear infinite;
+    }
+    .spin-down-ring {
+      animation: spinCounterClockwise 4s linear infinite;
+    }
+    /* Interactive 3D orbital canvas cursor */
+    #orbital-3d-canvas {
+      touch-action: none;
+      cursor: grab;
+    }
+    #orbital-3d-canvas:active {
+      cursor: grabbing;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-900 py-4 px-3 sm:py-6 sm:px-6">
+
+  <!-- Main Application Container -->
+  <div class="w-full max-w-6xl mx-auto space-y-4">
+
+    <!-- ============================================================== -->
+    <!-- CLEAN TOP HEADER & COMPACT ELECTRON CONTROLS                   -->
+    <!-- ============================================================== -->
+    <header class="bg-white border border-slate-200/90 rounded-2xl px-4 py-3.5 sm:px-6 shadow-2xs flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+      <!-- Title & Live Element Badge -->
+      <div class="flex flex-wrap items-center gap-3">
+        <div class="flex items-center gap-2.5">
+          <span class="text-2xl" aria-hidden="true">⚛️</span>
+          <div>
+            <h1 class="font-extrabold text-base sm:text-lg tracking-tight text-slate-900 leading-tight">
+              Electron & Orbital Builder
+            </h1>
+            <p class="text-xs text-slate-500">Levels n = 1 to 4 (1s – 4p)</p>
+          </div>
+        </div>
+
+        <!-- Current Atom Pill Badge -->
+        <div id="header-atom-badge" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-sky-700 text-white text-xs sm:text-sm font-bold shadow-2xs transition-colors">
+          <span id="header-atom-text">H · Hydrogen (Z = 1)</span>
+        </div>
+      </div>
+
+      <!-- Uncluttered Step Controls & Element Dropdown -->
+      <div class="flex flex-wrap items-center gap-2">
+        <button
+          type="button"
+          id="btn-add-electron"
+          onclick="addElectron()"
+          class="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold px-3.5 py-2.5 rounded-xl shadow-2xs transition text-xs sm:text-sm flex items-center gap-1.5 cursor-pointer"
+        >
+          <span class="text-base leading-none">+</span>
+          <span>Add Electron</span>
+        </button>
+
+        <button
+          type="button"
+          id="btn-remove-electron"
+          onclick="removeElectron()"
+          class="bg-slate-100 hover:bg-slate-200 active:bg-slate-300 disabled:opacity-40 disabled:cursor-not-allowed text-slate-800 font-bold px-3.5 py-2.5 rounded-xl border border-slate-200 transition text-xs sm:text-sm cursor-pointer"
+        >
+          − Remove
+        </button>
+
+        <button
+          type="button"
+          id="btn-reset-electrons"
+          onclick="resetElectrons()"
+          class="bg-white hover:bg-rose-50 text-rose-600 font-bold px-3 py-2.5 rounded-xl border border-slate-200 hover:border-rose-200 transition text-xs sm:text-sm cursor-pointer"
+        >
+          Reset
+        </button>
+
+        <select
+          id="element-select"
+          onchange="setElectronCount(parseInt(this.value, 10) || 1)"
+          aria-label="Jump to element"
+          class="bg-slate-50 border border-slate-200 text-slate-800 text-xs sm:text-sm font-semibold rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+        >
+          <!-- Populated dynamically with Z = 1 to Z = 36 -->
+        </select>
+      </div>
+    </header>
+
+    <!-- ============================================================== -->
+    <!-- MAIN TWO-COLUMN WORKSPACE                                      -->
+    <!-- ============================================================== -->
+    <main class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
+
+      <!-- LEFT COLUMN (~48% -> 6 cols on 12-col or custom flex): 3D Orbital Stage + Latest Electron Strip -->
+      <section class="lg:col-span-5 xl:col-span-6 bg-white border border-slate-200/90 rounded-2xl p-4 sm:p-5 shadow-2xs flex flex-col justify-between gap-3.5">
+        <!-- Stage Top Bar -->
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h2 class="text-sm font-extrabold text-slate-900">3D Atomic Orbitals</h2>
+            <p class="text-[11px] text-slate-500">Drag to rotate (x, y, z) axes</p>
+          </div>
+
+          <!-- Compact Layer Toggle -->
+          <div class="inline-flex rounded-xl bg-slate-100 p-1 border border-slate-200/80">
+            <button
+              type="button"
+              id="btn-layer-all"
+              onclick="setLayerMode('all')"
+              class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-blue-700 shadow-2xs transition cursor-pointer"
+            >
+              All Orbitals Stacked
+            </button>
+            <button
+              type="button"
+              id="btn-layer-current"
+              onclick="setLayerMode('current')"
+              class="px-2.5 py-1 rounded-lg text-[11px] font-bold text-slate-600 hover:text-slate-900 transition cursor-pointer"
+            >
+              Current Shell Only
+            </button>
+          </div>
+        </div>
+
+        <!-- 3D Canvas Container -->
+        <div class="relative w-full rounded-2xl border border-slate-200/80 bg-gradient-to-b from-slate-50 via-white to-slate-100/70 overflow-hidden">
+          <canvas id="orbital-3d-canvas" class="w-full h-[340px] sm:h-[410px] block"></canvas>
+
+          <!-- Clean Phase & Spin Legend -->
+          <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-xs border border-slate-200/80 rounded-xl px-3 py-2 text-[11px] text-slate-700 shadow-2xs pointer-events-none space-y-1">
+            <div class="flex items-center gap-1.5">
+              <span class="inline-block w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+              <span class="inline-block w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+              <span class="font-semibold text-slate-600">Wave Phases (+ / −)</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-cyan-600 text-white font-black text-[10px]">↿</span>
+              <span>Up (+½)</span>
+              <span class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-pink-600 text-white font-black text-[10px]">⇂</span>
+              <span>Down (−½)</span>
+            </div>
+          </div>
+
+          <!-- Reset View Button -->
+          <button
+            type="button"
+            id="btn-reset-camera"
+            onclick="resetCameraAngle()"
+            class="absolute top-3 right-3 bg-white/90 hover:bg-white text-slate-700 border border-slate-200/80 rounded-xl px-2.5 py-1.5 text-[11px] font-bold shadow-2xs transition cursor-pointer"
+          >
+            Reset View
+          </button>
+        </div>
+
+        <!-- Compact 1-Line Latest Electron Status Strip -->
+        <div id="latest-strip-container" class="bg-slate-50 border border-slate-200/90 rounded-xl px-3.5 py-2.5 flex flex-col gap-1.5 text-xs transition-colors">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="font-bold uppercase tracking-wider text-[10px] text-slate-400">Latest e⁻</span>
+              <span id="latest-strip-summary" class="font-bold text-slate-800">
+                e⁻ #1 → Level n = 1 · Orbital 1s
+              </span>
+              <span id="latest-strip-rule" class="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-200/80">
+                Aufbau Principle
+              </span>
+            </div>
+            <span id="latest-strip-spin" class="font-mono-code font-bold px-2.5 py-0.5 rounded-lg text-[11px] bg-cyan-100 text-cyan-800 border border-cyan-200">
+              Spin Up ↿ (+½)
+            </span>
+          </div>
+          <p id="latest-strip-exception-note" class="hidden text-[11px] font-medium text-amber-900 leading-snug"></p>
+        </div>
+      </section>
+
+      <!-- RIGHT COLUMN (~52% -> 6 cols): Side-by-Side Electron Configuration & Orbital Notation -->
+      <section class="lg:col-span-7 xl:col-span-6 bg-white border border-slate-200/90 rounded-2xl p-4 sm:p-5 shadow-2xs flex flex-col">
+        <!-- Side-by-Side Comparison Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 flex-1">
+
+          <!-- Sub-Panel A (5 cols): Electron Configuration -->
+          <div class="sm:col-span-5 flex flex-col justify-between bg-slate-50/80 border border-slate-200/80 rounded-2xl p-3.5 sm:p-4">
+            <div class="space-y-4">
+              <div>
+                <h2 class="text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2">
+                  Electron Configuration
+                </h2>
+                <div id="full-electron-notation" class="font-mono-code text-sm sm:text-base bg-white border border-slate-200 text-slate-900 p-3 rounded-xl min-h-[5.5rem] flex flex-wrap content-start items-center gap-x-1.5 gap-y-1.5 leading-relaxed shadow-2xs">
+                  <span class="text-slate-400 italic text-xs font-sans">No electrons yet</span>
+                </div>
+              </div>
+
+              <div>
+                <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 block mb-1.5">
+                  Noble Gas Shorthand
+                </span>
+                <div id="noble-gas-notation" class="font-mono-code text-xs sm:text-sm font-bold bg-white border border-slate-200 text-indigo-700 px-3 py-2.5 rounded-xl shadow-2xs">
+                  —
+                </div>
+              </div>
+            </div>
+
+            <!-- Compact Shell Summary Footer -->
+            <div class="mt-4 pt-3 border-t border-slate-200/80">
+              <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block mb-1.5">
+                Electrons per Energy Level
+              </span>
+              <div class="grid grid-cols-4 gap-1.5 text-center">
+                <div class="bg-white border border-slate-200 rounded-lg py-1">
+                  <span class="text-[9px] font-bold text-slate-400 block">n=1</span>
+                  <span id="count-n1" class="text-xs font-extrabold text-slate-800">0</span>
+                </div>
+                <div class="bg-white border border-slate-200 rounded-lg py-1">
+                  <span class="text-[9px] font-bold text-slate-400 block">n=2</span>
+                  <span id="count-n2" class="text-xs font-extrabold text-slate-800">0</span>
+                </div>
+                <div class="bg-white border border-slate-200 rounded-lg py-1">
+                  <span class="text-[9px] font-bold text-slate-400 block">n=3</span>
+                  <span id="count-n3" class="text-xs font-extrabold text-slate-800">0</span>
+                </div>
+                <div class="bg-white border border-slate-200 rounded-lg py-1">
+                  <span class="text-[9px] font-bold text-slate-400 block">n=4</span>
+                  <span id="count-n4" class="text-xs font-extrabold text-slate-800">0</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sub-Panel B (7 cols): Orbital Notation (Boxes & Spin Arrows) -->
+          <div class="sm:col-span-7 flex flex-col bg-slate-50/80 border border-slate-200/80 rounded-2xl p-3.5 sm:p-4">
+            <div class="flex items-center justify-between gap-2 mb-2.5">
+              <h2 class="text-xs font-extrabold uppercase tracking-wider text-slate-500">
+                Orbital Notation (1s – 4p)
+              </h2>
+              <span class="text-[11px] font-semibold text-slate-400">↿ Up • ⇂ Down</span>
+            </div>
+
+            <!-- Compact Vertical Stack of Subshell Orbital Boxes -->
+            <div id="orbital-diagram-container" class="space-y-2 flex-1 flex flex-col justify-between">
+              <!-- Subshell rows rendered dynamically by JS -->
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    // =========================================================================
+    // PERIODIC TABLE DATA (Z = 0 TO Z = 36) & SUBSHELL DEFINITIONS
+    // =========================================================================
+    const ELEMENTS = [
+      { z: 0,  symbol: "—",  name: "Empty Atom",  color: "bg-slate-600" },
+      { z: 1,  symbol: "H",  name: "Hydrogen",    color: "bg-sky-700" },
+      { z: 2,  symbol: "He", name: "Helium",      color: "bg-indigo-700" },
+      { z: 3,  symbol: "Li", name: "Lithium",     color: "bg-rose-700" },
+      { z: 4,  symbol: "Be", name: "Beryllium",   color: "bg-amber-700" },
+      { z: 5,  symbol: "B",  name: "Boron",       color: "bg-teal-700" },
+      { z: 6,  symbol: "C",  name: "Carbon",      color: "bg-sky-700" },
+      { z: 7,  symbol: "N",  name: "Nitrogen",    color: "bg-sky-700" },
+      { z: 8,  symbol: "O",  name: "Oxygen",      color: "bg-sky-700" },
+      { z: 9,  symbol: "F",  name: "Fluorine",    color: "bg-emerald-700" },
+      { z: 10, symbol: "Ne", name: "Neon",        color: "bg-indigo-700" },
+      { z: 11, symbol: "Na", name: "Sodium",      color: "bg-rose-700" },
+      { z: 12, symbol: "Mg", name: "Magnesium",   color: "bg-amber-700" },
+      { z: 13, symbol: "Al", name: "Aluminum",    color: "bg-cyan-700" },
+      { z: 14, symbol: "Si", name: "Silicon",     color: "bg-teal-700" },
+      { z: 15, symbol: "P",  name: "Phosphorus",  color: "bg-sky-700" },
+      { z: 16, symbol: "S",  name: "Sulfur",      color: "bg-sky-700" },
+      { z: 17, symbol: "Cl", name: "Chlorine",    color: "bg-emerald-700" },
+      { z: 18, symbol: "Ar", name: "Argon",       color: "bg-indigo-700" },
+      { z: 19, symbol: "K",  name: "Potassium",   color: "bg-rose-700" },
+      { z: 20, symbol: "Ca", name: "Calcium",     color: "bg-amber-700" },
+      { z: 21, symbol: "Sc", name: "Scandium",    color: "bg-violet-700" },
+      { z: 22, symbol: "Ti", name: "Titanium",    color: "bg-violet-700" },
+      { z: 23, symbol: "V",  name: "Vanadium",    color: "bg-violet-700" },
+      { z: 24, symbol: "Cr", name: "Chromium",    color: "bg-amber-600" },
+      { z: 25, symbol: "Mn", name: "Manganese",   color: "bg-violet-700" },
+      { z: 26, symbol: "Fe", name: "Iron",        color: "bg-violet-700" },
+      { z: 27, symbol: "Co", name: "Cobalt",      color: "bg-violet-700" },
+      { z: 28, symbol: "Ni", name: "Nickel",      color: "bg-violet-700" },
+      { z: 29, symbol: "Cu", name: "Copper",      color: "bg-amber-600" },
+      { z: 30, symbol: "Zn", name: "Zinc",        color: "bg-violet-700" },
+      { z: 31, symbol: "Ga", name: "Gallium",     color: "bg-cyan-700" },
+      { z: 32, symbol: "Ge", name: "Germanium",   color: "bg-teal-700" },
+      { z: 33, symbol: "As", name: "Arsenic",     color: "bg-teal-700" },
+      { z: 34, symbol: "Se", name: "Selenium",    color: "bg-sky-700" },
+      { z: 35, symbol: "Br", name: "Bromine",     color: "bg-emerald-700" },
+      { z: 36, symbol: "Kr", name: "Krypton",     color: "bg-indigo-700" }
+    ];
+
+    const SUBSHELLS = [
+      { id: "1s", n: 1, lType: "s", orbitals: 1, orbitalLabels: ["1s"] },
+      { id: "2s", n: 2, lType: "s", orbitals: 1, orbitalLabels: ["2s"] },
+      { id: "2p", n: 2, lType: "p", orbitals: 3, orbitalLabels: ["2p_x", "2p_y", "2p_z"] },
+      { id: "3s", n: 3, lType: "s", orbitals: 1, orbitalLabels: ["3s"] },
+      { id: "3p", n: 3, lType: "p", orbitals: 3, orbitalLabels: ["3p_x", "3p_y", "3p_z"] },
+      { id: "4s", n: 4, lType: "s", orbitals: 1, orbitalLabels: ["4s"] },
+      { id: "3d", n: 3, lType: "d", orbitals: 5, orbitalLabels: ["3d_xy", "3d_xz", "3d_yz", "3d_x²-y²", "3d_z²"] },
+      { id: "4p", n: 4, lType: "p", orbitals: 3, orbitalLabels: ["4p_x", "4p_y", "4p_z"] }
+    ];
+
+    // Build standard 36-electron Aufbau filling sequence (1-indexed by eNum)
+    const ELECTRON_SEQUENCE = [null];
+    (function buildAufbauSequence() {
+      let eCounter = 1;
+      for (const sub of SUBSHELLS) {
+        // Hund's Rule: fill all orbitals in subshell with Spin Up (+1/2) first
+        for (let b = 0; b < sub.orbitals; b++) {
+          ELECTRON_SEQUENCE.push({
+            eNum: eCounter++,
+            subshellId: sub.id,
+            n: sub.n,
+            lType: sub.lType,
+            boxIndex: b,
+            totalBoxes: sub.orbitals,
+            orbitalName: sub.orbitalLabels[b],
+            spin: "up",
+            isPromoted: false
+          });
+        }
+        // Pauli Exclusion Principle: pair each orbital with Spin Down (-1/2)
+        for (let b = 0; b < sub.orbitals; b++) {
+          ELECTRON_SEQUENCE.push({
+            eNum: eCounter++,
+            subshellId: sub.id,
+            n: sub.n,
+            lType: sub.lType,
+            boxIndex: b,
+            totalBoxes: sub.orbitals,
+            orbitalName: sub.orbitalLabels[b],
+            spin: "down",
+            isPromoted: false
+          });
+        }
+      }
+    })();
+
+    const SUPERSCRIPT_MAP = {
+      "0": "⁰", "1": "¹", "2": "²", "3": "³", "4": "⁴",
+      "5": "⁵", "6": "⁶", "7": "⁷", "8": "⁸", "9": "⁹"
+    };
+
+    function toSuperscript(num) {
+      return String(num).split("").map(ch => SUPERSCRIPT_MAP[ch] || ch).join("");
+    }
+
+    // =========================================================================
+    // MUTABLE APPLICATION STATE
+    // =========================================================================
+    let currentElectrons = 1;
+    let layerMode = "all"; // "all" | "current"
+    const DEFAULT_YAW = -0.58;
+    const DEFAULT_PITCH = 0.36;
+    let camYaw = DEFAULT_YAW;
+    let camPitch = DEFAULT_PITCH;
+    let isDraggingCanvas = false;
+    let lastPointerX = 0;
+    let lastPointerY = 0;
+    let animPhase = 0;
+
+    // =========================================================================
+    // INTERACTIVE CONTROLS (ADD, REMOVE, RESET, ELEMENT SELECT, LAYER, CAMERA)
+    // =========================================================================
+    function setElectronCount(count, animateNewest = false) {
+      const clamped = Math.max(0, Math.min(36, Number.isFinite(count) ? count : 1));
+      currentElectrons = clamped;
+      renderAll(animateNewest);
+    }
+
+    function addElectron() {
+      if (currentElectrons < 36) {
+        setElectronCount(currentElectrons + 1, true);
+      }
+    }
+
+    function removeElectron() {
+      if (currentElectrons > 0) {
+        setElectronCount(currentElectrons - 1, false);
+      }
+    }
+
+    function resetElectrons() {
+      setElectronCount(0, false);
+    }
+
+    function setLayerMode(mode) {
+      layerMode = mode === "current" ? "current" : "all";
+      const btnAll = document.getElementById("btn-layer-all");
+      const btnCurrent = document.getElementById("btn-layer-current");
+      if (btnAll && btnCurrent) {
+        if (layerMode === "all") {
+          btnAll.className = "px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-blue-700 shadow-2xs transition cursor-pointer";
+          btnCurrent.className = "px-2.5 py-1 rounded-lg text-[11px] font-bold text-slate-600 hover:text-slate-900 transition cursor-pointer";
+        } else {
+          btnCurrent.className = "px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-blue-700 shadow-2xs transition cursor-pointer";
+          btnAll.className = "px-2.5 py-1 rounded-lg text-[11px] font-bold text-slate-600 hover:text-slate-900 transition cursor-pointer";
+        }
+      }
+    }
+
+    function resetCameraAngle() {
+      camYaw = DEFAULT_YAW;
+      camPitch = DEFAULT_PITCH;
+    }
+
+    // =========================================================================
+    // STATE COMPUTATION & QUANTUM RULE HELPER (WITH Cr & Cu AUFBAU EXCEPTIONS)
+    // =========================================================================
+    const AUFBAU_EXCEPTIONS = {
+      24: {
+        symbol: "Cr",
+        badge: "★ Aufbau Exception (4s¹ 3d⁵)",
+        note: "Chromium promotes one 4s electron into 3d to achieve an extra-stable half-filled d subshell ([Ar] 4s¹ 3d⁵)."
+      },
+      29: {
+        symbol: "Cu",
+        badge: "★ Aufbau Exception (4s¹ 3d¹⁰)",
+        note: "Copper promotes one 4s electron into 3d to achieve an extra-stable completely filled d subshell ([Ar] 4s¹ 3d¹⁰)."
+      }
+    };
+
+    /**
+     * Returns the exact list of occupied electron entries for `count` electrons,
+     * applying the ground-state Aufbau promotion exceptions for Cr (Z=24) and Cu (Z=29).
+     */
+    function getActiveElectrons(count = currentElectrons) {
+      if (count <= 0) return [];
+      const list = ELECTRON_SEQUENCE.slice(1, count + 1).map(e => ({ ...e }));
+
+      // Chromium (Z = 24): promote the 4s spin-down electron (eNum #20) into 3dz² spin-up
+      if (count === 24) {
+        const idx4sDown = list.findIndex(e => e.subshellId === "4s" && e.spin === "down");
+        if (idx4sDown !== -1) {
+          list[idx4sDown] = {
+            ...list[idx4sDown],
+            subshellId: "3d",
+            n: 3,
+            lType: "d",
+            boxIndex: 4,
+            totalBoxes: 5,
+            orbitalName: "d_z²",
+            spin: "up",
+            isPromoted: true
+          };
+        }
+      }
+
+      // Copper (Z = 29): promote the 4s spin-down electron (eNum #20) into 3dz² spin-down
+      if (count === 29) {
+        const idx4sDown = list.findIndex(e => e.subshellId === "4s" && e.spin === "down");
+        if (idx4sDown !== -1) {
+          list[idx4sDown] = {
+            ...list[idx4sDown],
+            subshellId: "3d",
+            n: 3,
+            lType: "d",
+            boxIndex: 4,
+            totalBoxes: 5,
+            orbitalName: "d_z²",
+            spin: "down",
+            isPromoted: true
+          };
+        }
+      }
+
+      return list;
+    }
+
+    function getSubshellCounts() {
+      const counts = {};
+      SUBSHELLS.forEach(s => { counts[s.id] = 0; });
+      for (const e of getActiveElectrons()) {
+        counts[e.subshellId]++;
+      }
+      return counts;
+    }
+
+    function getShellCounts() {
+      const shells = { 1: 0, 2: 0, 3: 0, 4: 0 };
+      for (const e of getActiveElectrons()) {
+        shells[e.n]++;
+      }
+      return shells;
+    }
+
+    function getRuleTag(e) {
+      if (!e) return "Aufbau Principle";
+      if (AUFBAU_EXCEPTIONS[currentElectrons]) {
+        return AUFBAU_EXCEPTIONS[currentElectrons].badge;
+      }
+      if (e.spin === "down") {
+        return "Pauli Exclusion (Opposite Spin)";
+      }
+      if (e.totalBoxes > 1 && e.boxIndex > 0) {
+        return "Hund's Rule (Empty Orbital First)";
+      }
+      if (e.subshellId === "4s" && e.eNum === 19) {
+        return "Aufbau Principle (4s Before 3d)";
+      }
+      return "Aufbau Principle (Lowest Energy)";
+    }
+
+    // =========================================================================
+    // MASTER RENDER FUNCTION
+    // =========================================================================
+    function renderAll(animateNewest = false) {
+      const element = ELEMENTS[currentElectrons] || ELEMENTS[0];
+      const activeList = getActiveElectrons();
+      const latestElectron = activeList.length > 0 ? activeList[activeList.length - 1] : null;
+      const subshellCounts = getSubshellCounts();
+      const shellCounts = getShellCounts();
+
+      // 1. Update Controls & Header Element Badge
+      const addBtn = document.getElementById("btn-add-electron");
+      const removeBtn = document.getElementById("btn-remove-electron");
+      const selectEl = document.getElementById("element-select");
+      if (addBtn) addBtn.disabled = currentElectrons >= 36;
+      if (removeBtn) removeBtn.disabled = currentElectrons <= 0;
+      if (selectEl) selectEl.value = String(currentElectrons);
+
+      const headerBadge = document.getElementById("header-atom-badge");
+      const headerText = document.getElementById("header-atom-text");
+      if (headerBadge && headerText) {
+        const isException = Boolean(AUFBAU_EXCEPTIONS[currentElectrons]);
+        headerBadge.className = `inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl ${element.color} text-white text-xs sm:text-sm font-bold shadow-2xs transition-colors`;
+        headerText.textContent = isException
+          ? `${element.symbol} · ${element.name} (Z = ${element.z}) ★ Exception`
+          : `${element.symbol} · ${element.name} (Z = ${element.z})`;
+      }
+
+      // 2. Update Shell Counters (n = 1 to 4)
+      for (let n = 1; n <= 4; n++) {
+        const countEl = document.getElementById(`count-n${n}`);
+        if (countEl) countEl.textContent = shellCounts[n];
+      }
+
+      // 3. Update Compact Latest Electron Strip (including Cr/Cu exception callout)
+      renderLatestStrip(latestElectron);
+
+      // 4. Update Electron Configuration & Noble Gas Shorthand
+      renderNotations(subshellCounts, latestElectron);
+
+      // 5. Update Side-by-Side Orbital Box & Arrow Diagram
+      renderOrbitalDiagram(animateNewest, activeList, latestElectron);
+    }
+
+    function renderLatestStrip(latestElectron) {
+      const containerEl = document.getElementById("latest-strip-container");
+      const summaryEl = document.getElementById("latest-strip-summary");
+      const ruleEl = document.getElementById("latest-strip-rule");
+      const spinBadgeEl = document.getElementById("latest-strip-spin");
+      const exceptionNoteEl = document.getElementById("latest-strip-exception-note");
+      if (!summaryEl || !ruleEl || !spinBadgeEl) return;
+
+      if (!latestElectron) {
+        if (containerEl) {
+          containerEl.className = "bg-slate-50 border border-slate-200/90 rounded-xl px-3.5 py-2.5 flex flex-col gap-1.5 text-xs transition-colors";
+        }
+        summaryEl.innerHTML = `0 electrons · Click <span class="text-blue-700">+ Add Electron</span> to begin`;
+        ruleEl.textContent = "Ready";
+        ruleEl.className = "text-[11px] font-semibold px-2 py-0.5 rounded-md bg-slate-200/80 text-slate-700";
+        spinBadgeEl.textContent = "—";
+        spinBadgeEl.className = "font-mono-code font-bold px-2.5 py-0.5 rounded-lg text-[11px] bg-slate-100 text-slate-500 border border-slate-200";
+        if (exceptionNoteEl) exceptionNoteEl.classList.add("hidden");
+        return;
+      }
+
+      const exception = AUFBAU_EXCEPTIONS[currentElectrons];
+      summaryEl.innerHTML = `e⁻ #${latestElectron.eNum} → Level <span class="text-blue-700">n = ${latestElectron.n}</span> · Orbital <span class="font-mono-code text-indigo-700">${latestElectron.orbitalName}</span>`;
+      ruleEl.textContent = getRuleTag(latestElectron);
+
+      if (exception) {
+        if (containerEl) {
+          containerEl.className = "bg-amber-50/90 border border-amber-300 rounded-xl px-3.5 py-2.5 flex flex-col gap-1.5 text-xs transition-colors";
+        }
+        ruleEl.className = "text-[11px] font-bold px-2.5 py-0.5 rounded-md bg-amber-200/90 text-amber-950 border border-amber-400";
+        if (exceptionNoteEl) {
+          exceptionNoteEl.textContent = exception.note;
+          exceptionNoteEl.classList.remove("hidden");
+        }
+      } else {
+        if (containerEl) {
+          containerEl.className = "bg-slate-50 border border-slate-200/90 rounded-xl px-3.5 py-2.5 flex flex-col gap-1.5 text-xs transition-colors";
+        }
+        ruleEl.className = "text-[11px] font-semibold px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-200/80";
+        if (exceptionNoteEl) {
+          exceptionNoteEl.classList.add("hidden");
+        }
+      }
+
+      if (latestElectron.spin === "up") {
+        spinBadgeEl.textContent = "Spin Up ↿ (+½)";
+        spinBadgeEl.className = "font-mono-code font-bold px-2.5 py-0.5 rounded-lg text-[11px] bg-cyan-100 text-cyan-800 border border-cyan-200";
+      } else {
+        spinBadgeEl.textContent = "Spin Down ⇂ (−½)";
+        spinBadgeEl.className = "font-mono-code font-bold px-2.5 py-0.5 rounded-lg text-[11px] bg-pink-100 text-pink-800 border border-pink-200";
+      }
+    }
+
+    // =========================================================================
+    // 3D SUPERIMPOSED ORBITAL RENDERER (BLUE/PINK SHADED LOBES)
+    // =========================================================================
+    function init3DOrbitalCanvas() {
+      const canvas = document.getElementById("orbital-3d-canvas");
+      if (!canvas) return;
+
+      // Pointer drag-to-rotate interaction (supports both mouse and touch)
+      canvas.addEventListener("pointerdown", (e) => {
+        isDraggingCanvas = true;
+        lastPointerX = e.clientX;
+        lastPointerY = e.clientY;
+        canvas.setPointerCapture(e.pointerId);
+      });
+
+      canvas.addEventListener("pointermove", (e) => {
+        if (!isDraggingCanvas) return;
+        const dx = e.clientX - lastPointerX;
+        const dy = e.clientY - lastPointerY;
+        lastPointerX = e.clientX;
+        lastPointerY = e.clientY;
+
+        camYaw += dx * 0.009;
+        camPitch = Math.max(-1.15, Math.min(1.15, camPitch + dy * 0.009));
+      });
+
+      const stopDrag = (e) => {
+        isDraggingCanvas = false;
+        if (e.pointerId !== undefined && canvas.hasPointerCapture(e.pointerId)) {
+          canvas.releasePointerCapture(e.pointerId);
+        }
+      };
+      canvas.addEventListener("pointerup", stopDrag);
+      canvas.addEventListener("pointercancel", stopDrag);
+
+      // Start continuous 60fps animation loop for spinning electrons inside orbitals
+      function renderLoop() {
+        animPhase += 0.038;
+        drawSuperimposed3DOrbitals();
+        requestAnimationFrame(renderLoop);
+      }
+      requestAnimationFrame(renderLoop);
+    }
+
+    /**
+     * Projects a 3D point (x, y, z) in chemistry coordinates:
+     * +z is vertical up, +x points front-right, +y points back-right (matching LibreTexts diagram).
+     */
+    function project3D(x, y, z, cx, cy, scale) {
+      // Rotate around vertical z-axis by camYaw
+      const cosY = Math.cos(camYaw);
+      const sinY = Math.sin(camYaw);
+      const x1 = x * cosY - y * sinY;
+      const y1 = x * sinY + y * cosY;
+
+      // Tilt by camPitch
+      const cosP = Math.cos(camPitch);
+      const sinP = Math.sin(camPitch);
+      const z2 = z * cosP - y1 * sinP;
+      const depth = z * sinP + y1 * cosP;
+
+      // Subtle perspective foreshortening
+      const persp = 1 / (1 - depth * 0.0014);
+      return {
+        px: cx + x1 * scale * persp,
+        py: cy - z2 * scale * persp,
+        depth: depth,
+        persp: persp
+      };
+    }
+
+    /**
+     * Draws a single 3D teardrop/ellipsoidal lobe extending from the origin (0,0,0)
+     * along unit direction vector (ux, uy, uz) with LibreTexts blue or pink phase shading.
+     */
+    function draw3DLobe(ctx, cx, cy, scale, ux, uy, uz, length, width, phaseColor, alpha, isHighlighted) {
+      const tip = project3D(ux * length, uy * length, uz * length, cx, cy, scale);
+      const center = project3D(ux * length * 0.54, uy * length * 0.54, uz * length * 0.54, cx, cy, scale);
+      const origin = project3D(0, 0, 0, cx, cy, scale);
+
+      const dx = tip.px - origin.px;
+      const dy = tip.py - origin.py;
+      const projLen = Math.hypot(dx, dy);
+      const angle = Math.atan2(dy, dx);
+
+      // Foreshorten width slightly when lobe points toward/away from camera
+      const effectiveLen = Math.max(10, projLen);
+      const effectiveWidth = width * scale * center.persp * (0.82 + 0.18 * Math.min(1, projLen / (length * scale || 1)));
+
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.translate(origin.px, origin.py);
+      ctx.rotate(angle);
+
+      // Teardrop / bulbous orbital lobe path starting pinched at nucleus (0,0) and swelling at tip
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.bezierCurveTo(
+        effectiveLen * 0.25, -effectiveWidth * 0.22,
+        effectiveLen * 0.62, -effectiveWidth * 0.62,
+        effectiveLen, 0
+      );
+      ctx.bezierCurveTo(
+        effectiveLen * 0.62, effectiveWidth * 0.62,
+        effectiveLen * 0.25, effectiveWidth * 0.22,
+        0, 0
+      );
+      ctx.closePath();
+
+      // 3D Specular Radial Gradient (Blue or Pink phase matching reference image)
+      const grad = ctx.createRadialGradient(
+        effectiveLen * 0.66, -effectiveWidth * 0.16, effectiveWidth * 0.04,
+        effectiveLen * 0.58, 0, effectiveWidth * 0.72
+      );
+
+      if (phaseColor === "blue") {
+        grad.addColorStop(0, "#e0f2fe");
+        grad.addColorStop(0.32, "#60a5fa");
+        grad.addColorStop(0.78, "#2563eb");
+        grad.addColorStop(1, "#1e3a8a");
+      } else {
+        grad.addColorStop(0, "#fce7f3");
+        grad.addColorStop(0.32, "#f472b6");
+        grad.addColorStop(0.78, "#e11d48");
+        grad.addColorStop(1, "#881337");
+      }
+
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      // Rim highlight / active glow border
+      ctx.lineWidth = isHighlighted ? 1.8 : 0.8;
+      ctx.strokeStyle = isHighlighted
+        ? (phaseColor === "blue" ? "#1d4ed8" : "#be123c")
+        : (phaseColor === "blue" ? "rgba(30, 58, 138, 0.35)" : "rgba(136, 19, 55, 0.35)");
+      ctx.stroke();
+
+      ctx.restore();
+    }
+
+    /**
+     * Draws a translucent 3D spherical s-orbital (1s, 2s, 3s, 4s) centered at (0,0,0).
+     */
+    function draw3DSphereOrbital(ctx, cx, cy, scale, radius, alpha, isHighlighted) {
+      const r = radius * scale;
+      ctx.save();
+      ctx.globalAlpha = alpha;
+
+      const grad = ctx.createRadialGradient(
+        cx - r * 0.28, cy - r * 0.28, r * 0.06,
+        cx, cy, r
+      );
+      grad.addColorStop(0, "rgba(224, 242, 254, 0.95)");
+      grad.addColorStop(0.38, "rgba(96, 165, 250, 0.65)");
+      grad.addColorStop(0.82, "rgba(37, 99, 235, 0.45)");
+      grad.addColorStop(1, "rgba(30, 58, 138, 0.62)");
+
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      // Subtle equatorial 3D latitude ring to emphasize spherical depth
+      ctx.beginPath();
+      ctx.ellipse(cx, cy, r, r * Math.max(0.18, Math.abs(Math.sin(camPitch)) * 0.65 + 0.2), 0, 0, Math.PI * 2);
+      ctx.lineWidth = isHighlighted ? 1.6 : 0.9;
+      ctx.strokeStyle = isHighlighted ? "rgba(29, 78, 216, 0.85)" : "rgba(59, 130, 246, 0.35)";
+      ctx.stroke();
+
+      ctx.restore();
+    }
+
+    /**
+     * Draws the equatorial donut/torus ring for the 3dz² orbital (matching reference image).
+     */
+    function draw3DTorusRing(ctx, cx, cy, scale, torusRadius, tubeWidth, alpha, isHighlighted) {
+      const steps = 36;
+      ctx.save();
+      ctx.globalAlpha = alpha;
+
+      ctx.beginPath();
+      for (let i = 0; i <= steps; i++) {
+        const theta = (i / steps) * Math.PI * 2;
+        const pt = project3D(Math.cos(theta) * torusRadius, Math.sin(theta) * torusRadius, 0, cx, cy, scale);
+        if (i === 0) ctx.moveTo(pt.px, pt.py);
+        else ctx.lineTo(pt.px, pt.py);
+      }
+      ctx.closePath();
+
+      ctx.lineWidth = tubeWidth * scale;
+      ctx.strokeStyle = isHighlighted ? "rgba(59, 130, 246, 0.72)" : "rgba(96, 165, 250, 0.48)";
+      ctx.stroke();
+
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = "rgba(30, 58, 138, 0.45)";
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    /**
+     * Draws an animated spinning electron badge (↿ or ⇂) inside its orbital lobe.
+     */
+    function drawSpinningElectronParticle(ctx, px, py, spinDir, isNewest, alpha) {
+      ctx.save();
+      ctx.globalAlpha = Math.max(0.55, alpha);
+
+      const isUp = spinDir === "up";
+      const ringRadius = isNewest ? 12 : 9;
+      const coreRadius = isNewest ? 7.8 : 6;
+
+      // Soft outer glow halo (cyan/blue for Spin Up, magenta/pink for Spin Down)
+      ctx.beginPath();
+      ctx.arc(px, py, ringRadius + 2.5, 0, Math.PI * 2);
+      ctx.fillStyle = isUp ? "rgba(6, 182, 212, 0.28)" : "rgba(236, 72, 153, 0.28)";
+      ctx.fill();
+
+      // Rotating dashed spin ring around electron
+      ctx.save();
+      ctx.translate(px, py);
+      ctx.rotate(isUp ? animPhase * 1.4 : -animPhase * 1.4);
+      ctx.beginPath();
+      ctx.arc(0, 0, ringRadius, 0, Math.PI * 2);
+      ctx.setLineDash([3, 2.5]);
+      ctx.lineWidth = isNewest ? 1.9 : 1.3;
+      ctx.strokeStyle = isUp ? "#0891b2" : "#db2777";
+      ctx.stroke();
+      ctx.restore();
+
+      // Glowing core circle
+      ctx.beginPath();
+      ctx.arc(px, py, coreRadius, 0, Math.PI * 2);
+      ctx.fillStyle = isUp ? "#0284c7" : "#db2777";
+      ctx.fill();
+      ctx.lineWidth = 1.5;
+      ctx.strokeStyle = "#ffffff";
+      ctx.stroke();
+
+      // Crisp spin arrow symbol (↿ or ⇂)
+      ctx.fillStyle = "#ffffff";
+      ctx.font = `900 ${isNewest ? 11 : 9}px Inter, sans-serif`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(isUp ? "↿" : "⇂", px, py + 0.5);
+
+      ctx.restore();
+    }
+
+    /**
+     * Master 3D rendering routine: draws (x, y, z) axes, depth-sorted superimposed orbital lobes,
+     * and animated spinning electrons inside every occupied orbital.
+     */
+    function drawSuperimposed3DOrbitals() {
+      const canvas = document.getElementById("orbital-3d-canvas");
+      if (!canvas) return;
+
+      // High-DPI responsive sizing
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return;
+
+      if (canvas.width !== Math.round(rect.width * dpr) || canvas.height !== Math.round(rect.height * dpr)) {
+        canvas.width = Math.round(rect.width * dpr);
+        canvas.height = Math.round(rect.height * dpr);
+      }
+
+      const ctx = canvas.getContext("2d");
+      ctx.save();
+      ctx.scale(dpr, dpr);
+
+      const W = rect.width;
+      const H = rect.height;
+      const cx = W * 0.5;
+      const cy = H * 0.52;
+      const scale = Math.min(W, H) * 0.34;
+
+      ctx.clearRect(0, 0, W, H);
+
+      // 1. Draw subtle background coordinate grid plane (xy plane)
+      ctx.save();
+      ctx.strokeStyle = "rgba(148, 163, 184, 0.18)";
+      ctx.lineWidth = 1;
+      for (let g = -1; g <= 1; g += 0.5) {
+        const p1 = project3D(g, -1.1, 0, cx, cy, scale);
+        const p2 = project3D(g, 1.1, 0, cx, cy, scale);
+        ctx.beginPath();
+        ctx.moveTo(p1.px, p1.py);
+        ctx.lineTo(p2.px, p2.py);
+        ctx.stroke();
+
+        const p3 = project3D(-1.1, g, 0, cx, cy, scale);
+        const p4 = project3D(1.1, g, 0, cx, cy, scale);
+        ctx.beginPath();
+        ctx.moveTo(p3.px, p3.py);
+        ctx.lineTo(p4.px, p4.py);
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      // 2. Draw Negative Axis Lines (-x, -y, -z) behind the orbitals
+      const axisLen = 1.24;
+      const axes = [
+        { name: "x", vec: [1, 0, 0], color: "#334155" },
+        { name: "y", vec: [0, 1, 0], color: "#334155" },
+        { name: "z", vec: [0, 0, 1], color: "#0f172a" }
+      ];
+
+      axes.forEach(ax => {
+        const neg = project3D(-ax.vec[0] * axisLen * 0.85, -ax.vec[1] * axisLen * 0.85, -ax.vec[2] * axisLen * 0.85, cx, cy, scale);
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(neg.px, neg.py);
+        ctx.strokeStyle = "rgba(100, 116, 139, 0.45)";
+        ctx.setLineDash([3, 3]);
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+        ctx.restore();
+      });
+
+      // 3. Collect all active orbitals & electrons up to currentElectrons (including Cr & Cu promotion overrides)
+      const activeList = getActiveElectrons();
+      const latestElectron = activeList.length > 0 ? activeList[activeList.length - 1] : null;
+      const highestValenceN = activeList.length === 0 ? 0 : Math.max(...activeList.map(e => e.n));
+      const orbitalMap = new Map();
+
+      for (const e of activeList) {
+        const key = `${e.subshellId}_${e.boxIndex}`;
+        if (!orbitalMap.has(key)) {
+          orbitalMap.set(key, {
+            key,
+            subshellId: e.subshellId,
+            n: e.n,
+            lType: e.lType,
+            boxIndex: e.boxIndex,
+            orbitalName: e.orbitalName,
+            electrons: []
+          });
+        }
+        orbitalMap.get(key).electrons.push(e);
+      }
+
+      // Filter orbitals according to user's selected Layer Mode ("all" | "current")
+      const visibleOrbitals = Array.from(orbitalMap.values()).filter(orb => {
+        if (!latestElectron) return false;
+        if (layerMode === "current") {
+          return orb.n === highestValenceN;
+        }
+        return true;
+      });
+
+      // Scale radii by principal quantum number n = 1, 2, 3, 4 so outer shells concentrically surround inner shells
+      const nScaleMap = { 1: 0.34, 2: 0.58, 3: 0.82, 4: 1.05 };
+
+      // Sort outer-to-inner for s-spheres first, then depth-sort directional lobes + electrons
+      const sphereOrbitals = visibleOrbitals.filter(o => o.lType === "s").sort((a, b) => b.n - a.n);
+      const directionalOrbitals = visibleOrbitals.filter(o => o.lType !== "s");
+
+      // Render concentric s-orbital spheres (outermost translucent first so inner spheres show inside)
+      sphereOrbitals.forEach(orb => {
+        const isCurrentSub = latestElectron && orb.subshellId === latestElectron.subshellId;
+        const isNewestBox = latestElectron && orb.key === `${latestElectron.subshellId}_${latestElectron.boxIndex}`;
+        const alpha = isCurrentSub ? 0.58 : 0.25;
+        draw3DSphereOrbital(ctx, cx, cy, scale, nScaleMap[orb.n], alpha, isNewestBox);
+      });
+
+      // Build renderables list for directional lobes (p & d) and all electron particles
+      const lobeDrawList = [];
+      const electronDrawList = [];
+
+      // Collect electrons inside s-orbitals orbiting on the sphere surface
+      sphereOrbitals.forEach(orb => {
+        const r = nScaleMap[orb.n];
+        const isCurrentSub = latestElectron && orb.subshellId === latestElectron.subshellId;
+        const alpha = isCurrentSub ? 0.98 : 0.72;
+
+        orb.electrons.forEach((e, idx) => {
+          const phaseOffset = orb.n * 1.1 + (idx === 0 ? 0 : Math.PI);
+          const theta = animPhase * (idx === 0 ? 1 : -1) + phaseOffset;
+          const phi = 0.45 * orb.n;
+          const ex = r * Math.cos(theta) * Math.cos(phi);
+          const ey = r * Math.sin(theta) * Math.cos(phi);
+          const ez = r * Math.sin(phi) * (idx === 0 ? 1 : -1);
+          const proj = project3D(ex, ey, ez, cx, cy, scale);
+          electronDrawList.push({
+            px: proj.px,
+            py: proj.py,
+            depth: proj.depth + 0.2,
+            spin: e.spin,
+            isNewest: e.eNum === currentElectrons,
+            alpha
+          });
+        });
+      });
+
+      // Collect p and d directional lobes + their embedded spinning electrons
+      const invSqrt2 = 0.70710678;
+      directionalOrbitals.forEach(orb => {
+        const len = nScaleMap[orb.n] * 1.06;
+        const width = nScaleMap[orb.n] * 0.44;
+        const isCurrentSub = latestElectron && orb.subshellId === latestElectron.subshellId;
+        const isNewestBox = latestElectron && orb.key === `${latestElectron.subshellId}_${latestElectron.boxIndex}`;
+        const alpha = isNewestBox ? 0.94 : (isCurrentSub ? 0.76 : 0.34);
+
+        // Define lobe vectors (matching LibreTexts blue/pink phase conventions)
+        let lobes = [];
+        let torus = null;
+
+        if (orb.lType === "p") {
+          if (orb.boxIndex === 0) {
+            // px (along x-axis)
+            lobes = [
+              { u: [1, 0, 0], color: "blue" },
+              { u: [-1, 0, 0], color: "pink" }
+            ];
+          } else if (orb.boxIndex === 1) {
+            // py (along y-axis)
+            lobes = [
+              { u: [0, 1, 0], color: "blue" },
+              { u: [0, -1, 0], color: "pink" }
+            ];
+          } else {
+            // pz (along z-axis)
+            lobes = [
+              { u: [0, 0, 1], color: "pink" },
+              { u: [0, 0, -1], color: "blue" }
+            ];
+          }
+        } else if (orb.lType === "d") {
+          const dW = width * 0.78;
+          if (orb.boxIndex === 0) {
+            // dxy (4 lobes between x and y axes)
+            lobes = [
+              { u: [invSqrt2, invSqrt2, 0], color: "blue", w: dW },
+              { u: [-invSqrt2, -invSqrt2, 0], color: "blue", w: dW },
+              { u: [-invSqrt2, invSqrt2, 0], color: "pink", w: dW },
+              { u: [invSqrt2, -invSqrt2, 0], color: "pink", w: dW }
+            ];
+          } else if (orb.boxIndex === 1) {
+            // dxz (4 lobes between x and z axes)
+            lobes = [
+              { u: [invSqrt2, 0, invSqrt2], color: "blue", w: dW },
+              { u: [-invSqrt2, 0, -invSqrt2], color: "blue", w: dW },
+              { u: [-invSqrt2, 0, invSqrt2], color: "pink", w: dW },
+              { u: [invSqrt2, 0, -invSqrt2], color: "pink", w: dW }
+            ];
+          } else if (orb.boxIndex === 2) {
+            // dyz (4 lobes between y and z axes)
+            lobes = [
+              { u: [0, invSqrt2, invSqrt2], color: "blue", w: dW },
+              { u: [0, -invSqrt2, -invSqrt2], color: "blue", w: dW },
+              { u: [0, -invSqrt2, invSqrt2], color: "pink", w: dW },
+              { u: [0, invSqrt2, -invSqrt2], color: "pink", w: dW }
+            ];
+          } else if (orb.boxIndex === 3) {
+            // dx²-y² (4 lobes directly along x and y axes)
+            lobes = [
+              { u: [1, 0, 0], color: "blue", w: dW },
+              { u: [-1, 0, 0], color: "blue", w: dW },
+              { u: [0, 1, 0], color: "pink", w: dW },
+              { u: [0, -1, 0], color: "pink", w: dW }
+            ];
+          } else {
+            // dz² (2 lobes along +z/-z + equatorial donut ring)
+            lobes = [
+              { u: [0, 0, 1], color: "pink", w: width * 0.85 },
+              { u: [0, 0, -1], color: "pink", w: width * 0.85 }
+            ];
+            torus = { r: len * 0.44, tube: width * 0.28 };
+          }
+        }
+
+        // Queue torus if dz²
+        if (torus) {
+          lobeDrawList.push({
+            kind: "torus",
+            depth: 0,
+            torus,
+            alpha: alpha * 0.9,
+            isHighlighted: isNewestBox
+          });
+        }
+
+        // Queue each lobe with depth sorting
+        lobes.forEach(l => {
+          const mid = project3D(l.u[0] * len * 0.55, l.u[1] * len * 0.55, l.u[2] * len * 0.55, cx, cy, scale);
+          lobeDrawList.push({
+            kind: "lobe",
+            depth: mid.depth,
+            u: l.u,
+            len,
+            w: l.w || width,
+            color: l.color,
+            alpha,
+            isHighlighted: isNewestBox
+          });
+        });
+
+        // Position spinning electrons inside the primary lobes of this orbital
+        const eAlpha = isCurrentSub ? 1.0 : 0.72;
+        orb.electrons.forEach((e, idx) => {
+          const targetLobe = lobes[idx % lobes.length];
+          const wobble = Math.sin(animPhase * 1.5 + idx * 2.1) * 0.09;
+          const dist = len * (0.64 + wobble);
+          const pt = project3D(targetLobe.u[0] * dist, targetLobe.u[1] * dist, targetLobe.u[2] * dist, cx, cy, scale);
+          electronDrawList.push({
+            px: pt.px,
+            py: pt.py,
+            depth: pt.depth + 0.15,
+            spin: e.spin,
+            isNewest: e.eNum === currentElectrons,
+            alpha: eAlpha
+          });
+        });
+      });
+
+      // Painter's algorithm: draw back-to-front by 3D depth
+      lobeDrawList.sort((a, b) => a.depth - b.depth);
+      lobeDrawList.forEach(item => {
+        if (item.kind === "torus") {
+          draw3DTorusRing(ctx, cx, cy, scale, item.torus.r, item.torus.tube, item.alpha, item.isHighlighted);
+        } else {
+          draw3DLobe(ctx, cx, cy, scale, item.u[0], item.u[1], item.u[2], item.len, item.w, item.color, item.alpha, item.isHighlighted);
+        }
+      });
+
+      // 4. Draw Positive Coordinate Axes (+x, +y, +z) with crisp arrows & labels
+      axes.forEach(ax => {
+        const tip = project3D(ax.vec[0] * axisLen, ax.vec[1] * axisLen, ax.vec[2] * axisLen, cx, cy, scale);
+        const labelPt = project3D(ax.vec[0] * (axisLen + 0.13), ax.vec[1] * (axisLen + 0.13), ax.vec[2] * (axisLen + 0.13), cx, cy, scale);
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(tip.px, tip.py);
+        ctx.strokeStyle = ax.color;
+        ctx.lineWidth = 1.7;
+        ctx.stroke();
+
+        // Arrowhead
+        const angle = Math.atan2(tip.py - cy, tip.px - cx);
+        const headLen = 7;
+        ctx.beginPath();
+        ctx.moveTo(tip.px, tip.py);
+        ctx.lineTo(tip.px - headLen * Math.cos(angle - 0.42), tip.py - headLen * Math.sin(angle - 0.42));
+        ctx.lineTo(tip.px - headLen * Math.cos(angle + 0.42), tip.py - headLen * Math.sin(angle + 0.42));
+        ctx.closePath();
+        ctx.fillStyle = ax.color;
+        ctx.fill();
+
+        // Axis label (x, y, z)
+        ctx.font = "italic 800 13px Inter, sans-serif";
+        ctx.fillStyle = "#0f172a";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(ax.name, labelPt.px, labelPt.py);
+        ctx.restore();
+      });
+
+      // Central Nucleus Dot at (0,0,0)
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(cx, cy, 4.2, 0, Math.PI * 2);
+      ctx.fillStyle = "#0f172a";
+      ctx.fill();
+      ctx.lineWidth = 1.2;
+      ctx.strokeStyle = "#ffffff";
+      ctx.stroke();
+      ctx.restore();
+
+      // 5. Render Animated Spinning Electron Badges on top so students always see spin direction clearly
+      electronDrawList.sort((a, b) => a.depth - b.depth);
+      electronDrawList.forEach(el => {
+        drawSpinningElectronParticle(ctx, el.px, el.py, el.spin, el.isNewest, el.alpha);
+      });
+
+      ctx.restore();
+    }
+
+    function renderNotations(subshellCounts, latestElectron) {
+      const fullEl = document.getElementById("full-electron-notation");
+      const nobleEl = document.getElementById("noble-gas-notation");
+      const isException = Boolean(AUFBAU_EXCEPTIONS[currentElectrons]);
+
+      if (currentElectrons === 0) {
+        fullEl.innerHTML = `<span class="text-slate-400 italic text-xs font-sans">No electrons yet</span>`;
+        nobleEl.textContent = "—";
+        return;
+      }
+
+      // Build full configuration spans in Aufbau order, highlighting the subshell of the newest electron (and 4s/3d during Cr & Cu exceptions)
+      const parts = [];
+      for (const sub of SUBSHELLS) {
+        const count = subshellCounts[sub.id];
+        if (count > 0) {
+          const isNewestSub = latestElectron && latestElectron.subshellId === sub.id;
+          const isExceptionSub = isException && (sub.id === "4s" || sub.id === "3d");
+          let highlightClass = "text-slate-800 font-semibold";
+          if (isExceptionSub) {
+            highlightClass = isNewestSub
+              ? "bg-amber-500 text-white px-2 py-0.5 rounded-lg font-bold shadow-2xs ring-2 ring-amber-300"
+              : "bg-amber-100 text-amber-950 border border-amber-300 px-2 py-0.5 rounded-lg font-bold";
+          } else if (isNewestSub) {
+            highlightClass = "bg-blue-600 text-white px-2 py-0.5 rounded-lg font-bold shadow-2xs";
+          }
+          parts.push(`<span class="${highlightClass}">${sub.id}${toSuperscript(count)}</span>`);
+        }
+      }
+      fullEl.innerHTML = parts.join(" ");
+
+      // Build Noble Gas Shorthand ([He], [Ne], [Ar], or [Kr])
+      let corePrefix = "";
+      let startSubIndex = 0;
+
+      if (currentElectrons === 36) {
+        nobleEl.textContent = "[Kr]";
+        return;
+      } else if (currentElectrons > 18) {
+        corePrefix = "[Ar]";
+        startSubIndex = 5; // Starts at 4s
+      } else if (currentElectrons > 10) {
+        corePrefix = "[Ne]";
+        startSubIndex = 3; // Starts at 3s
+      } else if (currentElectrons > 2) {
+        corePrefix = "[He]";
+        startSubIndex = 1; // Starts at 2s
+      }
+
+      const remainder = [];
+      for (let i = startSubIndex; i < SUBSHELLS.length; i++) {
+        const sub = SUBSHELLS[i];
+        if (subshellCounts[sub.id] > 0) {
+          remainder.push(`${sub.id}${toSuperscript(subshellCounts[sub.id])}`);
+        }
+      }
+
+      nobleEl.textContent = corePrefix ? `${corePrefix} ${remainder.join(" ")}` : remainder.join(" ");
+    }
+
+    function renderOrbitalDiagram(animateNewest, activeList = getActiveElectrons(), latestElectron = null) {
+      const container = document.getElementById("orbital-diagram-container");
+      if (!latestElectron && activeList.length > 0) {
+        latestElectron = activeList[activeList.length - 1];
+      }
+      const isException = Boolean(AUFBAU_EXCEPTIONS[currentElectrons]);
+
+      // Build occupancy map for each subshell and box
+      const occupancy = {};
+      SUBSHELLS.forEach(s => {
+        occupancy[s.id] = Array.from({ length: s.orbitals }, () => ({ up: null, down: null }));
+      });
+
+      for (const e of activeList) {
+        if (e.spin === "up") {
+          occupancy[e.subshellId][e.boxIndex].up = e;
+        } else {
+          occupancy[e.subshellId][e.boxIndex].down = e;
+        }
+      }
+
+      container.innerHTML = SUBSHELLS.map(sub => {
+        const boxes = occupancy[sub.id];
+        const isActiveSub = latestElectron && latestElectron.subshellId === sub.id;
+        const isExceptionSub = isException && (sub.id === "4s" || sub.id === "3d");
+
+        const boxesHtml = boxes.map((box, bIdx) => {
+          const isNewestBox = isActiveSub && latestElectron.boxIndex === bIdx;
+          const upIsNewest = box.up && (box.up.eNum === currentElectrons || box.up.isPromoted);
+          const downIsNewest = box.down && (box.down.eNum === currentElectrons || box.down.isPromoted);
+
+          let boxBorderClass = "border-slate-300 bg-white";
+          if (isNewestBox) {
+            boxBorderClass = isExceptionSub
+              ? "border-amber-500 bg-amber-50 ring-2 ring-amber-300"
+              : "active-orbital-box";
+          } else if (isExceptionSub) {
+            boxBorderClass = "border-amber-400 bg-amber-50/70";
+          }
+
+          const upArrowHtml = box.up
+            ? `<span class="text-lg sm:text-xl font-black text-blue-600 leading-none select-none ${upIsNewest && animateNewest ? "animate-arrow-pop" : ""}">↿</span>`
+            : `<span class="text-lg sm:text-xl font-black text-slate-200 leading-none select-none">↿</span>`;
+
+          const downArrowHtml = box.down
+            ? `<span class="text-lg sm:text-xl font-black text-pink-600 leading-none select-none ${downIsNewest && animateNewest ? "animate-arrow-pop" : ""}">⇂</span>`
+            : `<span class="text-lg sm:text-xl font-black text-slate-200 leading-none select-none">⇂</span>`;
+
+          return `
+            <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-lg border-2 ${boxBorderClass} flex items-center justify-center gap-0.5 transition-all" title="${sub.orbitalLabels[bIdx]}">
+              ${upArrowHtml}
+              ${downArrowHtml}
+            </div>
+          `;
+        }).join("");
+
+        let rowClass = "border-slate-200/80 bg-white";
+        let labelClass = "text-slate-700";
+        if (isExceptionSub) {
+          rowClass = "border-amber-300 bg-amber-50/80";
+          labelClass = "text-amber-900";
+        } else if (isActiveSub) {
+          rowClass = "border-blue-300 bg-blue-50/60";
+          labelClass = "text-blue-700";
+        }
+
+        const exceptionPill = isExceptionSub
+          ? `<span class="text-[10px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber-200/90 text-amber-950 border border-amber-300 ml-1">${sub.id === "4s" ? "4s¹" : (currentElectrons === 24 ? "3d⁵" : "3d¹⁰")}</span>`
+          : "";
+
+        return `
+          <div class="flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-xl border ${rowClass} transition-colors">
+            <div class="flex items-center shrink-0">
+              <span class="font-mono-code text-xs sm:text-sm font-extrabold ${labelClass} w-7">
+                ${sub.id}
+              </span>
+              ${exceptionPill}
+            </div>
+            <div class="flex items-center gap-1.5 flex-wrap justify-end">
+              ${boxesHtml}
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    // =========================================================================
+    // SAFE DOM INITIALIZATION & KEYBOARD SHORTCUTS
+    // =========================================================================
+    function populateElementDropdown() {
+      const selectEl = document.getElementById("element-select");
+      if (!selectEl) return;
+      selectEl.innerHTML = ELEMENTS.map(el =>
+        `<option value="${el.z}">Z = ${el.z} · ${el.symbol} (${el.name})${AUFBAU_EXCEPTIONS[el.z] ? " ★" : ""}</option>`
+      ).join("");
+      selectEl.value = String(currentElectrons);
+    }
+
+    function initApp() {
+      try {
+        populateElementDropdown();
+        init3DOrbitalCanvas();
+        renderAll(false);
+
+        document.addEventListener("keydown", (e) => {
+          const tag = document.activeElement ? document.activeElement.tagName : "";
+          if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
+          if (e.key === "ArrowRight" || e.key === "+" || e.key === "=") {
+            e.preventDefault();
+            addElectron();
+          } else if (e.key === "ArrowLeft" || e.key === "-") {
+            e.preventDefault();
+            removeElectron();
+          }
+        });
+      } catch (err) {
+        console.error("Initialization error:", err);
+      }
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initApp);
+    } else {
+      initApp();
+    }
+  </script>
+</body>
+</html>
