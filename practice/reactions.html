@@ -1421,10 +1421,10 @@
       const dbUrl = getFirebaseDbUrl();
       if (dbUrl) {
         try {
-          await fetch(`${dbUrl}/sessions/${encodeURIComponent(code)}/meta.json`, {
-            method: "PUT",
+          await fetch(`${dbUrl}/sessions/${encodeURIComponent(code)}/meta.json?x-http-method-override=PUT`, {
+            method: "POST",
             cache: "no-store",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "text/plain;charset=UTF-8" },
             body: JSON.stringify(meta)
           });
         } catch (e) {}
@@ -1525,7 +1525,7 @@
     }
 
     // =========================================================================
-    // REAL-TIME SESSION DATA SYNC (NON-BLOCKING PATCH QUEUE + AUTO-RETRY)
+    // REAL-TIME SESSION DATA SYNC (ZERO-PREFLIGHT SIMPLE CORS POST + OVERRIDE)
     // =========================================================================
     function getStudentKey(name) {
       return name.replace(/[^a-zA-Z0-9]/g, "_");
@@ -1647,12 +1647,14 @@
 
       try {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 10000);
+        const timeoutId = setTimeout(() => controller.abort(), 8000);
 
-        const res = await fetch(`${dbUrl}/sessions/${encodeURIComponent(job.sessionCode)}/students/${encodeURIComponent(job.sKey)}.json`, {
-          method: "PATCH",
+        // Simple CORS POST with text/plain + ?x-http-method-override=PUT (bypasses school proxy OPTIONS/PATCH blocks)
+        const endpoint = `${dbUrl}/sessions/${encodeURIComponent(job.sessionCode)}/students/${encodeURIComponent(job.sKey)}.json?x-http-method-override=PUT`;
+        const res = await fetch(endpoint, {
+          method: "POST",
           cache: "no-store",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "text/plain;charset=UTF-8" },
           body: JSON.stringify(job.record),
           signal: controller.signal
         });
@@ -1666,12 +1668,13 @@
         if (!pendingSyncPayload) {
           pendingSyncPayload = job;
         }
+        const reason = err.name === "AbortError" ? "Timeout" : (err.message || "Err");
         if (badge && badgeText && badgeDot) {
           badge.className = "bg-amber-100 text-amber-800 font-semibold text-[11px] px-2.5 py-1 rounded-full flex items-center gap-1";
           badgeDot.className = "w-1.5 h-1.5 rounded-full bg-amber-500";
-          badgeText.textContent = `Retrying (${job.sessionCode})...`;
+          badgeText.textContent = `Retry (${reason})...`;
         }
-        syncRetryTimerId = setTimeout(() => flushPendingSync(), 2500);
+        syncRetryTimerId = setTimeout(() => flushPendingSync(), 3000);
       } finally {
         isSyncingNow = false;
         if (pendingSyncPayload) {
@@ -2754,7 +2757,9 @@ Rules:
       const dbUrl = getFirebaseDbUrl();
       if (dbUrl) {
         try {
-          await fetch(`${dbUrl}/sessions/${encodeURIComponent(teacherSessionCode)}/students.json`, { method: "DELETE" });
+          await fetch(`${dbUrl}/sessions/${encodeURIComponent(teacherSessionCode)}/students.json?x-http-method-override=DELETE`, {
+            method: "POST"
+          });
         } catch (e) {}
       }
 
