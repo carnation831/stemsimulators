@@ -1540,8 +1540,7 @@
         localStorage.setItem(LOCAL_SESSIONS_KEY, JSON.stringify(all));
       } catch (e) {}
     }
-
-    async function syncStudentProgressToSession(statusText) {
+async function syncStudentProgressToSession(statusText) {
       const badge = document.getElementById("live-sync-badge");
       const badgeDot = document.getElementById("live-sync-dot");
       const badgeText = document.getElementById("live-sync-text");
@@ -1565,6 +1564,85 @@
         lvl2: null,
         missedCounts: {}
       };
+
+      const dbUrl = getFirebaseDbUrl();
+      
+      // Safely fetch remote data without crashing if extensions interfere
+      if (dbUrl) {
+        try {
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 4000); // 4-second timeout
+          
+          const getRes = await fetch(`${dbUrl}/sessions/${encodeURIComponent(activeSessionCode)}/students/${encodeURIComponent(sKey)}.json`, {
+            signal: controller.signal
+          });
+          clearTimeout(timeoutId);
+          
+          if (getRes.ok) {
+            const remoteData = await getRes.json();
+            if (remoteData) existing = { ...existing, ...remoteData };
+          }
+        } catch (e) {
+          // Silently fallback to local state if network/extensions block the request
+        }
+      }
+
+      const combinedMissed = { ...(existing.missedCounts || {}) };
+      Object.entries(missedTopicCounts).forEach(([topic, count]) => {
+        combinedMissed[topic] = Math.max(combinedMissed[topic] || 0, count);
+      });
+
+      const levelPayload = {
+        right: rightCount,
+        wrong: wrongCount,
+        pct: pct,
+        completed: statusText === "Completed"
+      };
+
+      const updatedStudentRecord = {
+        name: studentName,
+        activeLevel: selectedLevel,
+        currentQ: Math.min(currentQuestionIndex + 1, totalQ),
+        totalQ: totalQ,
+        status: statusText,
+        lvl1: selectedLevel === 1 ? levelPayload : (existing.lvl1 || null),
+        lvl2: selectedLevel === 2 ? levelPayload : (existing.lvl2 || null),
+        missedCounts: combinedMissed,
+        updatedAt: Date.now()
+      };
+
+      // Always save locally first so progress is never lost
+      saveLocalSessionStudent(activeSessionCode, sKey, updatedStudentRecord);
+
+      if (badge && badgeText && badgeDot) {
+        badge.className = "bg-emerald-100 text-emerald-800 font-semibold text-[11px] px-2.5 py-1 rounded-full flex items-center gap-1";
+        badgeDot.className = "w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse";
+        badgeText.textContent = "Syncing...";
+      }
+
+      // Safely push to Firebase cloud database
+      if (dbUrl) {
+        try {
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 4000);
+
+          await fetch(`${dbUrl}/sessions/${encodeURIComponent(activeSessionCode)}/students/${encodeURIComponent(sKey)}.json`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(updatedStudentRecord),
+            signal: controller.signal
+          });
+          clearTimeout(timeoutId);
+
+          if (badgeText) badgeText.textContent = `Synced (${activeSessionCode})`;
+        } catch (err) {
+          if (badgeText) badgeText.textContent = `Saved Locally (${activeSessionCode})`;
+        }
+      } else {
+        if (badgeText) badgeText.textContent = `Session ${activeSessionCode}`;
+      }
+    }
+
 
       const dbUrl = getFirebaseDbUrl();
       if (dbUrl) {
