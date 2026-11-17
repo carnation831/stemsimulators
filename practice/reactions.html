@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>5 Types of Reactions - Live Session & AI Chemistry Quiz</title>
+  <title>5 Types of Reactions - Chemistry Practice & AI Tutor</title>
   
   <!-- Google AdSense Script -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4365444453795543"
@@ -30,9 +30,6 @@
       from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    .bar-fill {
-      transition: width 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-    }
     /* Custom chip checkbox styling */
     .compound-checkbox:checked + .compound-pill {
       background-color: #2563eb;
@@ -51,28 +48,21 @@
 <body class="min-h-screen flex flex-col items-center justify-start py-4 px-3 sm:py-6 sm:px-6">
 
   <!-- Main Responsive Container -->
-  <div id="app-shell" class="w-full max-w-4xl bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden transition-all duration-300">
+  <div id="app-shell" class="w-full max-w-3xl bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden transition-all duration-300">
     
     <!-- Top Header Bar -->
     <header class="bg-slate-900 text-white px-4 py-3.5 sm:px-6 flex flex-wrap items-center justify-between gap-2">
       <div class="flex items-center gap-2.5">
         <span class="text-2xl" role="img" aria-label="Chemistry Flask">⚗️</span>
         <div>
-          <div class="flex items-center gap-2">
-            <h1 class="font-extrabold text-base sm:text-lg leading-tight tracking-tight">5 Types of Reactions</h1>
-            <span id="header-session-pill" class="hidden font-mono-code text-[11px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 px-2 py-0.5 rounded-md"></span>
-          </div>
+          <h1 class="font-extrabold text-base sm:text-lg leading-tight tracking-tight">5 Types of Reactions</h1>
           <p class="text-xs text-slate-400 hidden sm:block">Bonding, Reaction Classification, States of Matter & AI Chemistry Tutor</p>
         </div>
       </div>
       <div class="flex items-center gap-2">
-        <button id="toggle-cheatsheet-btn" onclick="toggleCheatSheet()" class="bg-slate-800 hover:bg-slate-700 active:bg-slate-600 text-slate-200 text-xs sm:text-sm font-medium px-3 py-2 rounded-xl border border-slate-700 transition flex items-center gap-1.5">
+        <button id="toggle-cheatsheet-btn" onclick="toggleCheatSheet()" class="bg-slate-800 hover:bg-slate-700 active:bg-slate-600 text-slate-200 text-xs sm:text-sm font-medium px-3.5 py-2 rounded-xl border border-slate-700 transition flex items-center gap-1.5">
           <span>📋</span>
           <span>Reference Guide</span>
-        </button>
-        <button onclick="openTeacherAccess()" class="bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white text-xs sm:text-sm font-semibold px-3.5 py-2 rounded-xl transition flex items-center gap-1.5 shadow-sm">
-          <span>👩‍🏫</span>
-          <span>Teacher Hub</span>
         </button>
       </div>
     </header>
@@ -111,14 +101,14 @@
       </div>
     </div>
 
-    <!-- Custom In-App Toast Banner (Never uses alert()) -->
+    <!-- Custom In-App Toast Banner -->
     <div id="toast-banner" class="hidden mx-4 mt-4 sm:mx-6 px-4 py-3 rounded-xl text-sm font-medium flex items-center justify-between fade-in">
       <span id="toast-message"></span>
       <button onclick="hideToast()" class="ml-3 font-bold opacity-75 hover:opacity-100">✕</button>
     </div>
 
     <!-- =================================================================== -->
-    <!-- SCREEN 1: STUDENT CHECK-IN & TEACHER SESSION LAUNCHER               -->
+    <!-- SCREEN 1: PRIVACY-SAFE STUDENT CHECK-IN                             -->
     <!-- =================================================================== -->
     <main id="screen-checkin" class="p-5 sm:p-8 fade-in">
       <div class="max-w-lg mx-auto">
@@ -126,44 +116,62 @@
           <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-indigo-100 text-indigo-600 text-3xl mb-3">⚗️</div>
           <h2 class="text-2xl font-extrabold text-slate-900">5 Types of Reactions</h2>
           <p class="text-sm text-slate-600 mt-1">
-            Enter your teacher's <strong>Session Code</strong> (or leave blank for Solo Practice), type your <strong>First Name + Last Initial</strong>, and choose your level.
+            Enter your <strong>First Name</strong>, <strong>Last Initial</strong>, and <strong>Class Period</strong> to generate your score card image at the end.
           </p>
         </div>
 
         <div class="space-y-4">
-          <!-- Session Code Input -->
-          <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
-            <div class="flex items-center justify-between mb-1.5">
-              <label for="session-code-input" class="block text-xs font-bold uppercase tracking-wider text-slate-700">
-                Classroom Session Code
+          <!-- Privacy-Safe Student Info Row -->
+          <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+            <div class="sm:col-span-6">
+              <label for="first-name-input" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                First Name
               </label>
-              <span class="text-[11px] font-medium text-slate-500">Leave blank for Solo Practice</span>
+              <input 
+                type="text" 
+                id="first-name-input" 
+                placeholder="e.g., Maya" 
+                maxlength="20"
+                oninput="updateCheckinPreview()"
+                onkeydown="if(event.key === 'Enter') startQuiz()"
+                class="w-full px-3.5 py-3 text-base rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+              >
             </div>
-            <input 
-              type="text" 
-              id="session-code-input" 
-              placeholder="e.g., RXN-492 (or Solo Practice)" 
-              maxlength="12"
-              oninput="this.value = this.value.toUpperCase()"
-              class="w-full font-mono-code uppercase tracking-widest font-bold text-center text-lg px-4 py-3 rounded-xl border border-slate-300 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
-            >
+
+            <div class="sm:col-span-3">
+              <label for="last-initial-input" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                Last Initial
+              </label>
+              <input 
+                type="text" 
+                id="last-initial-input" 
+                placeholder="L" 
+                maxlength="1"
+                oninput="this.value = this.value.replace(/[^a-zA-Z]/g, '').toUpperCase(); updateCheckinPreview();"
+                onkeydown="if(event.key === 'Enter') startQuiz()"
+                class="w-full text-center uppercase font-bold px-3 py-3 text-base rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+              >
+            </div>
+
+            <div class="sm:col-span-3">
+              <label for="period-input" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                Period #
+              </label>
+              <input 
+                type="text" 
+                inputmode="numeric"
+                id="period-input" 
+                placeholder="3" 
+                maxlength="2"
+                oninput="this.value = this.value.replace(/[^0-9]/g, ''); updateCheckinPreview();"
+                onkeydown="if(event.key === 'Enter') startQuiz()"
+                class="w-full text-center font-bold px-3 py-3 text-base rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+              >
+            </div>
           </div>
 
-          <!-- Student Privacy-Safe Name Input -->
-          <div>
-            <label for="student-name-input" class="block text-sm font-semibold text-slate-700 mb-1.5">
-              First Name + Last Initial
-            </label>
-            <input 
-              type="text" 
-              id="student-name-input" 
-              placeholder="e.g., Maya L." 
-              maxlength="24"
-              oninput="previewSanitizedName()"
-              onkeydown="if(event.key === 'Enter') startQuiz()"
-              class="w-full px-4 py-3.5 text-base rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-            >
-            <p id="privacy-preview" class="text-xs text-slate-500 mt-1.5 min-h-[1rem]"></p>
+          <div id="privacy-preview" class="bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-600 min-h-[2.25rem] flex items-center justify-between">
+            <span>🔒 Full last names are never collected or printed on your score image.</span>
           </div>
 
           <!-- Level Selection Cards -->
@@ -202,17 +210,6 @@
             <span id="start-btn-label">Start Level 1 Quiz (15 Questions)</span>
             <span>➔</span>
           </button>
-
-          <!-- Teacher Quick-Host Divider -->
-          <div class="pt-4 mt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 bg-indigo-50/70 p-4 rounded-2xl border">
-            <div>
-              <p class="text-xs font-extrabold text-indigo-950 uppercase tracking-wider">Are you a teacher?</p>
-              <p class="text-xs text-slate-600">Create a live Session Code with your own custom PIN & watch real-time class analytics.</p>
-            </div>
-            <button onclick="openHostSessionModal()" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-xs transition shrink-0">
-              🚀 Host Live Session
-            </button>
-          </div>
         </div>
       </div>
     </main>
@@ -227,10 +224,6 @@
           <span id="quiz-student-badge" class="bg-slate-100 text-slate-800 font-semibold text-xs sm:text-sm px-2.5 py-1.5 rounded-xl border border-slate-200"></span>
           <span id="quiz-level-badge" class="bg-indigo-100 text-indigo-800 font-bold text-xs px-2.5 py-1.5 rounded-xl">Level 1</span>
           <span id="quiz-score-badge" class="bg-emerald-50 text-emerald-700 font-semibold text-xs sm:text-sm px-2.5 py-1.5 rounded-xl border border-emerald-200">✓ 0</span>
-          <span id="live-sync-badge" class="bg-slate-100 text-slate-700 font-semibold text-[11px] px-2.5 py-1 rounded-full flex items-center gap-1">
-            <span id="live-sync-dot" class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
-            <span id="live-sync-text">Solo Practice</span>
-          </span>
         </div>
         <div class="flex items-center gap-2">
           <span id="quiz-progress-badge" class="bg-blue-100 text-blue-800 font-bold text-xs sm:text-sm px-3 py-1.5 rounded-xl">
@@ -355,18 +348,39 @@
     </main>
 
     <!-- =================================================================== -->
-    <!-- SCREEN 3: STUDENT COMPLETION SUMMARY                                -->
+    <!-- SCREEN 3: STUDENT COMPLETION SUMMARY & JPEG SCORE IMAGE DOWNLOAD    -->
     <!-- =================================================================== -->
     <main id="screen-summary" class="hidden p-5 sm:p-8 fade-in max-w-xl mx-auto">
-      <div class="text-center mb-6">
+      <div class="text-center mb-5">
         <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-600 text-3xl mb-3">🏆</div>
         <h2 class="text-2xl font-extrabold text-slate-900" id="summary-heading">Level Complete!</h2>
-        <p id="summary-student-name" class="text-base font-semibold text-slate-600 mt-1"></p>
-        <p id="summary-sync-confirmation" class="text-xs font-semibold text-emerald-700 mt-1"></p>
+        <p id="summary-student-name" class="text-base font-semibold text-slate-700 mt-1"></p>
+        <p id="summary-sync-confirmation" class="text-xs font-semibold text-indigo-700 mt-1"></p>
+      </div>
+
+      <!-- Download JPEG Score Card Callout -->
+      <div class="bg-indigo-50 border-2 border-indigo-300 rounded-2xl p-4 sm:p-5 mb-5 shadow-xs">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+          <span class="inline-block text-[11px] font-extrabold uppercase tracking-wider bg-indigo-600 text-white px-2.5 py-0.5 rounded-full">Turn In Your Score Image</span>
+          <span id="summary-filename-badge" class="font-mono-code text-xs font-bold bg-white text-indigo-900 border border-indigo-200 px-2.5 py-1 rounded-lg"></span>
+        </div>
+        <p class="text-xs text-slate-600 mb-3">
+          Download your compact score card image (<code class="bg-white px-1.5 py-0.5 rounded border border-indigo-200 font-mono-code text-indigo-900">.jpg</code>) and upload it to your teacher's assignment dropbox.
+        </p>
+
+        <!-- Live Preview of the Generated JPEG Score Card -->
+        <div class="mb-3 rounded-xl overflow-hidden border border-indigo-200 bg-white shadow-2xs">
+          <img id="score-card-preview-img" alt="Score Card Preview" class="w-full h-auto block">
+        </div>
+
+        <button onclick="downloadScoreJpeg()" class="w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold py-3.5 px-5 rounded-xl shadow-md transition text-sm sm:text-base flex items-center justify-center gap-2">
+          <span>🖼️</span>
+          <span>Download Score Image (<span id="download-btn-filename">score.jpg</span>)</span>
+        </button>
       </div>
 
       <!-- Score Breakdown Grid -->
-      <div class="grid grid-cols-3 gap-3 mb-6 text-center">
+      <div class="grid grid-cols-3 gap-3 mb-5 text-center">
         <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-3.5">
           <span class="block text-2xl sm:text-3xl font-extrabold text-emerald-700" id="summary-right">0</span>
           <span class="text-xs font-semibold text-emerald-800 uppercase">Right</span>
@@ -381,7 +395,7 @@
         </div>
       </div>
 
-      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 mb-6">
+      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 mb-5">
         <p class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Concepts Missed</p>
         <p id="summary-missed-topics" class="text-sm text-slate-800 font-medium"></p>
       </div>
@@ -392,458 +406,24 @@
           <span>Continue to Level 2: Advanced + States of Matter ➔</span>
         </button>
         <button onclick="exitStudentSession()" class="w-full bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-3 px-4 rounded-xl transition text-sm">
-          Finish & Return to Check-In
+          Finish & Return to Start
         </button>
       </div>
     </main>
 
-    <!-- =================================================================== -->
-    <!-- SCREEN 4: LIVE REAL-TIME TEACHER ANALYTICS DASHBOARD                -->
-    <!-- =================================================================== -->
-    <main id="screen-teacher" class="hidden p-4 sm:p-7 fade-in">
-      <!-- Top Session Command Bar -->
-      <div class="bg-slate-900 text-white rounded-2xl p-4 sm:p-5 mb-6 shadow-md">
-        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          <div>
-            <div class="flex flex-wrap items-center gap-2 mb-1">
-              <span class="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span id="dashboard-connection-mode">Live Session Active</span>
-              </span>
-              <span id="last-updated-label" class="text-[11px] text-slate-400">Syncing live...</span>
-            </div>
-            <div class="flex flex-wrap items-center gap-3 mt-1.5">
-              <div>
-                <span class="text-[11px] text-slate-400 block uppercase">Active Session Code</span>
-                <span id="active-session-code-display" class="font-mono-code text-2xl sm:text-3xl font-extrabold tracking-widest text-amber-300">RXN-492</span>
-              </div>
-              <div class="flex flex-wrap gap-2">
-                <button onclick="copyStudentJoinLink()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-3.5 py-2 rounded-xl transition flex items-center gap-1.5 shadow-xs">
-                  <span>🔗</span>
-                  <span>Copy Student Join Link</span>
-                </button>
-                <button onclick="openChangePinModal()" class="bg-slate-800 hover:bg-slate-700 text-amber-200 text-xs font-semibold px-3 py-2 rounded-xl border border-slate-700 transition flex items-center gap-1">
-                  <span>🔑</span>
-                  <span>Change PIN</span>
-                </button>
-                <button onclick="openHostSessionModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-3 py-2 rounded-xl border border-slate-700 transition">
-                  + New Session
-                </button>
-              </div>
-            </div>
-            <!-- Session Recovery Key Pill -->
-            <div id="dashboard-recovery-bar" class="mt-2.5 inline-flex items-center gap-2 bg-slate-800/90 border border-slate-700 px-3 py-1 rounded-lg text-[11px] text-slate-300">
-              <span>Recovery Key (save to reset PIN):</span>
-              <strong id="dashboard-recovery-key" class="font-mono-code text-emerald-300 tracking-wider">—</strong>
-              <button type="button" onclick="copyRecoveryKey()" class="text-indigo-300 hover:text-white underline font-semibold ml-1">Copy</button>
-            </div>
-          </div>
-
-          <!-- Switch Session / Demo Controls -->
-          <div class="flex flex-wrap items-center gap-2">
-            <div class="flex items-center bg-slate-800 rounded-xl border border-slate-700 p-1">
-              <input 
-                type="text" 
-                id="switch-session-input" 
-                placeholder="Session code..." 
-                maxlength="12"
-                oninput="this.value = this.value.toUpperCase()"
-                class="bg-transparent font-mono-code text-xs text-white px-2.5 py-1.5 w-28 focus:outline-none uppercase"
-              >
-              <button onclick="switchTeacherSessionPrompt()" class="bg-slate-700 hover:bg-slate-600 text-white text-xs font-bold px-2.5 py-1.5 rounded-lg transition">
-                Load
-              </button>
-            </div>
-            <button id="simulate-class-btn" onclick="toggleSimulatedClassroom()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold px-3.5 py-2.5 rounded-xl transition shadow-xs flex items-center gap-1.5">
-              <span>⚡</span>
-              <span id="simulate-btn-label">Simulate Live Class</span>
-            </button>
-            <button onclick="closeTeacherDashboard()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold px-3 py-2.5 rounded-xl border border-slate-700 transition">
-              Exit Dashboard
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- 4-Card Top KPI Strip -->
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
-          <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Active Students</span>
-          <div class="flex items-baseline justify-between mt-1">
-            <span id="kpi-active-students" class="text-2xl sm:text-3xl font-extrabold text-slate-900">0</span>
-            <span id="kpi-completed-sub" class="text-xs font-semibold text-emerald-600">0 finished</span>
-          </div>
-        </div>
-
-        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
-          <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Class Average</span>
-          <div class="flex items-baseline justify-between mt-1">
-            <span id="kpi-class-avg" class="text-2xl sm:text-3xl font-extrabold text-indigo-600">—</span>
-            <span class="text-xs font-medium text-slate-500">across levels</span>
-          </div>
-        </div>
-
-        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
-          <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Questions Answered</span>
-          <div class="flex items-baseline justify-between mt-1">
-            <span id="kpi-total-answered" class="text-2xl sm:text-3xl font-extrabold text-slate-900">0</span>
-            <span class="text-xs font-medium text-slate-500">live responses</span>
-          </div>
-        </div>
-
-        <div class="bg-rose-50 border border-rose-200 rounded-2xl p-4">
-          <span class="text-xs font-bold text-rose-800 uppercase tracking-wider block">Top Struggling Concept</span>
-          <div class="mt-1">
-            <span id="kpi-top-misconception" class="text-sm sm:text-base font-extrabold text-rose-700 line-clamp-1">None yet</span>
-            <span id="kpi-top-misconception-pct" class="text-xs font-semibold text-rose-600 block">0% of class</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Main Analytics Split Grid: Real-Time Class Misconception Bar Chart + Quick Reteach Callout -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
-        <!-- Real-Time Horizontal Bar Chart -->
-        <div class="lg:col-span-2 bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 shadow-2xs">
-          <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
-            <div>
-              <h3 class="font-extrabold text-slate-900 text-base">📊 Most-Missed Reaction Types & Concepts</h3>
-              <p class="text-xs text-slate-500">Live breakdown of student errors across this session (ranked highest to lowest)</p>
-            </div>
-            <span class="text-[11px] font-semibold bg-slate-100 text-slate-600 px-2.5 py-1 rounded-lg">Auto-Updates Live</span>
-          </div>
-
-          <div id="misconception-chart-container" class="space-y-3"></div>
-        </div>
-
-        <!-- Dynamic Quick Reteach Tip Panel -->
-        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 sm:p-5 flex flex-col justify-between">
-          <div>
-            <div class="inline-flex items-center gap-1.5 bg-amber-200/70 text-amber-950 text-xs font-extrabold px-2.5 py-1 rounded-lg mb-3">
-              <span>💡</span>
-              <span>Live Reteach Spotlight</span>
-            </div>
-            <h4 id="reteach-title" class="font-extrabold text-slate-900 text-base mb-2">Waiting for student responses...</h4>
-            <p id="reteach-body" class="text-xs sm:text-sm text-slate-700 leading-relaxed">
-              As students submit answers in Level 1 or Level 2, this card automatically highlights the #1 class misconception and gives you a quick board example to reteach.
-            </p>
-          </div>
-          <div class="mt-4 pt-3 border-t border-amber-200/80 text-[11px] text-amber-900 font-medium">
-            Tip: Click <strong>⚡ Simulate Live Class</strong> above to preview live classroom analytics right now!
-          </div>
-        </div>
-      </div>
-
-      <!-- Unified Multi-Level Student Roster Section -->
-      <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-2xs mb-6">
-        <div class="p-4 sm:p-5 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div>
-            <h3 class="font-extrabold text-slate-900 text-base">📋 Live Student Roster (Level 1 & Level 2 Unified)</h3>
-            <p class="text-xs text-slate-500">Real-time progress, side-by-side level scores, and individual concept gaps</p>
-          </div>
-
-          <div class="flex flex-wrap items-center gap-2">
-            <input 
-              type="text" 
-              id="roster-search-input" 
-              placeholder="Search student..." 
-              oninput="renderTeacherDashboard()"
-              class="text-xs px-3 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-36 sm:w-44"
-            >
-            <button onclick="exportSessionCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-3.5 py-2 rounded-xl transition flex items-center gap-1.5 shadow-2xs">
-              <span>📥</span>
-              <span>Export CSV</span>
-            </button>
-            <button onclick="requestClearSessionData()" class="bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold text-xs px-3 py-2 rounded-xl transition">
-              Clear
-            </button>
-          </div>
-        </div>
-
-        <!-- Roster Filter Tabs -->
-        <div class="px-4 py-2.5 bg-slate-50 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2">
-          <div class="flex flex-wrap gap-1.5" id="roster-filter-tabs">
-            <button onclick="setRosterFilter('all')" data-filter="all" class="roster-tab-btn bg-slate-900 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition">All Students</button>
-            <button onclick="setRosterFilter('lvl1')" data-filter="lvl1" class="roster-tab-btn bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 text-xs font-semibold px-3 py-1.5 rounded-lg transition">Level 1</button>
-            <button onclick="setRosterFilter('lvl2')" data-filter="lvl2" class="roster-tab-btn bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 text-xs font-semibold px-3 py-1.5 rounded-lg transition">Level 2</button>
-            <button onclick="setRosterFilter('help')" data-filter="help" class="roster-tab-btn bg-white text-rose-700 hover:bg-rose-50 border border-rose-200 text-xs font-semibold px-3 py-1.5 rounded-lg transition">Needs Help (&lt;70%)</button>
-          </div>
-          <div class="flex items-center gap-1.5 text-xs text-slate-500">
-            <span>Sort:</span>
-            <select id="roster-sort-select" onchange="renderTeacherDashboard()" class="bg-white border border-slate-200 rounded-lg px-2 py-1 text-xs font-semibold text-slate-700 focus:outline-none">
-              <option value="recent">Most Recent</option>
-              <option value="name">Name (A–Z)</option>
-              <option value="score-asc">Score (Lowest First)</option>
-              <option value="score-desc">Score (Highest First)</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Inline Confirm Clear Banner -->
-        <div id="clear-confirm-box" class="hidden bg-rose-50 border-b border-rose-200 px-4 py-3 flex flex-wrap items-center justify-between gap-2 fade-in">
-          <p class="text-xs font-bold text-rose-900">Clear all student records in session <span id="clear-session-label" class="font-mono-code"></span>?</p>
-          <div class="flex gap-2">
-            <button onclick="confirmClearSessionData()" class="bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold px-3 py-1.5 rounded-lg">Yes, Clear</button>
-            <button onclick="cancelClearSessionData()" class="bg-white border border-slate-300 text-slate-700 text-xs font-bold px-3 py-1.5 rounded-lg">Cancel</button>
-          </div>
-        </div>
-
-        <!-- Responsive Roster Table -->
-        <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse text-xs sm:text-sm">
-            <thead>
-              <tr class="bg-slate-50 text-slate-600 border-b border-slate-200 text-[11px] uppercase tracking-wider">
-                <th class="py-3 px-4 font-bold">Student</th>
-                <th class="py-3 px-3 font-bold">Status & Progress</th>
-                <th class="py-3 px-3 font-bold text-center">Level 1 (Foundations)</th>
-                <th class="py-3 px-3 font-bold text-center">Level 2 (States)</th>
-                <th class="py-3 px-4 font-bold">Missed Concepts</th>
-              </tr>
-            </thead>
-            <tbody id="teacher-roster-body" class="divide-y divide-slate-200 bg-white"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Collapsible 1-Time Owner Firebase Realtime Database Configuration -->
-      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
-        <button type="button" onclick="toggleFirebaseConfigPanel()" class="w-full flex items-center justify-between text-left">
-          <div class="flex items-center gap-2">
-            <span class="text-base">⚙️</span>
-            <div>
-              <span class="font-bold text-slate-800 text-xs sm:text-sm block">Cloud Sync Settings (Firebase Realtime Database)</span>
-              <span class="text-[11px] text-slate-500">Connected to your Firebase project real-time database</span>
-            </div>
-          </div>
-          <span id="firebase-status-badge" class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800">● Firebase Cloud Connected</span>
-        </button>
-
-        <div id="firebase-config-body" class="hidden mt-3 pt-3 border-t border-slate-200 space-y-2.5 text-xs text-slate-600 fade-in">
-          <p>
-            Your Firebase Realtime Database URL is configured. Student scores and custom session PINs sync live across separate devices.
-          </p>
-          <div class="flex flex-col sm:flex-row gap-2">
-            <input 
-              type="url" 
-              id="firebase-url-input" 
-              placeholder="https://your-project-default-rtdb.firebaseio.com"
-              class="flex-1 bg-white px-3 py-2 rounded-xl border border-slate-300 font-mono-code text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            >
-            <button onclick="saveFirebaseDbUrl()" class="bg-slate-900 hover:bg-slate-800 text-white font-bold px-4 py-2 rounded-xl transition shrink-0">
-              Save Database URL
-            </button>
-          </div>
-        </div>
-      </div>
-    </main>
-
   </div>
 
-  <!-- =================================================================== -->
-  <!-- MODAL 1: HOST NEW LIVE SESSION (SET CUSTOM PIN & GET RECOVERY KEY)  -->
-  <!-- =================================================================== -->
-  <div id="host-session-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-sm w-full p-5 sm:p-6 shadow-2xl border border-slate-200 fade-in">
-      <h3 class="text-lg font-extrabold text-slate-900 mb-1">🚀 Host a New Live Session</h3>
-      <p class="text-xs text-slate-600 mb-4">
-        Create your own 4-digit Teacher PIN to protect your dashboard. You'll receive a unique <strong>Session Code</strong> and a <strong>Recovery Key</strong> in case you ever forget your PIN.
-      </p>
-
-      <div class="space-y-3">
-        <div class="bg-indigo-50 border border-indigo-200 rounded-xl p-3 flex items-center justify-between">
-          <div>
-            <span class="text-[11px] font-bold uppercase text-indigo-800 block">New Session Code</span>
-            <span id="host-preview-code" class="font-mono-code text-xl font-extrabold tracking-widest text-indigo-950">RXN-492</span>
-          </div>
-          <button type="button" onclick="refreshHostPreviewCode()" class="text-xs font-bold bg-white border border-indigo-200 text-indigo-700 px-2.5 py-1.5 rounded-lg hover:bg-indigo-100">
-            Shuffle ↻
-          </button>
-        </div>
-
-        <div>
-          <label for="host-custom-pin-input" class="block text-xs font-bold text-slate-700 mb-1">
-            Set Your 4-Digit Teacher PIN
-          </label>
-          <input 
-            type="password" 
-            inputmode="numeric" 
-            id="host-custom-pin-input" 
-            maxlength="4"
-            placeholder="e.g., 4812"
-            onkeydown="if(event.key === 'Enter') createCustomTeacherSession()"
-            class="w-full text-center text-2xl tracking-widest font-bold py-2.5 px-4 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          >
-        </div>
-        <p id="host-error-msg" class="hidden text-xs text-rose-600 font-semibold text-center"></p>
-      </div>
-
-      <div class="flex gap-2 mt-5">
-        <button onclick="closeHostSessionModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-sm">Cancel</button>
-        <button onclick="createCustomTeacherSession()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl text-sm">Launch Session</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- =================================================================== -->
-  <!-- MODAL 2: TEACHER HUB PIN LOGIN & RECOVERY KEY PIN RESET             -->
-  <!-- =================================================================== -->
-  <div id="pin-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-sm w-full p-5 sm:p-6 shadow-2xl border border-slate-200 fade-in">
-      
-      <!-- VIEW A: ENTER SESSION CODE + PIN -->
-      <div id="pin-login-view">
-        <h3 class="text-lg font-extrabold text-slate-900 mb-1">🔐 Teacher Hub Access</h3>
-        <p class="text-xs text-slate-500 mb-4">Enter your Session Code and 4-digit PIN (default demo PIN is <strong>1234</strong>).</p>
-        
-        <div class="space-y-2.5">
-          <div>
-            <label for="modal-session-input" class="block text-[11px] font-bold uppercase text-slate-600 mb-1">Session Code</label>
-            <input 
-              type="text" 
-              id="modal-session-input" 
-              placeholder="e.g., RXN-492"
-              maxlength="12"
-              oninput="this.value = this.value.toUpperCase()"
-              class="w-full font-mono-code uppercase text-center text-base font-bold py-2 px-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            >
-          </div>
-
-          <div>
-            <label for="modal-pin-input" class="block text-[11px] font-bold uppercase text-slate-600 mb-1">4-Digit Teacher PIN</label>
-            <input 
-              type="password" 
-              inputmode="numeric" 
-              id="modal-pin-input" 
-              maxlength="4"
-              placeholder="••••"
-              onkeydown="if(event.key === 'Enter') verifyTeacherPin()"
-              class="w-full text-center text-2xl tracking-widest font-bold py-2 px-4 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            >
-          </div>
-        </div>
-
-        <p id="pin-error-msg" class="hidden text-xs text-rose-600 font-semibold text-center mt-2.5"></p>
-
-        <div class="flex gap-2 mt-4">
-          <button onclick="closePinModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-sm">Cancel</button>
-          <button onclick="verifyTeacherPin()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl text-sm">Open Dashboard</button>
-        </div>
-
-        <div class="flex items-center justify-between mt-4 pt-3 border-t border-slate-100 text-xs">
-          <button type="button" onclick="showPinResetView()" class="text-indigo-600 hover:text-indigo-800 font-bold">Forgot PIN?</button>
-          <button type="button" onclick="closePinModal(); openHostSessionModal();" class="text-slate-600 hover:text-slate-900 font-semibold">+ Host New Session</button>
-        </div>
-      </div>
-
-      <!-- VIEW B: RESET FORGOTTEN PIN USING RECOVERY KEY -->
-      <div id="pin-reset-view" class="hidden">
-        <h3 class="text-lg font-extrabold text-slate-900 mb-1">🔄 Reset Session PIN</h3>
-        <p class="text-xs text-slate-600 mb-3">
-          Enter the <strong>Recovery Key</strong> given when you created this session to set a new 4-digit PIN.
-        </p>
-
-        <div class="space-y-2.5">
-          <div>
-            <label class="block text-[11px] font-bold uppercase text-slate-600 mb-1">Session Code</label>
-            <input 
-              type="text" 
-              id="reset-session-input" 
-              placeholder="e.g., RXN-492"
-              maxlength="12"
-              oninput="this.value = this.value.toUpperCase()"
-              class="w-full font-mono-code uppercase text-center text-sm font-bold py-2 px-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            >
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold uppercase text-slate-600 mb-1">Recovery Key</label>
-            <input 
-              type="text" 
-              id="reset-recovery-input" 
-              placeholder="e.g., REC-84A2"
-              maxlength="12"
-              oninput="this.value = this.value.toUpperCase()"
-              class="w-full font-mono-code uppercase text-center text-sm font-bold py-2 px-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            >
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold uppercase text-slate-600 mb-1">New 4-Digit PIN</label>
-            <input 
-              type="password" 
-              inputmode="numeric" 
-              id="reset-new-pin-input" 
-              placeholder="••••"
-              maxlength="4"
-              onkeydown="if(event.key === 'Enter') resetSessionPinWithRecovery()"
-              class="w-full text-center text-xl tracking-widest font-bold py-2 px-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-            >
-          </div>
-        </div>
-
-        <p id="reset-error-msg" class="hidden text-xs text-rose-600 font-semibold text-center mt-2"></p>
-
-        <button onclick="resetSessionPinWithRecovery()" class="w-full mt-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-sm">
-          Save New PIN & Unlock
-        </button>
-
-        <p class="text-[11px] text-slate-500 mt-3 leading-snug">
-          Lost your Recovery Key? No problem—go back and click <strong>+ Host New Session</strong> to spin up a fresh Session Code in 2 seconds.
-        </p>
-        <button type="button" onclick="showPinLoginView()" class="mt-2 text-xs text-indigo-600 hover:text-indigo-800 font-bold">
-          ← Back to PIN Login
-        </button>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- =================================================================== -->
-  <!-- MODAL 3: CHANGE PIN WHILE INSIDE DASHBOARD                          -->
-  <!-- =================================================================== -->
-  <div id="change-pin-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-xs w-full p-5 shadow-2xl border border-slate-200 fade-in">
-      <h3 class="text-lg font-extrabold text-slate-900 mb-1">🔑 Change Session PIN</h3>
-      <p class="text-xs text-slate-500 mb-3">Set a new 4-digit PIN for session <strong id="change-pin-session-label" class="font-mono-code"></strong>.</p>
-      <input 
-        type="password" 
-        inputmode="numeric" 
-        id="new-dashboard-pin-input" 
-        maxlength="4"
-        placeholder="••••"
-        onkeydown="if(event.key === 'Enter') saveNewDashboardPin()"
-        class="w-full text-center text-2xl tracking-widest font-bold py-2.5 px-4 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-2"
-      >
-      <p id="change-pin-error" class="hidden text-xs text-rose-600 font-semibold text-center mb-2">PIN must be exactly 4 digits.</p>
-      <div class="flex gap-2 mt-3">
-        <button onclick="closeChangePinModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-sm">Cancel</button>
-        <button onclick="saveNewDashboardPin()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl text-sm">Update PIN</button>
-      </div>
-    </div>
-  </div>
+  <!-- Hidden Offscreen Canvas for Generating Lightweight JPEG Score Card -->
+  <canvas id="score-export-canvas" width="760" height="410" class="hidden"></canvas>
 
   <script>
     // =========================================================================
     // CONFIGURATION & CONSTANTS
     // =========================================================================
     const GEMINI_API_KEY = ""; // Optional: Paste your Google Gemini API key here for live conversational AI tutoring
-    const FIREBASE_DB_URL = "https://types-of-reactions-default-rtdb.firebaseio.com"; // Configured Firebase Realtime Database URL
     const apiKey = GEMINI_API_KEY;
     const GEMINI_MODEL = "gemini-3-flash-preview";
-    const DEFAULT_FALLBACK_PIN = "1234";
-    const DB_STORAGE_KEY = "rxn5_firebase_db_url_v1";
-    const ACTIVE_SESSION_KEY = "rxn5_active_session_code_v1";
-    const ACTIVE_TEACHER_VIEW_KEY = "rxn5_active_teacher_dashboard_v1";
-    const STUDENT_SESSION_STATE_KEY = "rxn5_active_student_quiz_v1";
-    const LOCAL_SESSIONS_KEY = "rxn5_local_sessions_store_v1";
-    const SESSION_META_KEY = "rxn5_session_meta_store_v1";
-
-    const TRACKED_CONCEPTS = [
-      { id: "Ionic/Covalent Bonding", label: "Ionic vs. Covalent Bonding", color: "bg-blue-600", tip: "Remind students: Metal (or NH₄⁺) + Nonmetal = Ionic; Nonmetal + Nonmetal = Covalent; single unbonded metals (Na, Cu, Zn, Fe, Mg, Al) are pure elements (neither)." },
-      { id: "States of Matter", label: "States of Matter (s / l / g / aq)", color: "bg-indigo-600", tip: "Review solubility rules on the board: Group 1 (Na⁺, K⁺), Ammonium (NH₄⁺), and Nitrate (NO₃⁻) compounds are always (aq), while BaSO₄, CaSO₄, Al(OH)₃, and CaCO₃ form solid precipitates (s)." },
-      { id: "Synthesis", label: "Synthesis Reactions", color: "bg-emerald-600", tip: "Show the pattern A + B → AB: two or more simpler reactants combine to build ONE single compound." },
-      { id: "Decomposition", label: "Decomposition Reactions", color: "bg-amber-500", tip: "Show the pattern AB → A + B: ONE single compound reactant breaks apart into two or more simpler products." },
-      { id: "Single Replacement", label: "Single Replacement", color: "bg-orange-500", tip: "Show A + BC → AC + B: one lone element steps in and kicks a similar element out of a compound." },
-      { id: "Double Replacement", label: "Double Replacement", color: "bg-rose-600", tip: "Show AB + CD → AD + CB: two ionic compounds swap partners with each other." },
-      { id: "Combustion", label: "Combustion Reactions", color: "bg-purple-600", tip: "Highlight the signature trio: Hydrocarbon fuel + O₂ → CO₂ + H₂O." }
-    ];
+    const STUDENT_SESSION_STATE_KEY = "rxn5_student_quiz_standalone_v1";
 
     const STATE_OPTIONS = [
       { value: "(s)", label: "(s) Solid" },
@@ -1180,8 +760,10 @@
     // =========================================================================
     // GLOBAL APPLICATION STATE
     // =========================================================================
-    let studentName = "";
-    let activeSessionCode = "";
+    let studentFirstName = "";
+    let studentLastInitial = "";
+    let studentPeriod = "";
+    let studentDisplayId = "";
     let selectedLevel = 1;
     let activeQuestions = [];
     let currentDeckOrder = [];
@@ -1189,94 +771,47 @@
     let rightCount = 0;
     let wrongCount = 0;
     let missedTopicCounts = {};
+    let completionReceiptCode = "";
+    let completedTimestamp = "";
+    let latestJpegDataUrl = "";
+    let latestJpegFilename = "";
     let currentConversationHistory = [];
     let isAiLoading = false;
-
-    // Reliable Firebase Sync Queue State
-    let pendingSyncPayload = null;
-    let isSyncingNow = false;
-    let syncRetryTimerId = null;
-
-    // Teacher Dashboard State
-    let teacherSessionCode = "";
-    let sessionStudentsMap = {};
-    let rosterFilter = "all";
-    let pollingIntervalId = null;
-    let simulationIntervalId = null;
-    let hostPreviewCode = "";
 
     // =========================================================================
     // INITIALIZATION & PERSISTENT REFRESH RECOVERY
     // =========================================================================
     window.addEventListener("DOMContentLoaded", () => {
-      const params = new URLSearchParams(window.location.search);
-      const dbParam = params.get("db");
-      const sessionParam = params.get("session");
-
-      if (dbParam && dbParam.startsWith("https://")) {
-        localStorage.setItem(DB_STORAGE_KEY, dbParam.replace(/\/$/, ""));
-      }
-
-      if (sessionParam) {
-        const cleanCode = sessionParam.trim().toUpperCase().replace(/[^A-Z0-9-]/g, "");
-        document.getElementById("session-code-input").value = cleanCode;
-        activeSessionCode = cleanCode;
-        updateHeaderSessionBadge(cleanCode);
-      }
-
-      const savedSession = localStorage.getItem(ACTIVE_SESSION_KEY);
-      teacherSessionCode = savedSession || generateRandomSessionCode();
-      localStorage.setItem(ACTIVE_SESSION_KEY, teacherSessionCode);
-      ensureDefaultSessionMeta(teacherSessionCode);
-      updateFirebaseStatusUI();
-
-      // 1. Restore Teacher Dashboard if it was open before refresh
-      const savedTeacherDashCode = localStorage.getItem(ACTIVE_TEACHER_VIEW_KEY);
-      if (savedTeacherDashCode) {
-        teacherSessionCode = savedTeacherDashCode;
-        localStorage.setItem(ACTIVE_SESSION_KEY, teacherSessionCode);
-        launchTeacherDashboard();
-        return;
-      }
-
-      // 2. Restore Active Student Quiz Session if page was refreshed mid-quiz
       const savedStudentRaw = sessionStorage.getItem(STUDENT_SESSION_STATE_KEY);
       if (savedStudentRaw) {
         try {
           const st = JSON.parse(savedStudentRaw);
-          if (st && st.studentName && Array.isArray(st.deckOrder) && st.deckOrder.length > 0) {
-            studentName = st.studentName;
-            activeSessionCode = st.activeSessionCode || "SOLO";
+          if (st && st.studentFirstName && st.studentLastInitial && st.studentPeriod && Array.isArray(st.deckOrder) && st.deckOrder.length > 0) {
+            studentFirstName = st.studentFirstName;
+            studentLastInitial = st.studentLastInitial;
+            studentPeriod = st.studentPeriod;
+            studentDisplayId = `${studentFirstName} ${studentLastInitial}.`;
             selectedLevel = st.selectedLevel || 1;
             currentDeckOrder = st.deckOrder;
             currentQuestionIndex = st.currentQuestionIndex || 0;
             rightCount = st.rightCount || 0;
             wrongCount = st.wrongCount || 0;
             missedTopicCounts = st.missedTopicCounts || {};
+            completionReceiptCode = st.completionReceiptCode || "";
+            completedTimestamp = st.completedTimestamp || "";
 
             const sourcePool = selectedLevel === 1 ? LEVEL1_QUESTIONS : LEVEL2_QUESTIONS;
             activeQuestions = currentDeckOrder.map(idx => sourcePool[idx]).filter(Boolean);
 
             selectLevel(selectedLevel);
-            updateHeaderSessionBadge(activeSessionCode);
-            document.getElementById("quiz-student-badge").textContent = `👤 ${studentName}`;
+            document.getElementById("quiz-student-badge").textContent = `👤 ${studentDisplayId} • Pd ${studentPeriod}`;
             document.getElementById("quiz-level-badge").textContent = `Level ${selectedLevel}`;
 
             if (st.isCompleted || currentQuestionIndex >= activeQuestions.length) {
-              completeQuiz(true);
+              completeQuiz();
             } else {
               switchScreen("screen-quiz");
               renderQuestion();
-              if (activeSessionCode !== "SOLO") {
-                const badgeText = document.getElementById("live-sync-text");
-                const badgeDot = document.getElementById("live-sync-dot");
-                const badge = document.getElementById("live-sync-badge");
-                if (badge && badgeText && badgeDot) {
-                  badge.className = "bg-emerald-100 text-emerald-800 font-semibold text-[11px] px-2.5 py-1 rounded-full flex items-center gap-1";
-                  badgeDot.className = "w-1.5 h-1.5 rounded-full bg-emerald-600";
-                  badgeText.textContent = `Session ${activeSessionCode}`;
-                }
-              }
             }
           }
         } catch (e) {
@@ -1286,17 +821,20 @@
     });
 
     function saveStudentSessionState(isCompleted = false) {
-      if (!studentName || !currentDeckOrder.length) return;
+      if (!studentFirstName || !currentDeckOrder.length) return;
       try {
         sessionStorage.setItem(STUDENT_SESSION_STATE_KEY, JSON.stringify({
-          studentName,
-          activeSessionCode,
+          studentFirstName,
+          studentLastInitial,
+          studentPeriod,
           selectedLevel,
           deckOrder: currentDeckOrder,
           currentQuestionIndex,
           rightCount,
           wrongCount,
           missedTopicCounts,
+          completionReceiptCode,
+          completedTimestamp,
           isCompleted
         }));
       } catch (e) {}
@@ -1308,127 +846,15 @@
       } catch (e) {}
     }
 
-    function generateRandomSessionCode() {
-      const prefixes = ["RXN", "CHEM", "ATOM", "IONS", "BOND", "MOLE"];
-      const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
-      const digits = Math.floor(100 + Math.random() * 900);
-      return `${prefix}-${digits}`;
-    }
-
-    function generateRecoveryKey() {
-      const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-      let code = "REC-";
-      for (let i = 0; i < 4; i++) {
-        code += chars[Math.floor(Math.random() * chars.length)];
+    function generateVerificationCode(displayId, period, lvl, right, total) {
+      const seed = `${displayId}|P${period}|L${lvl}|${right}/${total}|${Date.now()}`;
+      let hash = 0;
+      for (let i = 0; i < seed.length; i++) {
+        hash = ((hash << 5) - hash) + seed.charCodeAt(i);
+        hash |= 0;
       }
-      return code;
-    }
-
-    function getFirebaseDbUrl() {
-      const saved = localStorage.getItem(DB_STORAGE_KEY);
-      const url = (saved !== null ? saved : FIREBASE_DB_URL).trim().replace(/\/$/, "");
-      return url.startsWith("https://") ? url : "";
-    }
-
-    function updateFirebaseStatusUI() {
-      const url = getFirebaseDbUrl();
-      const badge = document.getElementById("firebase-status-badge");
-      const input = document.getElementById("firebase-url-input");
-      const modeLabel = document.getElementById("dashboard-connection-mode");
-
-      if (input && url) input.value = url;
-
-      if (url) {
-        if (badge) {
-          badge.textContent = "● Firebase Cloud Connected";
-          badge.className = "text-[11px] font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800";
-        }
-        if (modeLabel) modeLabel.textContent = "Live Firebase Sync";
-      } else {
-        if (badge) {
-          badge.textContent = "Local Browser Mode";
-          badge.className = "text-[11px] font-bold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800";
-        }
-        if (modeLabel) modeLabel.textContent = "Local Browser Mode";
-      }
-    }
-
-    function updateHeaderSessionBadge(code) {
-      const pill = document.getElementById("header-session-pill");
-      if (code && code !== "SOLO") {
-        pill.textContent = `SESSION: ${code}`;
-        pill.classList.remove("hidden");
-      } else if (code === "SOLO") {
-        pill.textContent = "SOLO PRACTICE";
-        pill.classList.remove("hidden");
-      } else {
-        pill.classList.add("hidden");
-      }
-    }
-
-    // =========================================================================
-    // SESSION PIN & RECOVERY METADATA HELPERS
-    // =========================================================================
-    function getLocalMetaMap() {
-      try {
-        return JSON.parse(localStorage.getItem(SESSION_META_KEY) || "{}");
-      } catch (e) {
-        return {};
-      }
-    }
-
-    function saveLocalSessionMeta(code, meta) {
-      try {
-        const map = getLocalMetaMap();
-        map[code] = meta;
-        localStorage.setItem(SESSION_META_KEY, JSON.stringify(map));
-      } catch (e) {}
-    }
-
-    function ensureDefaultSessionMeta(code) {
-      const map = getLocalMetaMap();
-      if (!map[code]) {
-        saveLocalSessionMeta(code, {
-          pin: DEFAULT_FALLBACK_PIN,
-          recoveryKey: generateRecoveryKey(),
-          createdAt: Date.now()
-        });
-      }
-    }
-
-    async function fetchSessionMeta(code) {
-      const localMeta = getLocalMetaMap()[code] || null;
-      const dbUrl = getFirebaseDbUrl();
-      if (dbUrl) {
-        try {
-          const res = await fetch(`${dbUrl}/sessions/${encodeURIComponent(code)}/meta.json?t=${Date.now()}`, {
-            cache: "no-store"
-          });
-          if (res.ok) {
-            const remoteMeta = await res.json();
-            if (remoteMeta && remoteMeta.pin) {
-              saveLocalSessionMeta(code, remoteMeta);
-              return remoteMeta;
-            }
-          }
-        } catch (e) {}
-      }
-      return localMeta;
-    }
-
-    async function persistSessionMeta(code, meta) {
-      saveLocalSessionMeta(code, meta);
-      const dbUrl = getFirebaseDbUrl();
-      if (dbUrl) {
-        try {
-          await fetch(`${dbUrl}/sessions/${encodeURIComponent(code)}/meta.json?x-http-method-override=PUT`, {
-            method: "POST",
-            cache: "no-store",
-            headers: { "Content-Type": "text/plain;charset=UTF-8" },
-            body: JSON.stringify(meta)
-          });
-        } catch (e) {}
-      }
+      const hex = Math.abs(hash).toString(16).toUpperCase().padStart(6, "0").slice(0, 6);
+      return `RXN-${hex}`;
     }
 
     // =========================================================================
@@ -1469,26 +895,26 @@
       document.getElementById("cheat-sheet-drawer").classList.toggle("hidden");
     }
 
-    function sanitizeStudentName(rawInput) {
-      const cleaned = rawInput.trim().replace(/[^a-zA-Z\s.\-']/g, "");
-      if (!cleaned) return "";
-      const parts = cleaned.split(/\s+/).filter(Boolean);
-      if (parts.length === 1) {
-        return parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
-      }
-      const firstName = parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
-      const lastInitial = parts[1].charAt(0).toUpperCase();
-      return `${firstName} ${lastInitial}.`;
+    function cleanFirstName(raw) {
+      const lettersOnly = raw.trim().replace(/[^a-zA-Z\-']/g, "");
+      if (!lettersOnly) return "";
+      return lettersOnly.charAt(0).toUpperCase() + lettersOnly.slice(1).toLowerCase();
     }
 
-    function previewSanitizedName() {
-      const raw = document.getElementById("student-name-input").value;
-      const sanitized = sanitizeStudentName(raw);
+    function updateCheckinPreview() {
+      const fn = cleanFirstName(document.getElementById("first-name-input").value);
+      const li = document.getElementById("last-initial-input").value.trim().toUpperCase().replace(/[^A-Z]/g, "").slice(0, 1);
+      const pd = document.getElementById("period-input").value.trim().replace(/[^0-9]/g, "");
       const previewEl = document.getElementById("privacy-preview");
-      if (sanitized) {
-        previewEl.innerHTML = `🔒 Display ID: <strong class="text-slate-700">${sanitized}</strong> (Privacy Protected)`;
+
+      if (fn && li && pd) {
+        const sampleFile = `${fn.toLowerCase()}.${li.toLowerCase()}.${pd}.[score].jpg`;
+        previewEl.innerHTML = `
+          <span>🔒 Card ID: <strong class="text-slate-800">${fn} ${li}. (Pd ${pd})</strong></span>
+          <span class="font-mono-code text-[11px] text-indigo-700 font-bold">${sampleFile}</span>
+        `;
       } else {
-        previewEl.textContent = "";
+        previewEl.innerHTML = `<span>🔒 Full last names are never collected or printed on your score image.</span>`;
       }
     }
 
@@ -1516,8 +942,7 @@
     }
 
     function switchScreen(screenId) {
-      stopDashboardPolling();
-      ["screen-checkin", "screen-quiz", "screen-summary", "screen-teacher"].forEach(id => {
+      ["screen-checkin", "screen-quiz", "screen-summary"].forEach(id => {
         document.getElementById(id).classList.add("hidden");
       });
       document.getElementById(screenId).classList.remove("hidden");
@@ -1525,188 +950,42 @@
     }
 
     // =========================================================================
-    // REAL-TIME SESSION DATA SYNC (ZERO-PREFLIGHT SIMPLE CORS POST + OVERRIDE)
-    // =========================================================================
-    function getStudentKey(name) {
-      return name.replace(/[^a-zA-Z0-9]/g, "_");
-    }
-
-    function getLocalSessionStore(code) {
-      try {
-        const all = JSON.parse(localStorage.getItem(LOCAL_SESSIONS_KEY) || "{}");
-        return all[code] || {};
-      } catch (e) {
-        return {};
-      }
-    }
-
-    function saveLocalSessionStudent(code, studentKey, mergedRecord) {
-      try {
-        const all = JSON.parse(localStorage.getItem(LOCAL_SESSIONS_KEY) || "{}");
-        if (!all[code]) all[code] = {};
-        all[code][studentKey] = mergedRecord;
-        localStorage.setItem(LOCAL_SESSIONS_KEY, JSON.stringify(all));
-      } catch (e) {}
-    }
-
-    async function syncStudentProgressToSession(statusText) {
-      const badge = document.getElementById("live-sync-badge");
-      const badgeDot = document.getElementById("live-sync-dot");
-      const badgeText = document.getElementById("live-sync-text");
-
-      if (!activeSessionCode || activeSessionCode === "SOLO") {
-        if (badge && badgeText && badgeDot) {
-          badge.className = "bg-slate-100 text-slate-700 font-semibold text-[11px] px-2.5 py-1 rounded-full flex items-center gap-1";
-          badgeDot.className = "w-1.5 h-1.5 rounded-full bg-slate-500";
-          badgeText.textContent = "Solo Practice";
-        }
-        return;
-      }
-
-      const sKey = getStudentKey(studentName);
-      const totalQ = activeQuestions.length;
-      const answeredCount = rightCount + wrongCount;
-      const pct = answeredCount > 0 ? Math.round((rightCount / answeredCount) * 100) : 0;
-
-      const existing = getLocalSessionStore(activeSessionCode)[sKey] || {
-        name: studentName,
-        lvl1: null,
-        lvl2: null,
-        missedCounts: {}
-      };
-
-      const combinedMissed = { ...(existing.missedCounts || {}) };
-      Object.entries(missedTopicCounts).forEach(([topic, count]) => {
-        combinedMissed[topic] = Math.max(combinedMissed[topic] || 0, count);
-      });
-
-      const levelPayload = {
-        right: rightCount,
-        wrong: wrongCount,
-        pct: pct,
-        completed: statusText === "Completed"
-      };
-
-      const displayQ = statusText === "Completed"
-        ? totalQ
-        : Math.min(answeredCount + 1, totalQ);
-
-      const updatedStudentRecord = {
-        name: studentName,
-        activeLevel: selectedLevel,
-        currentQ: displayQ,
-        totalQ: totalQ,
-        status: statusText,
-        lvl1: selectedLevel === 1 ? levelPayload : (existing.lvl1 || null),
-        lvl2: selectedLevel === 2 ? levelPayload : (existing.lvl2 || null),
-        missedCounts: combinedMissed,
-        updatedAt: Date.now()
-      };
-
-      // Always save locally immediately
-      saveLocalSessionStudent(activeSessionCode, sKey, updatedStudentRecord);
-
-      // Enqueue the newest state so rapid submissions never get overwritten by older in-flight calls
-      pendingSyncPayload = {
-        sessionCode: activeSessionCode,
-        sKey: sKey,
-        record: updatedStudentRecord
-      };
-
-      flushPendingSync();
-    }
-
-    async function flushPendingSync() {
-      if (isSyncingNow || !pendingSyncPayload) return;
-
-      const dbUrl = getFirebaseDbUrl();
-      const badge = document.getElementById("live-sync-badge");
-      const badgeDot = document.getElementById("live-sync-dot");
-      const badgeText = document.getElementById("live-sync-text");
-
-      if (!dbUrl) {
-        pendingSyncPayload = null;
-        if (badgeText) badgeText.textContent = `Session ${activeSessionCode}`;
-        return;
-      }
-
-      if (syncRetryTimerId) {
-        clearTimeout(syncRetryTimerId);
-        syncRetryTimerId = null;
-      }
-
-      isSyncingNow = true;
-      const job = pendingSyncPayload;
-      pendingSyncPayload = null;
-
-      if (badge && badgeText && badgeDot) {
-        badge.className = "bg-emerald-100 text-emerald-800 font-semibold text-[11px] px-2.5 py-1 rounded-full flex items-center gap-1";
-        badgeDot.className = "w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse";
-        badgeText.textContent = "Syncing...";
-      }
-
-      try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 8000);
-
-        // Simple CORS POST with text/plain + ?x-http-method-override=PUT (bypasses school proxy OPTIONS/PATCH blocks)
-        const endpoint = `${dbUrl}/sessions/${encodeURIComponent(job.sessionCode)}/students/${encodeURIComponent(job.sKey)}.json?x-http-method-override=PUT`;
-        const res = await fetch(endpoint, {
-          method: "POST",
-          cache: "no-store",
-          headers: { "Content-Type": "text/plain;charset=UTF-8" },
-          body: JSON.stringify(job.record),
-          signal: controller.signal
-        });
-        clearTimeout(timeoutId);
-
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-        if (badgeDot) badgeDot.className = "w-1.5 h-1.5 rounded-full bg-emerald-600";
-        if (badgeText) badgeText.textContent = `Synced (${job.sessionCode})`;
-      } catch (err) {
-        if (!pendingSyncPayload) {
-          pendingSyncPayload = job;
-        }
-        const reason = err.name === "AbortError" ? "Timeout" : (err.message || "Err");
-        if (badge && badgeText && badgeDot) {
-          badge.className = "bg-amber-100 text-amber-800 font-semibold text-[11px] px-2.5 py-1 rounded-full flex items-center gap-1";
-          badgeDot.className = "w-1.5 h-1.5 rounded-full bg-amber-500";
-          badgeText.textContent = `Retry (${reason})...`;
-        }
-        syncRetryTimerId = setTimeout(() => flushPendingSync(), 3000);
-      } finally {
-        isSyncingNow = false;
-        if (pendingSyncPayload) {
-          flushPendingSync();
-        }
-      }
-    }
-
-    // =========================================================================
     // STUDENT QUIZ FLOW
     // =========================================================================
     function startQuiz() {
-      const rawInput = document.getElementById("student-name-input").value;
-      const sanitized = sanitizeStudentName(rawInput);
-      if (!sanitized) {
-        showToast("Please enter your First Name and Last Initial to start.", "error");
-        document.getElementById("student-name-input").focus();
+      const fn = cleanFirstName(document.getElementById("first-name-input").value);
+      const li = document.getElementById("last-initial-input").value.trim().toUpperCase().replace(/[^A-Z]/g, "").slice(0, 1);
+      const pd = document.getElementById("period-input").value.trim().replace(/[^0-9]/g, "");
+
+      if (!fn) {
+        showToast("Please enter your First Name.", "error");
+        document.getElementById("first-name-input").focus();
+        return;
+      }
+      if (!li) {
+        showToast("Please enter your 1-letter Last Initial.", "error");
+        document.getElementById("last-initial-input").focus();
+        return;
+      }
+      if (!pd) {
+        showToast("Please enter your Class Period number.", "error");
+        document.getElementById("period-input").focus();
         return;
       }
 
-      const rawCode = document.getElementById("session-code-input").value.trim().toUpperCase().replace(/[^A-Z0-9-]/g, "");
-      activeSessionCode = rawCode || "SOLO";
-      updateHeaderSessionBadge(activeSessionCode);
-
-      studentName = sanitized;
+      studentFirstName = fn;
+      studentLastInitial = li;
+      studentPeriod = pd;
+      studentDisplayId = `${fn} ${li}.`;
       currentQuestionIndex = 0;
       rightCount = 0;
       wrongCount = 0;
       missedTopicCounts = {};
+      completionReceiptCode = "";
+      completedTimestamp = "";
       hideToast();
 
-      document.getElementById("quiz-student-badge").textContent = `👤 ${studentName}`;
+      document.getElementById("quiz-student-badge").textContent = `👤 ${studentDisplayId} • Pd ${studentPeriod}`;
       document.getElementById("quiz-level-badge").textContent = `Level ${selectedLevel}`;
 
       const sourcePool = selectedLevel === 1 ? LEVEL1_QUESTIONS : LEVEL2_QUESTIONS;
@@ -1716,7 +995,6 @@
 
       switchScreen("screen-quiz");
       renderQuestion();
-      syncStudentProgressToSession("Active");
     }
 
     function startLevel2FromSummary() {
@@ -1725,15 +1003,16 @@
       rightCount = 0;
       wrongCount = 0;
       missedTopicCounts = {};
+      completionReceiptCode = "";
+      completedTimestamp = "";
       currentDeckOrder = buildShuffledDeckIndices(LEVEL2_QUESTIONS.length);
       activeQuestions = currentDeckOrder.map(idx => LEVEL2_QUESTIONS[idx]);
       saveStudentSessionState(false);
 
-      document.getElementById("quiz-student-badge").textContent = `👤 ${studentName}`;
+      document.getElementById("quiz-student-badge").textContent = `👤 ${studentDisplayId} • Pd ${studentPeriod}`;
       document.getElementById("quiz-level-badge").textContent = "Level 2";
       switchScreen("screen-quiz");
       renderQuestion();
-      syncStudentProgressToSession("Active");
     }
 
     function renderQuestion() {
@@ -1856,7 +1135,7 @@
       document.getElementById("check-answer-btn").classList.add("hidden");
       const nextBtn = document.getElementById("next-question-btn");
       nextBtn.classList.remove("hidden");
-      nextBtn.textContent = currentQuestionIndex === activeQuestions.length - 1 ? "View Final Score ➔" : "Next Reaction ➔";
+      nextBtn.textContent = currentQuestionIndex === activeQuestions.length - 1 ? "View & Download Score Image ➔" : "Next Reaction ➔";
 
       const feedbackContainer = document.getElementById("feedback-container");
       const feedbackHeader = document.getElementById("feedback-header");
@@ -1895,7 +1174,6 @@
 
       const isFinalQ = currentQuestionIndex === activeQuestions.length - 1;
       saveStudentSessionState(isFinalQ);
-      syncStudentProgressToSession(isFinalQ ? "Completed" : "Active");
     }
 
     function updateQuickPromptChipsForLevel() {
@@ -1933,29 +1211,50 @@
         saveStudentSessionState(false);
         renderQuestion();
       } else {
-        completeQuiz(false);
+        completeQuiz();
       }
     }
 
-    function completeQuiz(isRestored = false) {
-      const pct = Math.round((rightCount / activeQuestions.length) * 100);
-      const missedList = Object.keys(missedTopicCounts);
+    function completeQuiz() {
+      const totalQ = activeQuestions.length;
+      const pct = Math.round((rightCount / totalQ) * 100);
+      const missedList = Object.entries(missedTopicCounts)
+        .filter(([, count]) => count > 0)
+        .map(([topic, count]) => `${topic} (${count})`);
       const missedString = missedList.length ? missedList.join(", ") : "None (100% Mastery!)";
 
-      saveStudentSessionState(true);
-      if (!isRestored) {
-        syncStudentProgressToSession("Completed");
+      if (!completionReceiptCode) {
+        completionReceiptCode = generateVerificationCode(studentDisplayId, studentPeriod, selectedLevel, rightCount, totalQ);
+      }
+      if (!completedTimestamp) {
+        completedTimestamp = new Date().toLocaleString([], {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit"
+        });
       }
 
+      saveStudentSessionState(true);
+
+      // Exact requested filename: firstname.lastinitial.periodnumber.score.jpg
+      const safeFirst = studentFirstName.toLowerCase().replace(/[^a-z0-9]/g, "");
+      const safeLastInit = studentLastInitial.toLowerCase().replace(/[^a-z]/g, "");
+      const safePeriod = studentPeriod.replace(/[^0-9]/g, "");
+      latestJpegFilename = `${safeFirst}.${safeLastInit}.${safePeriod}.${pct}.jpg`;
+
       document.getElementById("summary-heading").textContent = `Level ${selectedLevel} Complete!`;
-      document.getElementById("summary-student-name").textContent = `Great effort, ${studentName}!`;
-      document.getElementById("summary-sync-confirmation").textContent = (activeSessionCode && activeSessionCode !== "SOLO")
-        ? `✓ Live score synced to Session ${activeSessionCode}`
-        : "Solo Practice Mode";
+      document.getElementById("summary-student-name").textContent = `${studentDisplayId} • Period ${studentPeriod}`;
+      document.getElementById("summary-sync-confirmation").textContent = `Completed ${completedTimestamp} • Verification ID: ${completionReceiptCode}`;
+      document.getElementById("summary-filename-badge").textContent = latestJpegFilename;
+      document.getElementById("download-btn-filename").textContent = latestJpegFilename;
       document.getElementById("summary-right").textContent = rightCount;
       document.getElementById("summary-wrong").textContent = wrongCount;
       document.getElementById("summary-percent").textContent = `${pct}%`;
       document.getElementById("summary-missed-topics").textContent = missedString;
+
+      renderCompactScoreJpeg(pct, totalQ, missedString);
 
       const unlockBtn = document.getElementById("unlock-level2-btn");
       if (selectedLevel === 1) {
@@ -1967,15 +1266,155 @@
       switchScreen("screen-summary");
     }
 
+    // =========================================================================
+    // LIGHTWEIGHT JPEG SCORE IMAGE GENERATOR (NO FULL LAST NAME ON IMAGE)
+    // =========================================================================
+    function roundRectPath(ctx, x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + w, y, x + w, y + h, r);
+      ctx.arcTo(x + w, y + h, x, y + h, r);
+      ctx.arcTo(x, y + h, x, y, r);
+      ctx.arcTo(x, y, x + w, y, r);
+      ctx.closePath();
+    }
+
+    function renderCompactScoreJpeg(pct, totalQ, missedString) {
+      const canvas = document.getElementById("score-export-canvas");
+      const ctx = canvas.getContext("2d");
+      const W = canvas.width;
+      const H = canvas.height;
+
+      // Solid white background (required for clean JPEG compression)
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, W, H);
+
+      // Outer border
+      ctx.strokeStyle = "#cbd5e1";
+      ctx.lineWidth = 3;
+      roundRectPath(ctx, 8, 8, W - 16, H - 16, 18);
+      ctx.stroke();
+
+      // Top dark slate banner
+      ctx.fillStyle = "#0f172a";
+      roundRectPath(ctx, 8, 8, W - 16, 86, 18);
+      ctx.fill();
+      ctx.fillRect(8, 72, W - 16, 22); // Square off bottom corners of banner
+
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "800 24px Inter, sans-serif";
+      ctx.fillText("5 Types of Reactions — Score Card", 32, 48);
+
+      ctx.fillStyle = "#94a3b8";
+      ctx.font = "600 14px Inter, sans-serif";
+      ctx.fillText(`Level ${selectedLevel}: ${selectedLevel === 1 ? "Foundations" : "Advanced + States of Matter"}`, 32, 74);
+
+      // Verification ID Pill in top right
+      ctx.fillStyle = "#312e81";
+      roundRectPath(ctx, W - 188, 28, 156, 42, 10);
+      ctx.fill();
+      ctx.fillStyle = "#c7d2fe";
+      ctx.font = "700 16px monospace";
+      ctx.fillText(completionReceiptCode, W - 170, 55);
+
+      // Privacy-safe Student Row (First Name + Last Initial + Period ONLY)
+      ctx.fillStyle = "#475569";
+      ctx.font = "700 13px Inter, sans-serif";
+      ctx.fillText("STUDENT", 32, 128);
+      ctx.fillText("CLASS PERIOD", 340, 128);
+      ctx.fillText("COMPLETED", 510, 128);
+
+      ctx.fillStyle = "#0f172a";
+      ctx.font = "800 22px Inter, sans-serif";
+      ctx.fillText(studentDisplayId, 32, 156);
+      ctx.fillText(`Period ${studentPeriod}`, 340, 156);
+
+      ctx.font = "600 15px Inter, sans-serif";
+      ctx.fillText(completedTimestamp, 510, 154);
+
+      // 3 Score Boxes
+      const boxY = 182;
+      const boxH = 104;
+      const boxW = 218;
+
+      // Box 1: Right
+      ctx.fillStyle = "#ecfdf5";
+      roundRectPath(ctx, 32, boxY, boxW, boxH, 14);
+      ctx.fill();
+      ctx.fillStyle = "#047857";
+      ctx.font = "800 34px Inter, sans-serif";
+      ctx.fillText(`${rightCount} / ${totalQ}`, 54, boxY + 52);
+      ctx.font = "700 13px Inter, sans-serif";
+      ctx.fillText("QUESTIONS RIGHT", 54, boxY + 80);
+
+      // Box 2: Wrong
+      ctx.fillStyle = "#fff1f2";
+      roundRectPath(ctx, 271, boxY, boxW, boxH, 14);
+      ctx.fill();
+      ctx.fillStyle = "#be123c";
+      ctx.font = "800 34px Inter, sans-serif";
+      ctx.fillText(`${wrongCount}`, 293, boxY + 52);
+      ctx.font = "700 13px Inter, sans-serif";
+      ctx.fillText("QUESTIONS MISSED", 293, boxY + 80);
+
+      // Box 3: Final Percentage
+      ctx.fillStyle = "#eff6ff";
+      roundRectPath(ctx, 510, boxY, boxW, boxH, 14);
+      ctx.fill();
+      ctx.fillStyle = "#1d4ed8";
+      ctx.font = "800 36px Inter, sans-serif";
+      ctx.fillText(`${pct}%`, 532, boxY + 52);
+      ctx.font = "700 13px Inter, sans-serif";
+      ctx.fillText("FINAL SCORE", 532, boxY + 80);
+
+      // Concepts Missed Footer Box
+      ctx.fillStyle = "#f8fafc";
+      roundRectPath(ctx, 32, 306, W - 64, 76, 12);
+      ctx.fill();
+      ctx.strokeStyle = "#e2e8f0";
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      ctx.fillStyle = "#475569";
+      ctx.font = "700 12px Inter, sans-serif";
+      ctx.fillText("CONCEPTS MISSED:", 48, 330);
+
+      ctx.fillStyle = "#0f172a";
+      ctx.font = "600 14px Inter, sans-serif";
+      const truncatedMissed = missedString.length > 82 ? missedString.slice(0, 79) + "..." : missedString;
+      ctx.fillText(truncatedMissed, 48, 356);
+
+      // Export as compact 0.80 quality JPEG (~35-55 KB)
+      latestJpegDataUrl = canvas.toDataURL("image/jpeg", 0.80);
+      document.getElementById("score-card-preview-img").src = latestJpegDataUrl;
+    }
+
+    function downloadScoreJpeg() {
+      if (!latestJpegDataUrl) return;
+      const a = document.createElement("a");
+      a.href = latestJpegDataUrl;
+      a.download = latestJpegFilename || "score.jpg";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      showToast(`Downloaded ${latestJpegFilename}! Upload that image to submit your work.`, "success");
+    }
+
     function exitStudentSession() {
       clearStudentSessionState();
-      studentName = "";
+      studentFirstName = "";
+      studentLastInitial = "";
+      studentPeriod = "";
+      studentDisplayId = "";
       currentDeckOrder = [];
-      document.getElementById("student-name-input").value = "";
-      document.getElementById("privacy-preview").textContent = "";
-      if (activeSessionCode && activeSessionCode !== "SOLO") {
-        document.getElementById("session-code-input").value = activeSessionCode;
-      }
+      completionReceiptCode = "";
+      completedTimestamp = "";
+      latestJpegDataUrl = "";
+      latestJpegFilename = "";
+      document.getElementById("first-name-input").value = "";
+      document.getElementById("last-initial-input").value = "";
+      document.getElementById("period-input").value = "";
+      updateCheckinPreview();
       switchScreen("screen-checkin");
     }
 
@@ -2053,7 +1492,7 @@
   - Student Selected Product States: ${studentStatesStr}`;
       }
 
-      return `You are an encouraging, friendly, Socratic middle/high school chemistry tutor helping a student named ${studentName} on Level ${selectedLevel} of "5 Types of Reactions".
+      return `You are an encouraging, friendly, Socratic middle/high school chemistry tutor helping a student named ${studentFirstName} on Level ${selectedLevel} of "5 Types of Reactions".
 Current Problem Context:
 - Balanced Equation: ${q.equation}
 - All species in equation: ${q.species.join(", ")}
@@ -2144,651 +1583,6 @@ Rules:
 
     function sendQuickPrompt(promptText) {
       sendFollowUpQuestion(promptText);
-    }
-
-    // =========================================================================
-    // TEACHER SESSION HOSTING, CUSTOM PIN LOGIN, RECOVERY RESET & CHANGE PIN
-    // =========================================================================
-    function openHostSessionModal() {
-      hostPreviewCode = generateRandomSessionCode();
-      document.getElementById("host-preview-code").textContent = hostPreviewCode;
-      document.getElementById("host-custom-pin-input").value = "";
-      document.getElementById("host-error-msg").classList.add("hidden");
-      document.getElementById("host-session-modal").classList.remove("hidden");
-      setTimeout(() => document.getElementById("host-custom-pin-input").focus(), 100);
-    }
-
-    function refreshHostPreviewCode() {
-      hostPreviewCode = generateRandomSessionCode();
-      document.getElementById("host-preview-code").textContent = hostPreviewCode;
-    }
-
-    function closeHostSessionModal() {
-      document.getElementById("host-session-modal").classList.add("hidden");
-    }
-
-    async function createCustomTeacherSession() {
-      const customPin = document.getElementById("host-custom-pin-input").value.trim();
-      const errEl = document.getElementById("host-error-msg");
-
-      if (!/^\d{4}$/.test(customPin)) {
-        errEl.textContent = "Please enter a valid 4-digit numeric PIN (e.g., 4812).";
-        errEl.classList.remove("hidden");
-        return;
-      }
-
-      stopSimulatedClassroom();
-      const recoveryKey = generateRecoveryKey();
-      const meta = {
-        pin: customPin,
-        recoveryKey: recoveryKey,
-        createdAt: Date.now()
-      };
-
-      teacherSessionCode = hostPreviewCode;
-      localStorage.setItem(ACTIVE_SESSION_KEY, teacherSessionCode);
-      await persistSessionMeta(teacherSessionCode, meta);
-
-      closeHostSessionModal();
-      launchTeacherDashboard(meta);
-      showToast(`Session ${teacherSessionCode} created! Save your Recovery Key (${recoveryKey}) to reset your PIN anytime.`, "success");
-    }
-
-    function openTeacherAccess() {
-      showPinLoginView();
-      document.getElementById("modal-session-input").value = teacherSessionCode;
-      document.getElementById("modal-pin-input").value = "";
-      document.getElementById("pin-error-msg").classList.add("hidden");
-      document.getElementById("pin-modal").classList.remove("hidden");
-      setTimeout(() => document.getElementById("modal-pin-input").focus(), 100);
-    }
-
-    function closePinModal() {
-      document.getElementById("pin-modal").classList.add("hidden");
-    }
-
-    function showPinResetView() {
-      document.getElementById("pin-login-view").classList.add("hidden");
-      document.getElementById("pin-reset-view").classList.remove("hidden");
-      document.getElementById("reset-session-input").value = document.getElementById("modal-session-input").value || teacherSessionCode;
-      document.getElementById("reset-recovery-input").value = "";
-      document.getElementById("reset-new-pin-input").value = "";
-      document.getElementById("reset-error-msg").classList.add("hidden");
-    }
-
-    function showPinLoginView() {
-      document.getElementById("pin-reset-view").classList.add("hidden");
-      document.getElementById("pin-login-view").classList.remove("hidden");
-      document.getElementById("pin-error-msg").classList.add("hidden");
-    }
-
-    async function verifyTeacherPin() {
-      const code = document.getElementById("modal-session-input").value.trim().toUpperCase().replace(/[^A-Z0-9-]/g, "");
-      const enteredPin = document.getElementById("modal-pin-input").value.trim();
-      const errEl = document.getElementById("pin-error-msg");
-
-      if (!code) {
-        errEl.textContent = "Please enter a Session Code.";
-        errEl.classList.remove("hidden");
-        return;
-      }
-
-      const meta = await fetchSessionMeta(code);
-      const validPin = meta && meta.pin ? meta.pin : DEFAULT_FALLBACK_PIN;
-
-      if (enteredPin === validPin) {
-        teacherSessionCode = code;
-        localStorage.setItem(ACTIVE_SESSION_KEY, teacherSessionCode);
-        closePinModal();
-        launchTeacherDashboard(meta);
-      } else {
-        errEl.textContent = "Incorrect PIN. Click 'Forgot PIN?' below if you have your Recovery Key.";
-        errEl.classList.remove("hidden");
-      }
-    }
-
-    async function resetSessionPinWithRecovery() {
-      const code = document.getElementById("reset-session-input").value.trim().toUpperCase().replace(/[^A-Z0-9-]/g, "");
-      const recKey = document.getElementById("reset-recovery-input").value.trim().toUpperCase();
-      const newPin = document.getElementById("reset-new-pin-input").value.trim();
-      const errEl = document.getElementById("reset-error-msg");
-
-      if (!code || !recKey) {
-        errEl.textContent = "Please enter both your Session Code and Recovery Key.";
-        errEl.classList.remove("hidden");
-        return;
-      }
-      if (!/^\d{4}$/.test(newPin)) {
-        errEl.textContent = "New PIN must be exactly 4 digits.";
-        errEl.classList.remove("hidden");
-        return;
-      }
-
-      const meta = await fetchSessionMeta(code);
-      if (!meta || meta.recoveryKey !== recKey) {
-        errEl.textContent = "Invalid Session Code or Recovery Key.";
-        errEl.classList.remove("hidden");
-        return;
-      }
-
-      const updatedMeta = { ...meta, pin: newPin };
-      await persistSessionMeta(code, updatedMeta);
-
-      teacherSessionCode = code;
-      localStorage.setItem(ACTIVE_SESSION_KEY, teacherSessionCode);
-      closePinModal();
-      launchTeacherDashboard(updatedMeta);
-      showToast(`PIN updated for ${code}! Unlocking your dashboard...`, "success");
-    }
-
-    function openChangePinModal() {
-      document.getElementById("change-pin-session-label").textContent = teacherSessionCode;
-      document.getElementById("new-dashboard-pin-input").value = "";
-      document.getElementById("change-pin-error").classList.add("hidden");
-      document.getElementById("change-pin-modal").classList.remove("hidden");
-      setTimeout(() => document.getElementById("new-dashboard-pin-input").focus(), 100);
-    }
-
-    function closeChangePinModal() {
-      document.getElementById("change-pin-modal").classList.add("hidden");
-    }
-
-    async function saveNewDashboardPin() {
-      const newPin = document.getElementById("new-dashboard-pin-input").value.trim();
-      const errEl = document.getElementById("change-pin-error");
-      if (!/^\d{4}$/.test(newPin)) {
-        errEl.classList.remove("hidden");
-        return;
-      }
-
-      const currentMeta = (await fetchSessionMeta(teacherSessionCode)) || {
-        recoveryKey: generateRecoveryKey(),
-        createdAt: Date.now()
-      };
-      const updatedMeta = { ...currentMeta, pin: newPin };
-      await persistSessionMeta(teacherSessionCode, updatedMeta);
-      closeChangePinModal();
-      showToast(`PIN updated for session ${teacherSessionCode}!`, "success");
-    }
-
-    function switchTeacherSessionPrompt() {
-      const code = document.getElementById("switch-session-input").value.trim().toUpperCase().replace(/[^A-Z0-9-]/g, "");
-      if (!code) return;
-      stopSimulatedClassroom();
-      showPinLoginView();
-      document.getElementById("modal-session-input").value = code;
-      document.getElementById("modal-pin-input").value = "";
-      document.getElementById("pin-error-msg").classList.add("hidden");
-      document.getElementById("pin-modal").classList.remove("hidden");
-      setTimeout(() => document.getElementById("modal-pin-input").focus(), 100);
-    }
-
-    function copyRecoveryKey() {
-      const recText = document.getElementById("dashboard-recovery-key").textContent;
-      if (!recText || recText === "—") return;
-      const temp = document.createElement("textarea");
-      temp.value = `5 Types of Reactions — Session: ${teacherSessionCode} | Recovery Key: ${recText}`;
-      document.body.appendChild(temp);
-      temp.select();
-      try {
-        document.execCommand("copy");
-        showToast("Session & Recovery Key copied to clipboard!", "success");
-      } catch (e) {}
-      document.body.removeChild(temp);
-    }
-
-    // =========================================================================
-    // LIVE TEACHER DASHBOARD & REAL-TIME ANALYTICS
-    // =========================================================================
-    async function launchTeacherDashboard(knownMeta = null) {
-      localStorage.setItem(ACTIVE_TEACHER_VIEW_KEY, teacherSessionCode);
-      switchScreen("screen-teacher");
-      document.getElementById("active-session-code-display").textContent = teacherSessionCode;
-      updateHeaderSessionBadge(teacherSessionCode);
-      updateFirebaseStatusUI();
-
-      const meta = knownMeta || (await fetchSessionMeta(teacherSessionCode));
-      document.getElementById("dashboard-recovery-key").textContent = meta?.recoveryKey || "—";
-
-      fetchAndRenderLiveSession();
-      startDashboardPolling();
-    }
-
-    function closeTeacherDashboard() {
-      localStorage.removeItem(ACTIVE_TEACHER_VIEW_KEY);
-      stopDashboardPolling();
-      stopSimulatedClassroom();
-      updateHeaderSessionBadge(activeSessionCode);
-      switchScreen("screen-checkin");
-    }
-
-    function startDashboardPolling() {
-      stopDashboardPolling();
-      pollingIntervalId = setInterval(fetchAndRenderLiveSession, 3000);
-    }
-
-    function stopDashboardPolling() {
-      if (pollingIntervalId) {
-        clearInterval(pollingIntervalId);
-        pollingIntervalId = null;
-      }
-    }
-
-    async function fetchAndRenderLiveSession() {
-      let combinedMap = { ...getLocalSessionStore(teacherSessionCode) };
-      const dbUrl = getFirebaseDbUrl();
-
-      if (dbUrl) {
-        try {
-          const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 8000);
-
-          const res = await fetch(`${dbUrl}/sessions/${encodeURIComponent(teacherSessionCode)}/students.json?t=${Date.now()}`, {
-            cache: "no-store",
-            signal: controller.signal
-          });
-          clearTimeout(timeoutId);
-
-          if (res.ok) {
-            const remoteStudents = await res.json();
-            if (remoteStudents && typeof remoteStudents === "object") {
-              Object.entries(remoteStudents).forEach(([key, remoteRec]) => {
-                const localRec = combinedMap[key];
-                if (!localRec || (remoteRec.updatedAt || 0) >= (localRec.updatedAt || 0)) {
-                  combinedMap[key] = remoteRec;
-                }
-              });
-            }
-          }
-        } catch (err) {}
-      }
-
-      sessionStudentsMap = combinedMap;
-      document.getElementById("last-updated-label").textContent = `Updated ${new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })}`;
-      renderTeacherDashboard();
-    }
-
-    function copyStudentJoinLink() {
-      const url = new URL(window.location.href);
-      url.searchParams.set("session", teacherSessionCode);
-      const dbUrl = getFirebaseDbUrl();
-      if (dbUrl) {
-        url.searchParams.set("db", dbUrl);
-      }
-      const shareUrl = url.toString();
-
-      const temp = document.createElement("textarea");
-      temp.value = shareUrl;
-      document.body.appendChild(temp);
-      temp.select();
-      try {
-        document.execCommand("copy");
-        showToast(`5 Types of Reactions join link for ${teacherSessionCode} copied!`, "success");
-      } catch (e) {
-        showToast(`Share Session Code ${teacherSessionCode} with students!`, "info");
-      }
-      document.body.removeChild(temp);
-    }
-
-    function renderTeacherDashboard() {
-      const students = Object.values(sessionStudentsMap);
-      const activeCount = students.length;
-      const completedCount = students.filter(s => s.status === "Completed").length;
-
-      let sumPct = 0;
-      let scoredStudents = 0;
-      let totalResponses = 0;
-
-      const conceptTotalMisses = {};
-      const conceptStudentsStruggling = {};
-      TRACKED_CONCEPTS.forEach(c => {
-        conceptTotalMisses[c.id] = 0;
-        conceptStudentsStruggling[c.id] = 0;
-      });
-
-      students.forEach(s => {
-        const l1Total = s.lvl1 ? (s.lvl1.right + s.lvl1.wrong) : 0;
-        const l2Total = s.lvl2 ? (s.lvl2.right + s.lvl2.wrong) : 0;
-        totalResponses += (l1Total + l2Total);
-
-        const totalRight = (s.lvl1?.right || 0) + (s.lvl2?.right || 0);
-        const totalAttempted = l1Total + l2Total;
-        if (totalAttempted > 0) {
-          sumPct += Math.round((totalRight / totalAttempted) * 100);
-          scoredStudents++;
-        }
-
-        if (s.missedCounts) {
-          Object.entries(s.missedCounts).forEach(([concept, count]) => {
-            if (count > 0 && Object.prototype.hasOwnProperty.call(conceptTotalMisses, concept)) {
-              conceptTotalMisses[concept] += count;
-              conceptStudentsStruggling[concept] += 1;
-            }
-          });
-        }
-      });
-
-      const classAvg = scoredStudents > 0 ? `${Math.round(sumPct / scoredStudents)}%` : "—";
-
-      const rankedConcepts = TRACKED_CONCEPTS.map(c => ({
-        ...c,
-        misses: conceptTotalMisses[c.id] || 0,
-        studentsAffected: conceptStudentsStruggling[c.id] || 0,
-        pctClass: activeCount > 0 ? Math.round(((conceptStudentsStruggling[c.id] || 0) / activeCount) * 100) : 0
-      })).sort((a, b) => b.misses - a.misses);
-
-      const topConcept = rankedConcepts[0];
-
-      document.getElementById("kpi-active-students").textContent = activeCount;
-      document.getElementById("kpi-completed-sub").textContent = `${completedCount} finished`;
-      document.getElementById("kpi-class-avg").textContent = classAvg;
-      document.getElementById("kpi-total-answered").textContent = totalResponses;
-
-      if (topConcept && topConcept.misses > 0) {
-        document.getElementById("kpi-top-misconception").textContent = topConcept.label;
-        document.getElementById("kpi-top-misconception-pct").textContent = `${topConcept.pctClass}% of class (${topConcept.misses} misses)`;
-        document.getElementById("reteach-title").textContent = `Focus: ${topConcept.label}`;
-        document.getElementById("reteach-body").textContent = topConcept.tip;
-      } else {
-        document.getElementById("kpi-top-misconception").textContent = "No errors yet";
-        document.getElementById("kpi-top-misconception-pct").textContent = "0% of class";
-        document.getElementById("reteach-title").textContent = "Waiting for student responses...";
-        document.getElementById("reteach-body").textContent = "As students submit answers in Level 1 or Level 2, this card automatically highlights the #1 class misconception and gives you a quick board example to reteach.";
-      }
-
-      const maxMisses = Math.max(...rankedConcepts.map(c => c.misses), 1);
-      const chartContainer = document.getElementById("misconception-chart-container");
-      chartContainer.innerHTML = rankedConcepts.map((c, idx) => {
-        const barWidthPct = c.misses > 0 ? Math.max(Math.round((c.misses / maxMisses) * 100), 6) : 0;
-        const severityColor = idx === 0 && c.misses > 0
-          ? "bg-rose-600"
-          : (idx === 1 && c.misses > 0 ? "bg-amber-500" : c.color);
-        const badgeHighlight = idx === 0 && c.misses > 0
-          ? "text-rose-700 font-extrabold"
-          : "text-slate-700 font-semibold";
-
-        return `
-          <div>
-            <div class="flex items-center justify-between text-xs mb-1">
-              <span class="${badgeHighlight}">${c.label}</span>
-              <span class="text-slate-500 font-medium">
-                <strong class="text-slate-800">${c.misses}</strong> ${c.misses === 1 ? "miss" : "misses"} (${c.pctClass}% of class)
-              </span>
-            </div>
-            <div class="w-full bg-slate-100 h-3.5 rounded-full overflow-hidden border border-slate-200/80">
-              <div class="bar-fill ${severityColor} h-full rounded-full" style="width: ${barWidthPct}%"></div>
-            </div>
-          </div>
-        `;
-      }).join("");
-
-      renderUnifiedRosterTable(students);
-    }
-
-    function setRosterFilter(filterKey) {
-      rosterFilter = filterKey;
-      document.querySelectorAll(".roster-tab-btn").forEach(btn => {
-        const isSelected = btn.getAttribute("data-filter") === filterKey;
-        if (isSelected) {
-          btn.className = "roster-tab-btn bg-slate-900 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition";
-        } else {
-          btn.className = "roster-tab-btn bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 text-xs font-semibold px-3 py-1.5 rounded-lg transition";
-        }
-      });
-      renderTeacherDashboard();
-    }
-
-    function getStudentOverallPct(s) {
-      const r = (s.lvl1?.right || 0) + (s.lvl2?.right || 0);
-      const w = (s.lvl1?.wrong || 0) + (s.lvl2?.wrong || 0);
-      return (r + w) > 0 ? Math.round((r / (r + w)) * 100) : 0;
-    }
-
-    function renderUnifiedRosterTable(allStudents) {
-      const searchQuery = (document.getElementById("roster-search-input")?.value || "").trim().toLowerCase();
-      const sortMode = document.getElementById("roster-sort-select")?.value || "recent";
-      const tbody = document.getElementById("teacher-roster-body");
-
-      let filtered = allStudents.filter(s => {
-        if (searchQuery && !s.name.toLowerCase().includes(searchQuery)) return false;
-        if (rosterFilter === "lvl1") return s.activeLevel === 1 || s.lvl1 !== null;
-        if (rosterFilter === "lvl2") return s.activeLevel === 2 || s.lvl2 !== null;
-        if (rosterFilter === "help") return getStudentOverallPct(s) < 70;
-        return true;
-      });
-
-      filtered.sort((a, b) => {
-        if (sortMode === "name") return a.name.localeCompare(b.name);
-        if (sortMode === "score-asc") return getStudentOverallPct(a) - getStudentOverallPct(b);
-        if (sortMode === "score-desc") return getStudentOverallPct(b) - getStudentOverallPct(a);
-        return (b.updatedAt || 0) - (a.updatedAt || 0);
-      });
-
-      if (filtered.length === 0) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="5" class="py-10 px-4 text-center text-slate-500 text-xs sm:text-sm">
-              No students in session <strong class="font-mono-code text-slate-800">${escapeHtml(teacherSessionCode)}</strong> match this view yet. Share the join link or click <strong>⚡ Simulate Live Class</strong> above!
-            </td>
-          </tr>
-        `;
-        return;
-      }
-
-      tbody.innerHTML = filtered.map(s => {
-        const isDone = s.status === "Completed";
-        const statusDot = isDone
-          ? `<span class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">✓ Done</span>`
-          : `<span class="inline-flex items-center gap-1 text-[11px] font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded-full"><span class="w-1.5 h-1.5 rounded-full bg-blue-600 animate-ping"></span> Lvl ${s.activeLevel} • Q${s.currentQ}/${s.totalQ}</span>`;
-
-        const formatLevelCell = (lvlObj) => {
-          if (!lvlObj) return `<span class="text-slate-400 text-xs">—</span>`;
-          const badgeClass = lvlObj.pct >= 80
-            ? "bg-emerald-100 text-emerald-800"
-            : (lvlObj.pct >= 65 ? "bg-amber-100 text-amber-800" : "bg-rose-100 text-rose-800");
-          return `
-            <div class="inline-flex flex-col items-center">
-              <span class="px-2 py-0.5 rounded-md font-extrabold text-xs ${badgeClass}">${lvlObj.pct}%</span>
-              <span class="text-[11px] text-slate-500 mt-0.5">${lvlObj.right}✓ / ${lvlObj.wrong}✕</span>
-            </div>
-          `;
-        };
-
-        const missedEntries = Object.entries(s.missedCounts || {}).filter(([, cnt]) => cnt > 0);
-        const missedHtml = missedEntries.length > 0
-          ? missedEntries.map(([topic, cnt]) => `<span class="inline-block bg-rose-50 text-rose-700 border border-rose-200 text-[11px] font-semibold px-2 py-0.5 rounded-md mr-1 mb-1">${escapeHtml(topic)} (${cnt})</span>`).join("")
-          : `<span class="text-xs text-emerald-600 font-semibold">All clear</span>`;
-
-        return `
-          <tr class="hover:bg-slate-50/80 transition">
-            <td class="py-3 px-4 font-extrabold text-slate-900">${escapeHtml(s.name)}</td>
-            <td class="py-3 px-3">${statusDot}</td>
-            <td class="py-3 px-3 text-center">${formatLevelCell(s.lvl1)}</td>
-            <td class="py-3 px-3 text-center">${formatLevelCell(s.lvl2)}</td>
-            <td class="py-3 px-4">${missedHtml}</td>
-          </tr>
-        `;
-      }).join("");
-    }
-
-    function escapeHtml(str) {
-      return String(str)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;");
-    }
-
-    // =========================================================================
-    // LIVE CLASSROOM SIMULATOR
-    // =========================================================================
-    function toggleSimulatedClassroom() {
-      if (simulationIntervalId) {
-        stopSimulatedClassroom();
-        showToast("Live classroom simulation paused.", "info");
-        return;
-      }
-
-      const demoRoster = [
-        { name: "Maya L.", lvl: 1, totalQ: 15 },
-        { name: "Jordan K.", lvl: 1, totalQ: 15 },
-        { name: "Ethan R.", lvl: 2, totalQ: 15 },
-        { name: "Sofia M.", lvl: 2, totalQ: 15 },
-        { name: "Liam T.", lvl: 1, totalQ: 15 },
-        { name: "Chloe W.", lvl: 2, totalQ: 15 }
-      ];
-
-      demoRoster.forEach(d => {
-        const sKey = getStudentKey(d.name);
-        if (!sessionStudentsMap[sKey]) {
-          sessionStudentsMap[sKey] = {
-            name: d.name,
-            activeLevel: d.lvl,
-            currentQ: 1,
-            totalQ: d.totalQ,
-            status: "Active",
-            lvl1: d.lvl === 1 ? { right: 1, wrong: 0, pct: 100, completed: false } : { right: 13, wrong: 2, pct: 87, completed: true },
-            lvl2: d.lvl === 2 ? { right: 1, wrong: 0, pct: 100, completed: false } : null,
-            missedCounts: {},
-            updatedAt: Date.now()
-          };
-          saveLocalSessionStudent(teacherSessionCode, sKey, sessionStudentsMap[sKey]);
-        }
-      });
-      renderTeacherDashboard();
-
-      document.getElementById("simulate-btn-label").textContent = "Stop Simulation";
-      showToast("Simulating live student answers every 2 seconds...", "success");
-
-      simulationIntervalId = setInterval(() => {
-        const pick = demoRoster[Math.floor(Math.random() * demoRoster.length)];
-        const sKey = getStudentKey(pick.name);
-        const rec = sessionStudentsMap[sKey];
-        if (!rec) return;
-
-        const lvlKey = rec.activeLevel === 1 ? "lvl1" : "lvl2";
-        const currentLvlObj = rec[lvlKey] || { right: 0, wrong: 0, pct: 0, completed: false };
-
-        if (rec.currentQ < rec.totalQ) {
-          rec.currentQ += 1;
-          const gotItRight = Math.random() > 0.34;
-          if (gotItRight) {
-            currentLvlObj.right += 1;
-          } else {
-            currentLvlObj.wrong += 1;
-            const weightedTopics = rec.activeLevel === 2
-              ? ["States of Matter", "States of Matter", "Double Replacement", "Ionic/Covalent Bonding", "Single Replacement"]
-              : ["Ionic/Covalent Bonding", "Single Replacement", "Double Replacement", "Combustion", "Decomposition"];
-            const missed = weightedTopics[Math.floor(Math.random() * weightedTopics.length)];
-            rec.missedCounts[missed] = (rec.missedCounts[missed] || 0) + 1;
-          }
-          const answered = currentLvlObj.right + currentLvlObj.wrong;
-          currentLvlObj.pct = Math.round((currentLvlObj.right / answered) * 100);
-          rec[lvlKey] = currentLvlObj;
-          rec.status = rec.currentQ >= rec.totalQ ? "Completed" : "Active";
-          rec.updatedAt = Date.now();
-          saveLocalSessionStudent(teacherSessionCode, sKey, rec);
-          renderTeacherDashboard();
-        }
-      }, 2000);
-    }
-
-    function stopSimulatedClassroom() {
-      if (simulationIntervalId) {
-        clearInterval(simulationIntervalId);
-        simulationIntervalId = null;
-      }
-      const lbl = document.getElementById("simulate-btn-label");
-      if (lbl) lbl.textContent = "Simulate Live Class";
-    }
-
-    // =========================================================================
-    // CSV EXPORT, CLEAR DATA & FIREBASE CONFIG
-    // =========================================================================
-    function exportSessionCSV() {
-      const students = Object.values(sessionStudentsMap);
-      if (students.length === 0) {
-        showToast("No student records to export in this session yet.", "error");
-        return;
-      }
-
-      let csv = "Session Code,Student,Status,Level 1 Right,Level 1 Wrong,Level 1 %,Level 2 Right,Level 2 Wrong,Level 2 %,Missed Concepts\n";
-      students.forEach(s => {
-        const l1R = s.lvl1 ? s.lvl1.right : "";
-        const l1W = s.lvl1 ? s.lvl1.wrong : "";
-        const l1P = s.lvl1 ? `${s.lvl1.pct}%` : "";
-        const l2R = s.lvl2 ? s.lvl2.right : "";
-        const l2W = s.lvl2 ? s.lvl2.wrong : "";
-        const l2P = s.lvl2 ? `${s.lvl2.pct}%` : "";
-        const missed = Object.entries(s.missedCounts || {}).filter(([, c]) => c > 0).map(([k, c]) => `${k} (${c})`).join("; ") || "None";
-
-        csv += `"${teacherSessionCode}","${s.name.replace(/"/g, '""')}","${s.status}",${l1R},${l1W},"${l1P}",${l2R},${l2W},"${l2P}","${missed.replace(/"/g, '""')}"\n`;
-      });
-
-      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `5_types_of_reactions_${teacherSessionCode}_${new Date().toISOString().slice(0, 10)}.csv`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      showToast(`Exported ${students.length} student record(s) to CSV!`, "success");
-    }
-
-    function requestClearSessionData() {
-      document.getElementById("clear-session-label").textContent = teacherSessionCode;
-      document.getElementById("clear-confirm-box").classList.remove("hidden");
-    }
-
-    function cancelClearSessionData() {
-      document.getElementById("clear-confirm-box").classList.add("hidden");
-    }
-
-    async function confirmClearSessionData() {
-      stopSimulatedClassroom();
-      try {
-        const all = JSON.parse(localStorage.getItem(LOCAL_SESSIONS_KEY) || "{}");
-        delete all[teacherSessionCode];
-        localStorage.setItem(LOCAL_SESSIONS_KEY, JSON.stringify(all));
-      } catch (e) {}
-
-      const dbUrl = getFirebaseDbUrl();
-      if (dbUrl) {
-        try {
-          await fetch(`${dbUrl}/sessions/${encodeURIComponent(teacherSessionCode)}/students.json?x-http-method-override=DELETE`, {
-            method: "POST"
-          });
-        } catch (e) {}
-      }
-
-      sessionStudentsMap = {};
-      document.getElementById("clear-confirm-box").classList.add("hidden");
-      renderTeacherDashboard();
-      showToast(`Cleared student data in session ${teacherSessionCode}.`, "info");
-    }
-
-    function toggleFirebaseConfigPanel() {
-      document.getElementById("firebase-config-body").classList.toggle("hidden");
-    }
-
-    function saveFirebaseDbUrl() {
-      const val = document.getElementById("firebase-url-input").value.trim().replace(/\/$/, "");
-      if (!val) {
-        localStorage.removeItem(DB_STORAGE_KEY);
-        updateFirebaseStatusUI();
-        showToast("Cleared Firebase URL (using Local Browser Mode).", "info");
-        return;
-      }
-      if (!val.startsWith("https://")) {
-        showToast("Please enter a valid https:// Firebase Realtime Database URL.", "error");
-        return;
-      }
-      localStorage.setItem(DB_STORAGE_KEY, val);
-      updateFirebaseStatusUI();
-      fetchAndRenderLiveSession();
-      showToast("Firebase Realtime Database connected! Student join links will auto-sync.", "success");
     }
   </script>
 </body>
