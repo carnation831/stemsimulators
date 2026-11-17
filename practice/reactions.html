@@ -1540,7 +1540,8 @@
         localStorage.setItem(LOCAL_SESSIONS_KEY, JSON.stringify(all));
       } catch (e) {}
     }
-async function syncStudentProgressToSession(statusText) {
+    
+    async function syncStudentProgressToSession(statusText) {
       const badge = document.getElementById("live-sync-badge");
       const badgeDot = document.getElementById("live-sync-dot");
       const badgeText = document.getElementById("live-sync-text");
