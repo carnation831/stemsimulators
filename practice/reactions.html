@@ -4,11 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>5 Types of Reactions - Live Session & AI Chemistry Quiz</title>
+  
+  <!-- Google AdSense Script -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4365444453795543"
+       crossorigin="anonymous"></script>
+
   <!-- Tailwind CSS -->
-
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4365444453795543"
-     crossorigin="anonymous"></script>
-
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Google Fonts: Inter & JetBrains Mono -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
@@ -48,17 +49,7 @@
   </style>
 </head>
 <body class="min-h-screen flex flex-col items-center justify-start py-4 px-3 sm:py-6 sm:px-6">
-  
-<!-- Back to Home Navigation Bar -->
-<div style="width: 100%; box-sizing: border-box; background-color: #ffffff; border-bottom: 1px solid #e2e8f0; padding: 0.75rem 1.5rem; margin-bottom: 1rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; display: flex; justify-content: space-between; align-items: center;">
-  <a href="/" style="text-decoration: none; color: #2563eb; font-weight: 600; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 0.4rem;">
-    &larr; Back to Home
-  </a>
-  <a href="/" style="text-decoration: none; color: #0f172a; font-weight: 800; font-size: 1.05rem; letter-spacing: -0.02em;">
-    STEM<span style="color: #2563eb;">Simulators</span>.org
-  </a>
-</div>
-  
+
   <!-- Main Responsive Container -->
   <div id="app-shell" class="w-full max-w-4xl bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden transition-all duration-300">
     
@@ -241,9 +232,14 @@
             <span id="live-sync-text">Solo Practice</span>
           </span>
         </div>
-        <span id="quiz-progress-badge" class="bg-blue-100 text-blue-800 font-bold text-xs sm:text-sm px-3.5 py-1.5 rounded-xl">
-          Question 1 of 15
-        </span>
+        <div class="flex items-center gap-2">
+          <span id="quiz-progress-badge" class="bg-blue-100 text-blue-800 font-bold text-xs sm:text-sm px-3 py-1.5 rounded-xl">
+            Question 1 of 15
+          </span>
+          <button onclick="exitStudentSession()" class="text-xs font-bold text-slate-500 hover:text-rose-600 px-2.5 py-1.5 rounded-xl border border-slate-200 hover:border-rose-200 transition" title="Switch Student or Level">
+            Exit
+          </button>
+        </div>
       </div>
 
       <!-- Progress Bar -->
@@ -395,7 +391,7 @@
           <span>🚀</span>
           <span>Continue to Level 2: Advanced + States of Matter ➔</span>
         </button>
-        <button onclick="returnToCheckIn()" class="w-full bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-3 px-4 rounded-xl transition text-sm">
+        <button onclick="exitStudentSession()" class="w-full bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-3 px-4 rounded-xl transition text-sm">
           Finish & Return to Check-In
         </button>
       </div>
@@ -463,7 +459,7 @@
               <span id="simulate-btn-label">Simulate Live Class</span>
             </button>
             <button onclick="closeTeacherDashboard()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold px-3 py-2.5 rounded-xl border border-slate-700 transition">
-              Exit
+              Exit Dashboard
             </button>
           </div>
         </div>
@@ -615,15 +611,15 @@
             <span class="text-base">⚙️</span>
             <div>
               <span class="font-bold text-slate-800 text-xs sm:text-sm block">Cloud Sync Settings (Firebase Realtime Database)</span>
-              <span class="text-[11px] text-slate-500">Connect a free Firebase Realtime Database URL to sync across student Chromebooks</span>
+              <span class="text-[11px] text-slate-500">Connected to your Firebase project real-time database</span>
             </div>
           </div>
-          <span id="firebase-status-badge" class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800">Local / Demo Mode</span>
+          <span id="firebase-status-badge" class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800">● Firebase Cloud Connected</span>
         </button>
 
         <div id="firebase-config-body" class="hidden mt-3 pt-3 border-t border-slate-200 space-y-2.5 text-xs text-slate-600 fade-in">
           <p>
-            To sync student scores and custom session PINs live across separate devices, paste your <strong>Firebase Realtime Database URL</strong> below (e.g. <code class="bg-slate-200 px-1 rounded">https://your-project-default-rtdb.firebaseio.com</code>). You can also share your quiz link with <code class="bg-slate-200 px-1 rounded">?db=YOUR_FIREBASE_URL</code> so student devices connect automatically.
+            Your Firebase Realtime Database URL is configured. Student scores and custom session PINs sync live across separate devices.
           </p>
           <div class="flex flex-col sm:flex-row gap-2">
             <input 
@@ -827,12 +823,15 @@
     // =========================================================================
     // CONFIGURATION & CONSTANTS
     // =========================================================================
-    const apiKey = ""; // Runtime automatically injects API key for gemini-3-flash-preview
+    const GEMINI_API_KEY = ""; // Optional: Paste your Google Gemini API key here for live conversational AI tutoring
+    const FIREBASE_DB_URL = "https://types-of-reactions-default-rtdb.firebaseio.com"; // Configured Firebase Realtime Database URL
+    const apiKey = GEMINI_API_KEY;
     const GEMINI_MODEL = "gemini-3-flash-preview";
     const DEFAULT_FALLBACK_PIN = "1234";
-    const DEFAULT_FIREBASE_URL = ""; // Optional: Site owner can paste default Firebase RTDB URL here
     const DB_STORAGE_KEY = "rxn5_firebase_db_url_v1";
     const ACTIVE_SESSION_KEY = "rxn5_active_session_code_v1";
+    const ACTIVE_TEACHER_VIEW_KEY = "rxn5_active_teacher_dashboard_v1";
+    const STUDENT_SESSION_STATE_KEY = "rxn5_active_student_quiz_v1";
     const LOCAL_SESSIONS_KEY = "rxn5_local_sessions_store_v1";
     const SESSION_META_KEY = "rxn5_session_meta_store_v1";
 
@@ -986,7 +985,6 @@
 
     // =========================================================================
     // LEVEL 2: 15 HARDER, DISTINCT BALANCED REACTIONS + STATES OF MATTER
-    // (3 Synthesis, 3 Decomposition, 3 Single Replacement, 3 Double Replacement, 3 Combustion)
     // =========================================================================
     const LEVEL2_QUESTIONS = [
       // SYNTHESIS (3)
@@ -1186,6 +1184,7 @@
     let activeSessionCode = "";
     let selectedLevel = 1;
     let activeQuestions = [];
+    let currentDeckOrder = [];
     let currentQuestionIndex = 0;
     let rightCount = 0;
     let wrongCount = 0;
@@ -1202,7 +1201,7 @@
     let hostPreviewCode = "";
 
     // =========================================================================
-    // INITIALIZATION & URL PARAMETERS (?session=RXN-492 & ?db=FIREBASE_URL)
+    // INITIALIZATION & PERSISTENT REFRESH RECOVERY
     // =========================================================================
     window.addEventListener("DOMContentLoaded", () => {
       const params = new URLSearchParams(window.location.search);
@@ -1225,7 +1224,84 @@
       localStorage.setItem(ACTIVE_SESSION_KEY, teacherSessionCode);
       ensureDefaultSessionMeta(teacherSessionCode);
       updateFirebaseStatusUI();
+
+      // 1. Restore Teacher Dashboard if it was open before refresh
+      const savedTeacherDashCode = localStorage.getItem(ACTIVE_TEACHER_VIEW_KEY);
+      if (savedTeacherDashCode) {
+        teacherSessionCode = savedTeacherDashCode;
+        localStorage.setItem(ACTIVE_SESSION_KEY, teacherSessionCode);
+        launchTeacherDashboard();
+        return;
+      }
+
+      // 2. Restore Active Student Quiz Session if page was refreshed mid-quiz
+      const savedStudentRaw = sessionStorage.getItem(STUDENT_SESSION_STATE_KEY);
+      if (savedStudentRaw) {
+        try {
+          const st = JSON.parse(savedStudentRaw);
+          if (st && st.studentName && Array.isArray(st.deckOrder) && st.deckOrder.length > 0) {
+            studentName = st.studentName;
+            activeSessionCode = st.activeSessionCode || "SOLO";
+            selectedLevel = st.selectedLevel || 1;
+            currentDeckOrder = st.deckOrder;
+            currentQuestionIndex = st.currentQuestionIndex || 0;
+            rightCount = st.rightCount || 0;
+            wrongCount = st.wrongCount || 0;
+            missedTopicCounts = st.missedTopicCounts || {};
+
+            const sourcePool = selectedLevel === 1 ? LEVEL1_QUESTIONS : LEVEL2_QUESTIONS;
+            activeQuestions = currentDeckOrder.map(idx => sourcePool[idx]).filter(Boolean);
+
+            selectLevel(selectedLevel);
+            updateHeaderSessionBadge(activeSessionCode);
+            document.getElementById("quiz-student-badge").textContent = `👤 ${studentName}`;
+            document.getElementById("quiz-level-badge").textContent = `Level ${selectedLevel}`;
+
+            if (st.isCompleted || currentQuestionIndex >= activeQuestions.length) {
+              completeQuiz(true);
+            } else {
+              switchScreen("screen-quiz");
+              renderQuestion();
+              if (activeSessionCode !== "SOLO") {
+                const badgeText = document.getElementById("live-sync-text");
+                const badgeDot = document.getElementById("live-sync-dot");
+                const badge = document.getElementById("live-sync-badge");
+                if (badge && badgeText && badgeDot) {
+                  badge.className = "bg-emerald-100 text-emerald-800 font-semibold text-[11px] px-2.5 py-1 rounded-full flex items-center gap-1";
+                  badgeDot.className = "w-1.5 h-1.5 rounded-full bg-emerald-600";
+                  badgeText.textContent = `Session ${activeSessionCode}`;
+                }
+              }
+            }
+          }
+        } catch (e) {
+          sessionStorage.removeItem(STUDENT_SESSION_STATE_KEY);
+        }
+      }
     });
+
+    function saveStudentSessionState(isCompleted = false) {
+      if (!studentName || !currentDeckOrder.length) return;
+      try {
+        sessionStorage.setItem(STUDENT_SESSION_STATE_KEY, JSON.stringify({
+          studentName,
+          activeSessionCode,
+          selectedLevel,
+          deckOrder: currentDeckOrder,
+          currentQuestionIndex,
+          rightCount,
+          wrongCount,
+          missedTopicCounts,
+          isCompleted
+        }));
+      } catch (e) {}
+    }
+
+    function clearStudentSessionState() {
+      try {
+        sessionStorage.removeItem(STUDENT_SESSION_STATE_KEY);
+      } catch (e) {}
+    }
 
     function generateRandomSessionCode() {
       const prefixes = ["RXN", "CHEM", "ATOM", "IONS", "BOND", "MOLE"];
@@ -1245,7 +1321,7 @@
 
     function getFirebaseDbUrl() {
       const saved = localStorage.getItem(DB_STORAGE_KEY);
-      const url = (saved !== null ? saved : DEFAULT_FIREBASE_URL).trim().replace(/\/$/, "");
+      const url = (saved !== null ? saved : FIREBASE_DB_URL).trim().replace(/\/$/, "");
       return url.startsWith("https://") ? url : "";
     }
 
@@ -1262,13 +1338,13 @@
           badge.textContent = "● Firebase Cloud Connected";
           badge.className = "text-[11px] font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800";
         }
-        if (modeLabel) modeLabel.textContent = "Cloud Realtime Sync Active";
+        if (modeLabel) modeLabel.textContent = "Live Firebase Sync";
       } else {
         if (badge) {
-          badge.textContent = "Local / Demo Mode";
+          badge.textContent = "Local Browser Mode";
           badge.className = "text-[11px] font-bold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800";
         }
-        if (modeLabel) modeLabel.textContent = "Live Session Active (Local / Demo)";
+        if (modeLabel) modeLabel.textContent = "Local Browser Mode";
       }
     }
 
@@ -1350,13 +1426,13 @@
     // =========================================================================
     // FISHER-YATES SHUFFLE & UI HELPERS
     // =========================================================================
-    function shuffleArray(array) {
-      const copy = [...array];
-      for (let i = copy.length - 1; i > 0; i--) {
+    function buildShuffledDeckIndices(length) {
+      const indices = Array.from({ length }, (_, i) => i);
+      for (let i = indices.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [copy[i], copy[j]] = [copy[j], copy[i]];
+        [indices[i], indices[j]] = [indices[j], indices[i]];
       }
-      return copy;
+      return indices;
     }
 
     function showToast(msg, type = "info") {
@@ -1576,7 +1652,9 @@
       document.getElementById("quiz-level-badge").textContent = `Level ${selectedLevel}`;
 
       const sourcePool = selectedLevel === 1 ? LEVEL1_QUESTIONS : LEVEL2_QUESTIONS;
-      activeQuestions = shuffleArray(sourcePool);
+      currentDeckOrder = buildShuffledDeckIndices(sourcePool.length);
+      activeQuestions = currentDeckOrder.map(idx => sourcePool[idx]);
+      saveStudentSessionState(false);
 
       switchScreen("screen-quiz");
       renderQuestion();
@@ -1589,7 +1667,9 @@
       rightCount = 0;
       wrongCount = 0;
       missedTopicCounts = {};
-      activeQuestions = shuffleArray(LEVEL2_QUESTIONS);
+      currentDeckOrder = buildShuffledDeckIndices(LEVEL2_QUESTIONS.length);
+      activeQuestions = currentDeckOrder.map(idx => LEVEL2_QUESTIONS[idx]);
+      saveStudentSessionState(false);
 
       document.getElementById("quiz-student-badge").textContent = `👤 ${studentName}`;
       document.getElementById("quiz-level-badge").textContent = "Level 2";
@@ -1756,6 +1836,7 @@
       }
 
       const isFinalQ = currentQuestionIndex === activeQuestions.length - 1;
+      saveStudentSessionState(isFinalQ);
       syncStudentProgressToSession(isFinalQ ? "Completed" : "Active");
     }
 
@@ -1791,18 +1872,22 @@
     function nextQuestion() {
       currentQuestionIndex++;
       if (currentQuestionIndex < activeQuestions.length) {
+        saveStudentSessionState(false);
         renderQuestion();
       } else {
-        completeQuiz();
+        completeQuiz(false);
       }
     }
 
-    function completeQuiz() {
+    function completeQuiz(isRestored = false) {
       const pct = Math.round((rightCount / activeQuestions.length) * 100);
       const missedList = Object.keys(missedTopicCounts);
       const missedString = missedList.length ? missedList.join(", ") : "None (100% Mastery!)";
 
-      syncStudentProgressToSession("Completed");
+      saveStudentSessionState(true);
+      if (!isRestored) {
+        syncStudentProgressToSession("Completed");
+      }
 
       document.getElementById("summary-heading").textContent = `Level ${selectedLevel} Complete!`;
       document.getElementById("summary-student-name").textContent = `Great effort, ${studentName}!`;
@@ -1824,9 +1909,15 @@
       switchScreen("screen-summary");
     }
 
-    function returnToCheckIn() {
+    function exitStudentSession() {
+      clearStudentSessionState();
+      studentName = "";
+      currentDeckOrder = [];
       document.getElementById("student-name-input").value = "";
       document.getElementById("privacy-preview").textContent = "";
+      if (activeSessionCode && activeSessionCode !== "SOLO") {
+        document.getElementById("session-code-input").value = activeSessionCode;
+      }
       switchScreen("screen-checkin");
     }
 
@@ -1864,6 +1955,7 @@
     }
 
     async function callGeminiWithRetry(systemInstruction, contents) {
+      if (!apiKey) throw new Error("No Gemini API key configured");
       const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
       const payload = {
         contents: contents,
@@ -2191,6 +2283,7 @@ Rules:
     // LIVE TEACHER DASHBOARD & REAL-TIME ANALYTICS
     // =========================================================================
     async function launchTeacherDashboard(knownMeta = null) {
+      localStorage.setItem(ACTIVE_TEACHER_VIEW_KEY, teacherSessionCode);
       switchScreen("screen-teacher");
       document.getElementById("active-session-code-display").textContent = teacherSessionCode;
       updateHeaderSessionBadge(teacherSessionCode);
@@ -2204,8 +2297,10 @@ Rules:
     }
 
     function closeTeacherDashboard() {
+      localStorage.removeItem(ACTIVE_TEACHER_VIEW_KEY);
       stopDashboardPolling();
       stopSimulatedClassroom();
+      updateHeaderSessionBadge(activeSessionCode);
       switchScreen("screen-checkin");
     }
 
@@ -2610,7 +2705,7 @@ Rules:
       if (!val) {
         localStorage.removeItem(DB_STORAGE_KEY);
         updateFirebaseStatusUI();
-        showToast("Cleared Firebase URL (using Local / Demo Mode).", "info");
+        showToast("Cleared Firebase URL (using Local Browser Mode).", "info");
         return;
       }
       if (!val.startsWith("https://")) {
