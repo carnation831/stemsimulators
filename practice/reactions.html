@@ -256,7 +256,7 @@
       <!-- Question 1: Ionic Compounds -->
       <div class="mb-5">
         <label class="block text-sm sm:text-base font-bold text-slate-800 mb-1">
-          1. Select all <span class="text-blue-600">IONIC</span> compounds <span class="font-normal text-slate-500 text-xs sm:text-sm">(Metal or NH₄⁺ + Nonmetal)</span>:
+1. Select all <span class="text-blue-600">IONIC</span> compounds <span class="font-normal text-slate-500 text-xs sm:text-sm">(Metal or NH₄⁺ + Nonmetal)</span>:
         </label>
         <p class="text-xs text-slate-500 mb-2.5">Tap all that apply, or leave unselected if none are ionic.</p>
         <div id="ionic-chips-container" class="flex flex-wrap gap-2.5"></div>
@@ -265,7 +265,7 @@
       <!-- Question 2: Covalent Molecules -->
       <div class="mb-5">
         <label class="block text-sm sm:text-base font-bold text-slate-800 mb-1">
-          2. Select all <span class="text-purple-600">COVALENT</span> molecules <span class="font-normal text-slate-500 text-xs sm:text-sm">(Nonmetal + Nonmetal)</span>:
+2. Select all <span class="text-purple-600">COVALENT</span> molecules <span class="font-normal text-slate-500 text-xs sm:text-sm">(Nonmetal + Nonmetal)</span>:
         </label>
         <p class="text-xs text-slate-500 mb-2.5">Tap all that apply, or leave unselected if none are covalent.</p>
         <div id="covalent-chips-container" class="flex flex-wrap gap-2.5"></div>
@@ -274,7 +274,7 @@
       <!-- Question 3: Reaction Type (Dropdown) -->
       <div class="mb-6">
         <label for="reaction-type-select" class="block text-sm sm:text-base font-bold text-slate-800 mb-1.5">
-          3. Which of the 5 reaction types is this?
+3. Which of the 5 reaction types is this?
         </label>
         <select 
           id="reaction-type-select"
@@ -293,7 +293,7 @@
       <div id="level2-states-section" class="hidden mb-6 bg-indigo-50/70 border border-indigo-200 rounded-2xl p-4 sm:p-5 fade-in">
         <div class="flex items-center justify-between mb-1.5">
           <label class="block text-sm sm:text-base font-bold text-indigo-950">
-            4. Predict the <span class="text-indigo-600">State of Matter</span> for EVERY product:
+4. Predict the <span class="text-indigo-600">State of Matter</span> for EVERY product:
           </label>
           <button type="button" onclick="toggleCheatSheet()" class="text-xs font-bold text-indigo-700 underline hover:text-indigo-900">Solubility Rules</button>
         </div>
@@ -1192,6 +1192,11 @@
     let currentConversationHistory = [];
     let isAiLoading = false;
 
+    // Reliable Firebase Sync Queue State
+    let pendingSyncPayload = null;
+    let isSyncingNow = false;
+    let syncRetryTimerId = null;
+
     // Teacher Dashboard State
     let teacherSessionCode = "";
     let sessionStudentsMap = {};
@@ -1396,7 +1401,9 @@
       const dbUrl = getFirebaseDbUrl();
       if (dbUrl) {
         try {
-          const res = await fetch(`${dbUrl}/sessions/${encodeURIComponent(code)}/meta.json`);
+          const res = await fetch(`${dbUrl}/sessions/${encodeURIComponent(code)}/meta.json?t=${Date.now()}`, {
+            cache: "no-store"
+          });
           if (res.ok) {
             const remoteMeta = await res.json();
             if (remoteMeta && remoteMeta.pin) {
@@ -1416,6 +1423,7 @@
         try {
           await fetch(`${dbUrl}/sessions/${encodeURIComponent(code)}/meta.json`, {
             method: "PUT",
+            cache: "no-store",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(meta)
           });
@@ -1517,7 +1525,7 @@
     }
 
     // =========================================================================
-    // REAL-TIME SESSION DATA SYNC (ROBUST & EXTENSION-PROOF)
+    // REAL-TIME SESSION DATA SYNC (NON-BLOCKING PATCH QUEUE + AUTO-RETRY)
     // =========================================================================
     function getStudentKey(name) {
       return name.replace(/[^a-zA-Z0-9]/g, "_");
@@ -1557,36 +1565,15 @@
 
       const sKey = getStudentKey(studentName);
       const totalQ = activeQuestions.length;
-      const pct = (rightCount + wrongCount) > 0 ? Math.round((rightCount / (rightCount + wrongCount)) * 100) : 0;
+      const answeredCount = rightCount + wrongCount;
+      const pct = answeredCount > 0 ? Math.round((rightCount / answeredCount) * 100) : 0;
 
-      let existing = getLocalSessionStore(activeSessionCode)[sKey] || {
+      const existing = getLocalSessionStore(activeSessionCode)[sKey] || {
         name: studentName,
         lvl1: null,
         lvl2: null,
         missedCounts: {}
       };
-
-      const dbUrl = getFirebaseDbUrl();
-      
-      // Safely fetch remote data without crashing if extensions interfere
-      if (dbUrl) {
-        try {
-          const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 4000); // 4-second timeout
-          
-          const getRes = await fetch(`${dbUrl}/sessions/${encodeURIComponent(activeSessionCode)}/students/${encodeURIComponent(sKey)}.json`, {
-            signal: controller.signal
-          });
-          clearTimeout(timeoutId);
-          
-          if (getRes.ok) {
-            const remoteData = await getRes.json();
-            if (remoteData) existing = { ...existing, ...remoteData };
-          }
-        } catch (e) {
-          // Silently fallback to local state if network/extensions block the request
-        }
-      }
 
       const combinedMissed = { ...(existing.missedCounts || {}) };
       Object.entries(missedTopicCounts).forEach(([topic, count]) => {
@@ -1600,10 +1587,14 @@
         completed: statusText === "Completed"
       };
 
+      const displayQ = statusText === "Completed"
+        ? totalQ
+        : Math.min(answeredCount + 1, totalQ);
+
       const updatedStudentRecord = {
         name: studentName,
         activeLevel: selectedLevel,
-        currentQ: Math.min(currentQuestionIndex + 1, totalQ),
+        currentQ: displayQ,
         totalQ: totalQ,
         status: statusText,
         lvl1: selectedLevel === 1 ? levelPayload : (existing.lvl1 || null),
@@ -1612,8 +1603,41 @@
         updatedAt: Date.now()
       };
 
-      // Always save locally first so progress is never lost
+      // Always save locally immediately
       saveLocalSessionStudent(activeSessionCode, sKey, updatedStudentRecord);
+
+      // Enqueue the newest state so rapid submissions never get overwritten by older in-flight calls
+      pendingSyncPayload = {
+        sessionCode: activeSessionCode,
+        sKey: sKey,
+        record: updatedStudentRecord
+      };
+
+      flushPendingSync();
+    }
+
+    async function flushPendingSync() {
+      if (isSyncingNow || !pendingSyncPayload) return;
+
+      const dbUrl = getFirebaseDbUrl();
+      const badge = document.getElementById("live-sync-badge");
+      const badgeDot = document.getElementById("live-sync-dot");
+      const badgeText = document.getElementById("live-sync-text");
+
+      if (!dbUrl) {
+        pendingSyncPayload = null;
+        if (badgeText) badgeText.textContent = `Session ${activeSessionCode}`;
+        return;
+      }
+
+      if (syncRetryTimerId) {
+        clearTimeout(syncRetryTimerId);
+        syncRetryTimerId = null;
+      }
+
+      isSyncingNow = true;
+      const job = pendingSyncPayload;
+      pendingSyncPayload = null;
 
       if (badge && badgeText && badgeDot) {
         badge.className = "bg-emerald-100 text-emerald-800 font-semibold text-[11px] px-2.5 py-1 rounded-full flex items-center gap-1";
@@ -1621,26 +1645,38 @@
         badgeText.textContent = "Syncing...";
       }
 
-      // Safely push to Firebase cloud database
-      if (dbUrl) {
-        try {
-          const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 4000);
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
 
-          await fetch(`${dbUrl}/sessions/${encodeURIComponent(activeSessionCode)}/students/${encodeURIComponent(sKey)}.json`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(updatedStudentRecord),
-            signal: controller.signal
-          });
-          clearTimeout(timeoutId);
+        const res = await fetch(`${dbUrl}/sessions/${encodeURIComponent(job.sessionCode)}/students/${encodeURIComponent(job.sKey)}.json`, {
+          method: "PATCH",
+          cache: "no-store",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(job.record),
+          signal: controller.signal
+        });
+        clearTimeout(timeoutId);
 
-          if (badgeText) badgeText.textContent = `Synced (${activeSessionCode})`;
-        } catch (err) {
-          if (badgeText) badgeText.textContent = `Saved Locally (${activeSessionCode})`;
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        if (badgeDot) badgeDot.className = "w-1.5 h-1.5 rounded-full bg-emerald-600";
+        if (badgeText) badgeText.textContent = `Synced (${job.sessionCode})`;
+      } catch (err) {
+        if (!pendingSyncPayload) {
+          pendingSyncPayload = job;
         }
-      } else {
-        if (badgeText) badgeText.textContent = `Session ${activeSessionCode}`;
+        if (badge && badgeText && badgeDot) {
+          badge.className = "bg-amber-100 text-amber-800 font-semibold text-[11px] px-2.5 py-1 rounded-full flex items-center gap-1";
+          badgeDot.className = "w-1.5 h-1.5 rounded-full bg-amber-500";
+          badgeText.textContent = `Retrying (${job.sessionCode})...`;
+        }
+        syncRetryTimerId = setTimeout(() => flushPendingSync(), 2500);
+      } finally {
+        isSyncingNow = false;
+        if (pendingSyncPayload) {
+          flushPendingSync();
+        }
       }
     }
 
@@ -2010,8 +2046,8 @@
           : "Not provided";
         level2Context = `
 - LEVEL 2 PRODUCT STATES OF MATTER:
-  * Correct Product States & Reasons: ${expectedStatesStr}
-  * Student Selected Product States: ${studentStatesStr}`;
+  - Correct Product States & Reasons: ${expectedStatesStr}
+  - Student Selected Product States: ${studentStatesStr}`;
       }
 
       return `You are an encouraging, friendly, Socratic middle/high school chemistry tutor helping a student named ${studentName} on Level ${selectedLevel} of "5 Types of Reactions".
@@ -2341,11 +2377,24 @@ Rules:
 
       if (dbUrl) {
         try {
-          const res = await fetch(`${dbUrl}/sessions/${encodeURIComponent(teacherSessionCode)}/students.json`);
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 8000);
+
+          const res = await fetch(`${dbUrl}/sessions/${encodeURIComponent(teacherSessionCode)}/students.json?t=${Date.now()}`, {
+            cache: "no-store",
+            signal: controller.signal
+          });
+          clearTimeout(timeoutId);
+
           if (res.ok) {
             const remoteStudents = await res.json();
             if (remoteStudents && typeof remoteStudents === "object") {
-              combinedMap = { ...combinedMap, ...remoteStudents };
+              Object.entries(remoteStudents).forEach(([key, remoteRec]) => {
+                const localRec = combinedMap[key];
+                if (!localRec || (remoteRec.updatedAt || 0) >= (localRec.updatedAt || 0)) {
+                  combinedMap[key] = remoteRec;
+                }
+              });
             }
           }
         } catch (err) {}
