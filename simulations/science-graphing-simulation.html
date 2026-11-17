@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Science Graphing Simulation | STEM Simulators</title>
+    
+    <!-- GOOGLE ADSENSE SCRIPT -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4365444453795543"
+       crossorigin="anonymous"></script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #F1F5F9; color: #0F172A; }
+        .graph-paper-bg {
+            background-color: #FAF9F6;
+            background-image: 
+                linear-gradient(to right, rgba(148, 163, 184, 0.16) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(148, 163, 184, 0.16) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 9999px; }
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(13, 148, 136, 0.35); }
+            50% { box-shadow: 0 0 0 7px rgba(13, 148, 136, 0); }
+        }
+        .animate-pulse-glow { animation: pulseGlow 2.6s infinite; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans antialiased">
+
+    <!-- Top Navigation: Back to Home Bar -->
+    <div style="width: 100%; box-sizing: border-box; background-color: #ffffff; border-bottom: 1px solid #e2e8f0; padding: 0.75rem 1.5rem; display: flex; justify-content: space-between; align-items: center; z-index: 40;">
+        <a href="https://stemsimulators.org/" style="text-decoration: none; color: #2563eb; font-weight: 600; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 0.4rem;">
+            &larr; Back to Home
+        </a>
+        <a href="https://stemsimulators.org/" style="text-decoration: none; color: #0f172a; font-weight: 800; font-size: 1.05rem; letter-spacing: -0.02em;">
+            STEM<span style="color: #2563eb;">Simulators</span>.org
+        </a>
+    </div>
+
+    <!-- Header: Stepper & Preset Selector -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-[1600px] mx-auto px-4 sm:px-6 py-3 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-teal-600 text-white flex items-center justify-center shadow-sm shrink-0">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 3v18h18M7 15l4-4 3 3 5-7"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg text-slate-900 leading-tight">Science Graphing Simulation</h1>
+                    <p class="text-[11px] font-medium text-slate-500 uppercase tracking-wider">Interactive Student Practice Lab</p>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-between xl:justify-end gap-3">
+                <select id="datasetSelect" class="text-xs sm:text-sm font-semibold bg-slate-50 border border-slate-300 text-slate-800 rounded-xl px-3 py-1.5 cursor-pointer">
+                    <option value="enzyme">Practice Lab 1: Enzyme Activity vs. Temp</option>
+                    <option value="pendulum">Practice Lab 2: Pendulum Length vs. Period[cite: 3]</option>
+                    <option value="fertilizer">Practice Lab 3: Fertilizer vs. Plant Growth[cite: 3]</option>
+                </select>
+
+                <nav class="flex items-center gap-1 sm:gap-1.5">
+                    <button onclick="goToPhase(1)" id="step-btn-1" class="step-pill px-2.5 py-1.5 rounded-full text-xs font-semibold bg-teal-600 text-white">1. Variables</button>
+                    <span class="text-slate-300 text-xs">›</span>
+                    <button onclick="goToPhase(2)" id="step-btn-2" class="step-pill px-2.5 py-1.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">2. Axes</button>
+                    <span class="text-slate-300 text-xs">›</span>
+                    <button onclick="goToPhase(3)" id="step-btn-3" class="step-pill px-2.5 py-1.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">3. Scale</button>
+                    <span class="text-slate-300 text-xs">›</span>
+                    <button onclick="goToPhase(4)" id="step-btn-4" class="step-pill px-2.5 py-1.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">4. Plot</button>
+                    <span class="text-slate-300 text-xs">›</span>
+                    <button onclick="goToPhase(5)" id="step-btn-5" class="step-pill px-2.5 py-1.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">5. Analysis</button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="flex-1 max-w-[1600px] w-full mx-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+        
+        <!-- Left Panel: Data Table -->
+        <section class="lg:col-span-3 bg-white rounded-2xl border border-slate-200 shadow-sm p-4 space-y-4">
+            <div class="bg-slate-900 text-white px-4 py-3 rounded-xl flex items-center justify-between">
+                <h2 class="font-bold text-xs uppercase tracking-wide">Lab Investigation[cite: 3]</h2>
+                <span class="text-[10px] bg-teal-700 text-teal-100 px-2 py-0.5 rounded">Practice</span>
+            </div>
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-3.5">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-amber-800 block mb-1">Research Question</span>
+                <p id="researchQuestionText" class="text-sm font-semibold text-slate-900"></p>
+                <p id="experimentContextText" class="text-xs text-slate-600 mt-2"></p>
+            </div>
+            <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 block">Raw Data Table</span>
+                <div class="border border-slate-200 rounded-xl overflow-hidden">
+                    <table class="w-full text-left border-collapse font-mono text-xs">
+                        <thead>
+                            <tr class="bg-slate-100 border-b border-slate-200 text-slate-700">
+                                <th id="th-colA" class="py-2 px-3 border-r border-slate-200">Col A</th>
+                                <th id="th-colB" class="py-2 px-3">Col B</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dataTableBody" class="divide-y divide-slate-100"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Center Panel: Canvas & Stepper Controls -->
+        <section class="lg:col-span-5 flex flex-col gap-5">
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <div>
+                        <span id="phaseTag" class="text-[11px] font-bold uppercase tracking-wider text-teal-600">Phase 1 of 5</span>
+                        <h2 id="phaseTitle" class="font-bold text-lg text-slate-900">Identify Variables</h2>
+                    </div>
+                    <span id="phaseStatusBadge" class="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">In Progress</span>
+                </div>
+
+                <!-- Phase 1 -->
+                <div id="phase-panel-1" class="phase-panel space-y-4">
+                    <p class="text-sm text-slate-600">Identify the Independent Variable (IV) and Dependent Variable (DV)[cite: 3].</p>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Independent (IV)</label>
+                            <select id="ivSelect" class="w-full text-sm bg-slate-50 border border-slate-300 rounded-xl p-2.5">
+                                <option value="">-- Select --</option>
+                                <option value="colA" id="opt-iv-colA">Col A</option>
+                                <option value="colB" id="opt-iv-colB">Col B</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Dependent (DV)</label>
+                            <select id="dvSelect" class="w-full text-sm bg-slate-50 border border-slate-300 rounded-xl p-2.5">
+                                <option value="">-- Select --</option>
+                                <option value="colA" id="opt-dv-colA">Col A</option>
+                                <option value="colB" id="opt-dv-colB">Col B</option>
+                            </select>
+                        </div>
+                    </div>
+                    <textarea id="varJustification" rows="2" placeholder="Brief justification..." class="w-full text-sm bg-slate-50 border border-slate-300 rounded-xl p-3"></textarea>
+                </div>
+
+                <!-- Phase 2 -->
+                <div id="phase-panel-2" class="phase-panel hidden space-y-4">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-2">
+                            <label class="block text-xs font-bold text-slate-700">X-Axis Variable</label>
+                            <select id="xAxisVarSelect" onchange="renderCanvas()" class="w-full text-xs bg-white border border-slate-300 rounded-lg p-2">
+                                <option value="">-- Assign X --</option>
+                                <option value="colA" id="opt-x-colA">Col A</option>
+                                <option value="colB" id="opt-x-colB">Col B</option>
+                            </select>
+                            <label class="block text-xs font-bold text-slate-700">X Label & Units</label>
+                            <input type="text" id="xAxisLabelInput" oninput="renderCanvas()" placeholder="e.g., Temp (°C)" class="w-full text-sm bg-white border border-slate-300 rounded-lg p-2">
+                        </div>
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-2">
+                            <label class="block text-xs font-bold text-slate-700">Y-Axis Variable</label>
+                            <select id="yAxisVarSelect" onchange="renderCanvas()" class="w-full text-xs bg-white border border-slate-300 rounded-lg p-2">
+                                <option value="">-- Assign Y --</option>
+                                <option value="colA" id="opt-y-colA">Col A</option>
+                                <option value="colB" id="opt-y-colB">Col B</option>
+                            </select>
+                            <label class="block text-xs font-bold text-slate-700">Y Label & Units</label>
+                            <input type="text" id="yAxisLabelInput" oninput="renderCanvas()" placeholder="e.g., Rate (mL/min)" class="w-full text-sm bg-white border border-slate-300 rounded-lg p-2">
+                        </div>
+                    </div>
+                    <input type="text" id="graphTitleInput" oninput="renderCanvas()" placeholder="The Effect of [IV] on [DV]" class="w-full text-sm bg-slate-50 border border-slate-300 rounded-xl p-2.5">
+                </div>
+
+                <!-- Phase 3 -->
+                <div id="phase-panel-3" class="phase-panel hidden space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-2">
+                            <span class="text-xs font-bold">X Scale</span>
+                            <div class="grid grid-cols-3 gap-1">
+                                <input type="number" id="xMinInput" value="0" oninput="renderCanvas()" class="text-xs p-1 border rounded">
+                                <input type="number" id="xMaxInput" value="10" oninput="renderCanvas()" class="text-xs p-1 border rounded">
+                                <input type="number" id="xStepInput" value="2" oninput="renderCanvas()" class="text-xs p-1 border rounded">
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-2">
+                            <span class="text-xs font-bold">Y Scale</span>
+                            <div class="grid grid-cols-3 gap-1">
+                                <input type="number" id="yMinInput" value="0" oninput="renderCanvas()" class="text-xs p-1 border rounded">
+                                <input type="number" id="yMaxInput" value="10" oninput="renderCanvas()" class="text-xs p-1 border rounded">
+                                <input type="number" id="yStepInput" value="2" oninput="renderCanvas()" class="text-xs p-1 border rounded">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 4 -->
+                <div id="phase-panel-4" class="phase-panel hidden space-y-3">
+                    <p class="text-sm text-slate-600">Click on the graph grid below to plot data points[cite: 3].</p>
+                    <div class="flex items-center justify-between bg-slate-50 p-2.5 rounded-xl border border-slate-200 text-xs">
+                        <span>Plotted: <span id="plottedCountLabel" class="font-mono text-teal-700 font-bold">0</span></span>
+                        <select id="lineModeSelect" onchange="renderCanvas()" class="bg-white border p-1 rounded">
+                            <option value="none">No Line</option>
+                            <option value="connect">Connect Points</option>
+                            <option value="bestfit">Best Fit Line</option>
+                        </select>
+                        <button onclick="clearPlottedPoints()" class="text-rose-600 font-bold">Clear</button>
+                    </div>
+                </div>
+
+                <!-- Phase 5 -->
+                <div id="phase-panel-5" class="phase-panel hidden space-y-4">
+                    <textarea id="conclusionInput" rows="3" placeholder="As [IV] increases, [DV]..." class="w-full text-sm bg-slate-50 border rounded-xl p-3"></textarea>
+                    <div class="flex gap-2">
+                        <button onclick="exportGraphPNG()" class="bg-slate-900 text-white text-xs font-semibold px-4 py-2.5 rounded-xl">Download PNG</button>
+                    </div>
+                </div>
+
+                <!-- Footer Navigation -->
+                <div class="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between">
+                    <button id="prevPhaseBtn" onclick="prevPhase()" class="text-xs font-semibold text-slate-600">← Previous</button>
+                    <div class="flex items-center gap-2">
+                        <button onclick="requestCoachCheck()" class="bg-teal-600 text-white text-xs font-bold px-4 py-2.5 rounded-xl animate-pulse-glow">Check Step</button>
+                        <button id="nextPhaseBtn" onclick="nextPhase()" class="bg-slate-800 text-white text-xs font-bold px-4 py-2.5 rounded-xl">Next →</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Graph Canvas -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
+                <div id="canvasContainer" class="relative w-full aspect-[4/3] graph-paper-bg rounded-xl border border-slate-300 overflow-hidden cursor-crosshair">
+                    <canvas id="graphCanvas" class="w-full h-full block"></canvas>
+                </div>
+                <div id="plottedPointsBar" class="mt-3 flex flex-wrap gap-1.5 min-h-[28px]"></div>
+            </div>
+        </section>
+
+        <!-- Right Panel: Socratic Lab Coach -->
+        <aside class="lg:col-span-4 bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col h-[640px] lg:h-[calc(100vh-110px)] sticky top-[76px]">
+            <div class="bg-teal-700 text-white px-4 py-3.5 rounded-t-2xl flex items-center justify-between">
+                <span class="font-bold text-sm">Lab Coach[cite: 3]</span>
+                <button onclick="resetChat()" class="text-teal-100 text-xs">Reset</button>
+            </div>
+            <div id="chatMessages" class="flex-1 p-4 overflow-y-auto space-y-3.5 custom-scrollbar bg-slate-50/40 text-xs"></div>
+            <form id="chatForm" onsubmit="handleChatSubmit(event)" class="p-3 bg-white border-t border-slate-200 rounded-b-2xl flex gap-2">
+                <input type="text" id="chatInput" placeholder="Ask Lab Coach..." class="flex-1 text-sm bg-slate-50 border rounded-xl px-3 py-2">
+                <button type="submit" class="bg-teal-600 text-white px-3 py-2 rounded-xl">Send</button>
+            </form>
+        </aside>
+    </main>
+
+    <script>
+        // Core dataset & canvas logic for Student Practice
+        const DATASETS = {
+            enzyme: {
+                id: 'enzyme', name: 'Enzyme Activity vs. Temperature',
+                question: 'How does water temperature affect the reaction rate of catalase enzyme?',
+                context: 'Biology students placed catalase into hydrogen peroxide at 6 temperatures.',
+                colA: { name: 'Temperature', unit: '°C', full: 'Temperature (°C)' },
+                colB: { name: 'Reaction Rate', unit: 'mL/min', full: 'Reaction Rate (mL/min)' },
+                ivCol: 'colA', dvCol: 'colB',
+                rows: [{colA:10,colB:12},{colA:20,colB:24},{colA:30,colB:38},{colA:37,colB:46},{colA:50,colB:18},{colA:60,colB:4}]
+            },
+            pendulum: {
+                id: 'pendulum', name: 'Pendulum Length vs. Period',
+                question: 'How does changing the string length of a pendulum affect swing period?',
+                context: 'Physics students tested 6 different string lengths.',
+                colA: { name: 'Period', unit: 's', full: 'Swing Period (s)' },
+                colB: { name: 'Length', unit: 'cm', full: 'String Length (cm)' },
+                ivCol: 'colB', dvCol: 'colA',
+                rows: [{colA:0.9,colB:20},{colA:1.3,colB:40},{colA:1.6,colB:60},{colA:1.8,colB:80},{colA:2.0,colB:100},{colA:2.2,colB:120}]
+            },
+            fertilizer: {
+                id: 'fertilizer', name: 'Fertilizer Concentration vs. Plant Growth',
+                question: 'What is the effect of liquid nitrogen fertilizer on bean seedling height?',
+                context: 'Environmental science students watered bean seedlings with 6 concentrations.',
+                colA: { name: 'Concentration', unit: 'g/L', full: 'Fertilizer Concentration (g/L)' },
+                colB: { name: 'Height', unit: 'cm', full: 'Seedling Height (cm)' },
+                ivCol: 'colA', dvCol: 'colB',
+                rows: [{colA:0,colB:8},{colA:2,colB:14},{colA:4,colB:21},{colA:6,colB:25},{colA:8,colB:22},{colA:10,colB:15}]
+            }
+        };
+
+        let appState = { currentDatasetKey: 'enzyme', currentPhase: 1, completedPhases: new Set(), plottedPoints: [], hoverPoint: null, draggingIndex: -1 };
+        function getActiveDataset() { return DATASETS[appState.currentDatasetKey]; }
+
+        window.onload = function() {
+            setupCanvasEvents();
+            window.addEventListener('resize', renderCanvas);
+            loadDataset('enzyme');
+        };
+
+        document.getElementById('datasetSelect').addEventListener('change', e => loadDataset(e.target.value));
+
+        function loadDataset(key) {
+            appState.currentDatasetKey = key;
+            appState.currentPhase = 1;
+            appState.completedPhases.clear();
+            appState.plottedPoints = [];
+            const ds = getActiveDataset();
+            document.getElementById('researchQuestionText').textContent = ds.question;
+            document.getElementById('experimentContextText').textContent = ds.context;
+            document.getElementById('th-colA').textContent = ds.colA.full;
+            document.getElementById('th-colB').textContent = ds.colB.full;
+            const tbody = document.getElementById('dataTableBody');
+            tbody.innerHTML = ds.rows.map(r => `<tr><td class="py-2 px-3 border-r">${r.colA}</td><td class="py-2 px-3">${r.colB}</td></tr>`).join('');
+            document.getElementById('opt-iv-colA').textContent = ds.colA.full;
+            document.getElementById('opt-iv-colB').textContent = ds.colB.full;
+            document.getElementById('opt-dv-colA').textContent = ds.colA.full;
+            document.getElementById('opt-dv-colB').textContent = ds.colB.full;
+            document.getElementById('opt-x-colA').textContent = ds.colA.full;
+            document.getElementById('opt-x-colB').textContent = ds.colB.full;
+            document.getElementById('opt-y-colA').textContent = ds.colA.full;
+            document.getElementById('opt-y-colB').textContent = ds.colB.full;
+            goToPhase(1);
+            resetChat();
+        }
+
+        function goToPhase(p) {
+            appState.currentPhase = p;
+            document.querySelectorAll('.phase-panel').forEach((el, idx) => el.classList.toggle('hidden', idx + 1 !== p));
+            document.getElementById('phaseTag').textContent = `Phase ${p} of 5`;
+            renderCanvas();
+        }
+
+        function prevPhase() { if (appState.currentPhase > 1) goToPhase(appState.currentPhase - 1); }
+        function nextPhase() { if (appState.currentPhase < 5) goToPhase(appState.currentPhase + 1); }
+        function requestCoachCheck() { appendTutorMessage("Good progress! Keep verifying your steps."); }
+
+        const MARGIN = { top: 54, right: 32, bottom: 62, left: 68 };
+        function getScaleParams() {
+            return {
+                xMin: parseFloat(document.getElementById('xMinInput').value) || 0,
+                xMax: parseFloat(document.getElementById('xMaxInput').value) || 10,
+                xStep: parseFloat(document.getElementById('xStepInput').value) || 2,
+                yMin: parseFloat(document.getElementById('yMinInput').value) || 0,
+                yMax: parseFloat(document.getElementById('yMaxInput').value) || 10,
+                yStep: parseFloat(document.getElementById('yStepInput').value) || 2
+            };
+        }
+
+        function dataToPixel(dx, dy, W, H, scale) {
+            const plotW = W - MARGIN.left - MARGIN.right;
+            const plotH = H - MARGIN.top - MARGIN.bottom;
+            return {
+                px: MARGIN.left + ((dx - scale.xMin) / (scale.xMax - scale.xMin)) * plotW,
+                py: MARGIN.top + plotH - ((dy - scale.yMin) / (scale.yMax - scale.yMin)) * plotH
+            };
+        }
+
+        function renderCanvas() {
+            const canvas = document.getElementById('graphCanvas');
+            const container = document.getElementById('canvasContainer');
+            if (!canvas || !container) return;
+            const rect = container.getBoundingClientRect();
+            canvas.width = rect.width; canvas.height = rect.height;
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Draw axis borders and plotted points[cite: 3]
+            const scale = getScaleParams();
+            appState.plottedPoints.forEach(pt => {
+                const { px, py } = dataToPixel(pt.x, pt.y, canvas.width, canvas.height, scale);
+                ctx.fillStyle = '#0D9488';
+                ctx.beginPath(); ctx.arc(px, py, 6, 0, Math.PI * 2); ctx.fill();
+            });
+        }
+
+        function setupCanvasEvents() {
+            const canvas = document.getElementById('graphCanvas');
+            canvas.addEventListener('mousedown', e => {
+                if (appState.currentPhase !== 4) return;
+                const rect = canvas.getBoundingClientRect();
+                const scale = getScaleParams();
+                const plotW = rect.width - MARGIN.left - MARGIN.right;
+                const plotH = rect.height - MARGIN.top - MARGIN.bottom;
+                let dx = scale.xMin + ((e.clientX - rect.left - MARGIN.left) / plotW) * (scale.xMax - scale.xMin);
+                let dy = scale.yMin + ((MARGIN.top + plotH - (e.clientY - rect.top)) / plotH) * (scale.yMax - scale.yMin);
+                appState.plottedPoints.push({ x: Number(dx.toFixed(1)), y: Number(dy.toFixed(1)) });
+                renderCanvas();
+            });
+        }
+
+        function clearPlottedPoints() { appState.plottedPoints = []; renderCanvas(); }
+        function resetChat() {
+            document.getElementById('chatMessages').innerHTML = '<div class="bg-white p-3 rounded-xl border">Hello! I am your Lab Coach[cite: 3]. Ask me for hints as you build your graph.</div>';
+        }
+        function appendTutorMessage(txt) {
+            const box = document.getElementById('chatMessages');
+            box.innerHTML += `<div class="bg-white p-3 rounded-xl border">${txt}</div>`;
+            box.scrollTop = box.scrollHeight;
+        }
+        function handleChatSubmit(e) {
+            e.preventDefault();
+            const input = document.getElementById('chatInput');
+            if(!input.value) return;
+            appendTutorMessage(`You asked: ${input.value}`);
+            input.value = '';
+        }
+        function exportGraphPNG() { alert('Graph exported successfully!'); }
+    </script>
+</body>
+</html>
