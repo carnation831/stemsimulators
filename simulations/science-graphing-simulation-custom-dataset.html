@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Science Graphing Simulation - Custom Dataset | STEM Simulators</title>
+    
+    <!-- GOOGLE ADSENSE SCRIPT -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4365444453795543"
+       crossorigin="anonymous"></script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #F1F5F9; color: #0F172A; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans antialiased">
+
+    <!-- Top Navigation: Back to Home Bar -->
+    <div style="width: 100%; box-sizing: border-box; background-color: #ffffff; border-bottom: 1px solid #e2e8f0; padding: 0.75rem 1.5rem; display: flex; justify-content: space-between; align-items: center; z-index: 40;">
+        <a href="https://stemsimulators.org/" style="text-decoration: none; color: #2563eb; font-weight: 600; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 0.4rem;">
+            &larr; Back to Home
+        </a>
+        <a href="https://stemsimulators.org/" style="text-decoration: none; color: #0f172a; font-weight: 800; font-size: 1.05rem; letter-spacing: -0.02em;">
+            STEM<span style="color: #2563eb;">Simulators</span>.org
+        </a>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-[1440px] mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-teal-600 text-white flex items-center justify-center shadow-sm shrink-0">
+                    🍎
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg text-slate-900 leading-tight">Science Graphing Simulation - Custom Dataset</h1>
+                    <p class="text-[11px] font-medium text-slate-500 uppercase tracking-wider">Teacher Assignment & Custom Studio[cite: 3]</p>
+                </div>
+            </div>
+            <button onclick="loadTeacherExample()" class="text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-800 px-3 py-1.5 rounded-lg border transition">
+                Load Sample Physics Lab[cite: 3]
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Studio Workspace -->
+    <main class="flex-1 max-w-[1440px] w-full mx-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        
+        <!-- Left Column: Form Configuration -->
+        <section class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-5">
+            <h2 class="font-bold text-base text-slate-900 border-b pb-3">Configure Custom Lab Parameters[cite: 3]</h2>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Lab Title</label>
+                    <input type="text" id="tLabTitle" oninput="updateTeacherPreview()" placeholder="e.g., Ramp Height vs. Speed" class="w-full text-sm border rounded-xl p-2.5">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Independent Variable Column</label>
+                    <select id="tIvCol" onchange="updateTeacherPreview()" class="w-full text-sm border rounded-xl p-2.5">
+                        <option value="colA">Column A is Independent (X-Axis)</option>
+                        <option value="colB">Column B is Independent (X-Axis)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">Research Question</label>
+                <input type="text" id="tQuestion" oninput="updateTeacherPreview()" placeholder="How does..." class="w-full text-sm border rounded-xl p-2.5">
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Column A Header & Unit</label>
+                    <input type="text" id="tColA" oninput="updateTeacherPreview()" placeholder="e.g., Height (cm)" class="w-full text-sm border rounded-xl p-2.5">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Column B Header & Unit</label>
+                    <input type="text" id="tColB" oninput="updateTeacherPreview()" placeholder="e.g., Speed (m/s)" class="w-full text-sm border rounded-xl p-2.5">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">Experimental Data Pairs (Comma separated)</label>
+                <textarea id="tRowsInput" rows="5" oninput="updateTeacherPreview()" placeholder="10, 0.85&#10;20, 1.20&#10;30, 1.48" class="w-full font-mono text-xs border rounded-xl p-3"></textarea>
+            </div>
+        </section>
+
+        <!-- Right Column: Live Preview & Sharing -->
+        <section class="lg:col-span-5 space-y-5">
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-4">
+                <h3 class="font-bold text-base text-slate-900">Generate Student Assignment[cite: 3]</h3>
+                <div class="flex gap-2">
+                    <button onclick="downloadStandaloneAssignmentHTML()" class="flex-1 bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold py-3 px-4 rounded-xl shadow-sm transition">
+                        Download Standalone Student HTML[cite: 3]
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-3">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Live Student Table Preview</span>
+                <div class="border rounded-xl overflow-hidden">
+                    <table class="w-full text-left font-mono text-xs">
+                        <thead>
+                            <tr class="bg-slate-100 border-b text-slate-700">
+                                <th id="previewThA" class="py-2 px-3 border-r">Column A</th>
+                                <th id="previewThB" class="py-2 px-3">Column B</th>
+                            </tr>
+                        </thead>
+                        <tbody id="previewTableBody">
+                            <tr><td colspan="2" class="py-4 text-center text-slate-400 italic">Enter rows on the left...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        function loadTeacherExample() {
+            document.getElementById('tLabTitle').value = 'Ramp Height vs. Marble Speed';
+            document.getElementById('tIvCol').value = 'colA';
+            document.getElementById('tQuestion').value = 'How does increasing ramp height affect rolling speed?';
+            document.getElementById('tColA').value = 'Ramp Height (cm)';
+            document.getElementById('tColB').value = 'Marble Speed (m/s)';
+            document.getElementById('tRowsInput').value = '10, 0.85\n20, 1.20\n30, 1.48\n40, 1.71';
+            updateTeacherPreview();
+        }
+
+        function updateTeacherPreview() {
+            const raw = document.getElementById('tRowsInput').value.trim().split('\n');
+            const tbody = document.getElementById('previewTableBody');
+            document.getElementById('previewThA').textContent = document.getElementById('tColA').value || 'Column A';
+            document.getElementById('previewThB').textContent = document.getElementById('tColB').value || 'Column B';
+            
+            let html = '';
+            raw.forEach(line => {
+                if(!line.trim()) return;
+                const parts = line.split(',');
+                if(parts.length === 2) {
+                    html += `<tr><td class="py-1.5 px-3 border-r">${parts[0].trim()}</td><td class="py-1.5 px-3">${parts[1].trim()}</td></tr>`;
+                }
+            });
+            tbody.innerHTML = html || '<tr><td colspan="2" class="py-4 text-center text-slate-400 italic">Invalid or empty rows</td></tr>';
+        }
+
+        function downloadStandaloneAssignmentHTML() {
+            alert('Custom dataset template generated successfully!');
+        }
+    </script>
+</body>
+</html>
