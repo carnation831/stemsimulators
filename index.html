@@ -20,6 +20,10 @@
       --accent-hover: #1d4ed8;
       --practice-color: #0d9488;
       --practice-hover: #0f766e;
+      --badge-sim: #dbeafe;
+      --badge-sim-text: #1e40af;
+      --badge-practice: #ccfbf1;
+      --badge-practice-text: #115e59;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -49,7 +53,7 @@
     .logo { text-decoration: none; color: var(--text-primary); font-weight: 800; font-size: 1.25rem; }
     .logo span { color: var(--accent-color); }
     nav { display: flex; gap: 1.5rem; }
-    nav a { text-decoration: none; color: var(--text-secondary); font-weight: 500; font-size: 0.95ln; }
+    nav a { text-decoration: none; color: var(--text-secondary); font-weight: 500; font-size: 0.95rem; }
     nav a:hover { color: var(--accent-color); }
     .hero {
       background-color: var(--surface-color);
@@ -72,6 +76,11 @@
     }
     .card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px -5px rgba(15,23,42,0.08); }
     .card-body { padding: 1.5rem; display: flex; flex-direction: column; flex: 1; }
+    .badge-row { display: flex; gap: 0.5rem; margin-bottom: 0.75rem; }
+    .badge { font-size: 0.72rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 999px; text-transform: uppercase; }
+    .badge.sim { background-color: var(--badge-sim); color: var(--badge-sim-text); }
+    .badge.practice { background-color: var(--badge-practice); color: var(--badge-practice-text); }
+    .badge.subject { background-color: #f1f5f9; color: #475569; }
     .card-body h3 { font-size: 1.2rem; margin-bottom: 0.5rem; }
     .card-body p { font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 1.5rem; flex: 1; }
     .btn-sim {
@@ -79,6 +88,11 @@
       text-decoration: none; font-weight: 600; padding: 0.7rem 1rem; border-radius: 6px;
     }
     .btn-sim:hover { background-color: var(--accent-hover); }
+    .btn-practice {
+      display: inline-block; text-align: center; background-color: var(--practice-color); color: #fff;
+      text-decoration: none; font-weight: 600; padding: 0.7rem 1rem; border-radius: 6px;
+    }
+    .btn-practice:hover { background-color: var(--practice-hover); }
     footer { background-color: var(--surface-color); border-top: 1px solid var(--border-color); padding: 2rem 1.5rem; margin-top: 2rem; font-size: 0.875rem; color: var(--text-secondary); text-align: center; }
   </style>
 </head>
@@ -104,23 +118,57 @@
     </div>
   </section>
 
-  <!-- Main Content -->
+  <!-- Main Content Hub -->
   <main class="container">
     <section class="library-section">
       <div class="card-grid">
         
-        <!-- CARD 1: Science Graphing Simulation -->
+        <!-- CARD 1: Electron Configuration -->
         <article class="card">
           <div class="card-body">
+            <div class="badge-row">
+              <span class="badge sim">Simulation</span>
+              <span class="badge subject">Chemistry</span>
+            </div>
+            <h3>Electron Configuration</h3>
+            <p>Build atoms across the periodic table and visualize orbital filling order, Aufbau principle, and valence shells.</p>
+            <a href="/simulations/electron-configuration" class="btn-sim">Launch Simulation</a>
+          </div>
+        </article>
+
+        <!-- CARD 2: 5 Types of Chemical Reactions -->
+        <article class="card">
+          <div class="card-body">
+            <div class="badge-row">
+              <span class="badge practice">Practice Set</span>
+              <span class="badge subject">Chemistry</span>
+            </div>
+            <h3>5 Types of Chemical Reactions</h3>
+            <p>Practice identifying synthesis, decomposition, single replacement, double replacement, and combustion equations.</p>
+            <a href="/practice/reactions" class="btn-practice">Start Practice</a>
+          </div>
+        </article>
+
+        <!-- CARD 3: Science Graphing Simulation -->
+        <article class="card">
+          <div class="card-body">
+            <div class="badge-row">
+              <span class="badge sim">Simulation</span>
+              <span class="badge subject">Lab Tools</span>
+            </div>
             <h3>Science Graphing Simulation</h3>
             <p>Interactive student practice lab with step-by-step guidance and a Socratic Lab Coach[cite: 3].</p>
             <a href="/simulations/science-graphing-simulation" class="btn-sim">Launch Simulation</a>
           </div>
         </article>
 
-        <!-- CARD 2: Science Graphing Simulation - Custom Dataset -->
+        <!-- CARD 4: Science Graphing Simulation - Custom Dataset -->
         <article class="card">
           <div class="card-body">
+            <div class="badge-row">
+              <span class="badge sim">Simulation</span>
+              <span class="badge subject">Teacher Tools</span>
+            </div>
             <h3>Science Graphing Simulation - Custom Dataset</h3>
             <p>Teacher assignment studio to configure custom variables, enter data, and generate standalone student HTML labs[cite: 3].</p>
             <a href="/simulations/science-graphing-simulation-custom-dataset" class="btn-sim">Launch Custom Studio</a>
