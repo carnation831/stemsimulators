@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Science Graphing Simulation | STEM Simulators</title>
 
-    <!-- CHROMEBOOK-ONLY DEVICE LOCK -->
+    <!-- CHROMEBOOK-ONLY DEVICE LOCK (SILENT BLACK SCREEN ON NON-CHROMEOS) -->
     <script>
         (function enforceChromebookOnly() {
             const ua = navigator.userAgent || "";
@@ -13,18 +13,10 @@
             const isChromebook = /\bCrOS\b/i.test(ua) || /Chrome\s*OS/i.test(platform);
 
             if (!isChromebook) {
+                document.documentElement.style.backgroundColor = "#000000";
                 document.addEventListener("DOMContentLoaded", () => {
-                    document.body.innerHTML = `
-                        <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #0f172a; color: #f8fafc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 24px; text-align: center;">
-                            <div style="max-width: 420px; background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 32px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3);">
-                                <div style="font-size: 42px; margin-bottom: 12px;">💻</div>
-                                <h1 style="font-size: 20px; font-weight: 800; margin: 0 0 8px;">School Chromebook Required</h1>
-                                <p style="font-size: 14px; color: #94a3b8; line-height: 1.5; margin: 0;">
-                                    This lab simulation is restricted to ChromeOS devices. Please open this link on your school Chromebook to continue.
-                                </p>
-                            </div>
-                        </div>
-                    `;
+                    document.body.style.cssText = "margin:0;padding:0;background:#000000;min-height:100vh;overflow:hidden;";
+                    document.body.innerHTML = "";
                 });
             }
         })();
@@ -134,39 +126,39 @@
 
             <!-- Right Side of Header: Preset Selector + 5-Phase Stepper -->
             <div class="flex flex-wrap items-center justify-between xl:justify-end gap-3">
-                <!-- 3 Practice Labs Dropdown -->
+                <!-- 3 Practice Labs Dropdown (Blood Drop First) -->
                 <div class="flex items-center gap-2">
                     <label for="datasetSelect" class="sr-only">Choose Practice Experiment</label>
                     <select id="datasetSelect" class="text-xs sm:text-sm font-semibold bg-slate-50 border border-slate-300 text-slate-800 rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-teal-500 cursor-pointer">
-                        <option value="enzyme">Practice Lab 1: Enzyme Activity vs. Temp</option>
-                        <option value="blooddrop">Practice Lab 2: Blood Drop Height vs. Diameter</option>
+                        <option value="blooddrop">Practice Lab 1: Blood Drop Height vs. Diameter</option>
+                        <option value="enzyme">Practice Lab 2: Enzyme Activity vs. Temp</option>
                         <option value="fertilizer">Practice Lab 3: Fertilizer vs. Plant Growth</option>
                     </select>
                 </div>
 
                 <!-- 5-Phase Progress Stepper -->
                 <nav aria-label="Graphing Steps" class="flex items-center overflow-x-auto pb-1 xl:pb-0 gap-1 sm:gap-1.5">
-                    <button onclick="goToPhase(1)" id="step-btn-1" class="step-pill flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold transition-all whitespace-nowrap bg-teal-600 text-white shadow-sm">
+                    <button onclick="attemptStepJump(1)" id="step-btn-1" class="step-pill flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold transition-all whitespace-nowrap bg-teal-600 text-white shadow-sm">
                         <span class="w-4 h-4 rounded-full bg-white/20 flex items-center justify-center text-[10px]">1</span>
                         <span>Variables</span>
                     </button>
                     <span class="text-slate-300 text-xs">›</span>
-                    <button onclick="goToPhase(2)" id="step-btn-2" class="step-pill flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold transition-all whitespace-nowrap bg-slate-100 text-slate-600 hover:bg-slate-200">
+                    <button onclick="attemptStepJump(2)" id="step-btn-2" class="step-pill flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold transition-all whitespace-nowrap bg-slate-100 text-slate-400 cursor-not-allowed">
                         <span class="w-4 h-4 rounded-full bg-slate-300/60 flex items-center justify-center text-[10px]">2</span>
                         <span>Axes & Title</span>
                     </button>
                     <span class="text-slate-300 text-xs">›</span>
-                    <button onclick="goToPhase(3)" id="step-btn-3" class="step-pill flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold transition-all whitespace-nowrap bg-slate-100 text-slate-600 hover:bg-slate-200">
+                    <button onclick="attemptStepJump(3)" id="step-btn-3" class="step-pill flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold transition-all whitespace-nowrap bg-slate-100 text-slate-400 cursor-not-allowed">
                         <span class="w-4 h-4 rounded-full bg-slate-300/60 flex items-center justify-center text-[10px]">3</span>
                         <span>Scale</span>
                     </button>
                     <span class="text-slate-300 text-xs">›</span>
-                    <button onclick="goToPhase(4)" id="step-btn-4" class="step-pill flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold transition-all whitespace-nowrap bg-slate-100 text-slate-600 hover:bg-slate-200">
+                    <button onclick="attemptStepJump(4)" id="step-btn-4" class="step-pill flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold transition-all whitespace-nowrap bg-slate-100 text-slate-400 cursor-not-allowed">
                         <span class="w-4 h-4 rounded-full bg-slate-300/60 flex items-center justify-center text-[10px]">4</span>
                         <span>Plot Points</span>
                     </button>
                     <span class="text-slate-300 text-xs">›</span>
-                    <button onclick="goToPhase(5)" id="step-btn-5" class="step-pill flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold transition-all whitespace-nowrap bg-slate-100 text-slate-600 hover:bg-slate-200">
+                    <button onclick="attemptStepJump(5)" id="step-btn-5" class="step-pill flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold transition-all whitespace-nowrap bg-slate-100 text-slate-400 cursor-not-allowed">
                         <span class="w-4 h-4 rounded-full bg-slate-300/60 flex items-center justify-center text-[10px]">5</span>
                         <span>Analysis</span>
                     </button>
@@ -270,7 +262,7 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
                             <label class="block text-xs font-bold text-slate-700 mb-1.5">Independent Variable (IV)</label>
-                            <select id="ivSelect" class="w-full text-sm bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
+                            <select id="ivSelect" onchange="invalidatePhase(1)" class="w-full text-sm bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
                                 <option value="">-- Choose Variable --</option>
                                 <option value="colA" id="opt-iv-colA">Column A</option>
                                 <option value="colB" id="opt-iv-colB">Column B</option>
@@ -278,7 +270,7 @@
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-slate-700 mb-1.5">Dependent Variable (DV)</label>
-                            <select id="dvSelect" class="w-full text-sm bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
+                            <select id="dvSelect" onchange="invalidatePhase(1)" class="w-full text-sm bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
                                 <option value="">-- Choose Variable --</option>
                                 <option value="colA" id="opt-dv-colA">Column A</option>
                                 <option value="colB" id="opt-dv-colB">Column B</option>
@@ -289,7 +281,7 @@
                         <label for="varJustification" class="block text-xs font-bold text-slate-700 mb-1">
                             Brief Justification <span class="font-normal text-slate-400">(Why did you classify them this way?)</span>
                         </label>
-                        <textarea id="varJustification" rows="2" placeholder="e.g., The scientist deliberately changed... and then measured..." class="w-full text-sm bg-slate-50 border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-teal-500 focus:border-teal-500"></textarea>
+                        <textarea id="varJustification" rows="2" oninput="invalidatePhase(1)" placeholder="e.g., The scientist deliberately changed... and then measured..." class="w-full text-sm bg-slate-50 border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-teal-500 focus:border-teal-500"></textarea>
                     </div>
                 </div>
 
@@ -301,24 +293,24 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-2">
                             <label class="block text-xs font-bold text-slate-700">Horizontal X-Axis Variable</label>
-                            <select id="xAxisVarSelect" onchange="renderCanvas()" class="w-full text-xs bg-white border border-slate-300 rounded-lg px-2.5 py-2">
+                            <select id="xAxisVarSelect" onchange="invalidatePhase(2); renderCanvas();" class="w-full text-xs bg-white border border-slate-300 rounded-lg px-2.5 py-2">
                                 <option value="">-- Assign to X-Axis --</option>
                                 <option value="colA" id="opt-x-colA">Column A</option>
                                 <option value="colB" id="opt-x-colB">Column B</option>
                             </select>
                             <label class="block text-xs font-bold text-slate-700 pt-1">X-Axis Label & Units</label>
-                            <input type="text" id="xAxisLabelInput" oninput="renderCanvas()" placeholder="e.g., Temperature (°C)" class="w-full text-sm bg-white border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-teal-500">
+                            <input type="text" id="xAxisLabelInput" oninput="invalidatePhase(2); renderCanvas();" placeholder="e.g., Blood Drop Height (cm)" class="w-full text-sm bg-white border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-teal-500">
                         </div>
 
                         <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-2">
                             <label class="block text-xs font-bold text-slate-700">Vertical Y-Axis Variable</label>
-                            <select id="yAxisVarSelect" onchange="renderCanvas()" class="w-full text-xs bg-white border border-slate-300 rounded-lg px-2.5 py-2">
+                            <select id="yAxisVarSelect" onchange="invalidatePhase(2); renderCanvas();" class="w-full text-xs bg-white border border-slate-300 rounded-lg px-2.5 py-2">
                                 <option value="">-- Assign to Y-Axis --</option>
                                 <option value="colA" id="opt-y-colA">Column A</option>
                                 <option value="colB" id="opt-y-colB">Column B</option>
                             </select>
                             <label class="block text-xs font-bold text-slate-700 pt-1">Y-Axis Label & Units</label>
-                            <input type="text" id="yAxisLabelInput" oninput="renderCanvas()" placeholder="e.g., Reaction Rate (mg/s)" class="w-full text-sm bg-white border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-teal-500">
+                            <input type="text" id="yAxisLabelInput" oninput="invalidatePhase(2); renderCanvas();" placeholder="e.g., Blood Drop Diameter (mm)" class="w-full text-sm bg-white border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-teal-500">
                         </div>
                     </div>
 
@@ -326,7 +318,7 @@
                         <label for="graphTitleInput" class="block text-xs font-bold text-slate-700 mb-1">
                             Descriptive Scientific Graph Title <span class="font-normal text-slate-400">(Format: "The Effect of [IV] on [DV]")</span>
                         </label>
-                        <input type="text" id="graphTitleInput" oninput="renderCanvas()" placeholder="The Effect of..." class="w-full text-sm bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 focus:ring-2 focus:ring-teal-500">
+                        <input type="text" id="graphTitleInput" oninput="invalidatePhase(2); renderCanvas();" placeholder="The Effect of..." class="w-full text-sm bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 focus:ring-2 focus:ring-teal-500">
                     </div>
                 </div>
 
@@ -345,15 +337,15 @@
                             <div class="grid grid-cols-3 gap-2">
                                 <div>
                                     <label class="block text-[10px] font-bold text-slate-500 uppercase">Min</label>
-                                    <input type="number" step="any" id="xMinInput" value="0" oninput="renderCanvas()" class="w-full font-mono text-xs bg-white border border-slate-300 rounded-lg px-2 py-1.5">
+                                    <input type="number" step="any" id="xMinInput" value="0" oninput="invalidatePhase(3); renderCanvas();" class="w-full font-mono text-xs bg-white border border-slate-300 rounded-lg px-2 py-1.5">
                                 </div>
                                 <div>
                                     <label class="block text-[10px] font-bold text-slate-500 uppercase">Max</label>
-                                    <input type="number" step="any" id="xMaxInput" value="10" oninput="renderCanvas()" class="w-full font-mono text-xs bg-white border border-slate-300 rounded-lg px-2 py-1.5">
+                                    <input type="number" step="any" id="xMaxInput" value="10" oninput="invalidatePhase(3); renderCanvas();" class="w-full font-mono text-xs bg-white border border-slate-300 rounded-lg px-2 py-1.5">
                                 </div>
                                 <div>
                                     <label class="block text-[10px] font-bold text-slate-500 uppercase">Step</label>
-                                    <input type="number" step="any" id="xStepInput" value="2" oninput="renderCanvas()" class="w-full font-mono text-xs bg-white border border-slate-300 rounded-lg px-2 py-1.5">
+                                    <input type="number" step="any" id="xStepInput" value="2" oninput="invalidatePhase(3); renderCanvas();" class="w-full font-mono text-xs bg-white border border-slate-300 rounded-lg px-2 py-1.5">
                                 </div>
                             </div>
                         </div>
@@ -367,15 +359,15 @@
                             <div class="grid grid-cols-3 gap-2">
                                 <div>
                                     <label class="block text-[10px] font-bold text-slate-500 uppercase">Min</label>
-                                    <input type="number" step="any" id="yMinInput" value="0" oninput="renderCanvas()" class="w-full font-mono text-xs bg-white border border-slate-300 rounded-lg px-2 py-1.5">
+                                    <input type="number" step="any" id="yMinInput" value="0" oninput="invalidatePhase(3); renderCanvas();" class="w-full font-mono text-xs bg-white border border-slate-300 rounded-lg px-2 py-1.5">
                                 </div>
                                 <div>
                                     <label class="block text-[10px] font-bold text-slate-500 uppercase">Max</label>
-                                    <input type="number" step="any" id="yMaxInput" value="10" oninput="renderCanvas()" class="w-full font-mono text-xs bg-white border border-slate-300 rounded-lg px-2 py-1.5">
+                                    <input type="number" step="any" id="yMaxInput" value="10" oninput="invalidatePhase(3); renderCanvas();" class="w-full font-mono text-xs bg-white border border-slate-300 rounded-lg px-2 py-1.5">
                                 </div>
                                 <div>
                                     <label class="block text-[10px] font-bold text-slate-500 uppercase">Step</label>
-                                    <input type="number" step="any" id="yStepInput" value="2" oninput="renderCanvas()" class="w-full font-mono text-xs bg-white border border-slate-300 rounded-lg px-2 py-1.5">
+                                    <input type="number" step="any" id="yStepInput" value="2" oninput="invalidatePhase(3); renderCanvas();" class="w-full font-mono text-xs bg-white border border-slate-300 rounded-lg px-2 py-1.5">
                                 </div>
                             </div>
                         </div>
@@ -417,7 +409,7 @@
                         <label for="conclusionInput" class="block text-xs font-bold text-slate-700 mb-1">
                             Data Analysis & Scientific Conclusion
                         </label>
-                        <textarea id="conclusionInput" rows="3" placeholder="As [Independent Variable] increases, [Dependent Variable]..." class="w-full text-sm bg-slate-50 border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-teal-500 focus:border-teal-500"></textarea>
+                        <textarea id="conclusionInput" rows="3" oninput="invalidatePhase(5)" placeholder="As [Independent Variable] increases, [Dependent Variable]..." class="w-full text-sm bg-slate-50 border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-teal-500 focus:border-teal-500"></textarea>
                     </div>
                     <div class="flex flex-wrap items-center gap-2.5 pt-1">
                         <button onclick="downloadScoreJpeg()" class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition shadow-sm">
@@ -601,25 +593,6 @@
 - ============================================================================
          */
         const DATASETS = {
-            enzyme: {
-                id: 'enzyme',
-                name: 'Enzyme Activity vs. Temperature',
-                question: 'How does water temperature affect the reaction rate of catalase enzyme?',
-                context: 'Biology students placed catalase enzyme into hydrogen peroxide at 6 different water bath temperatures and measured oxygen gas production rate.',
-                colA: { name: 'Temperature', unit: '°C', full: 'Temperature (°C)' },
-                colB: { name: 'Reaction Rate', unit: 'mL/min', full: 'Reaction Rate (mL/min)' },
-                ivCol: 'colA',
-                dvCol: 'colB',
-                customHint: 'Think about which variable the biology students controlled using the water bath before measuring oxygen gas.',
-                rows: [
-                    { colA: 10, colB: 12 },
-                    { colA: 20, colB: 24 },
-                    { colA: 30, colB: 38 },
-                    { colA: 37, colB: 46 },
-                    { colA: 50, colB: 18 },
-                    { colA: 60, colB: 4 }
-                ]
-            },
             blooddrop: {
                 id: 'blooddrop',
                 name: 'Blood Drop Height vs. Diameter',
@@ -638,6 +611,25 @@
                     { colA: 21, colB: 80 },
                     { colA: 23, colB: 100 },
                     { colA: 24, colB: 120 }
+                ]
+            },
+            enzyme: {
+                id: 'enzyme',
+                name: 'Enzyme Activity vs. Temperature',
+                question: 'How does water temperature affect the reaction rate of catalase enzyme?',
+                context: 'Biology students placed catalase enzyme into hydrogen peroxide at 6 different water bath temperatures and measured oxygen gas production rate.',
+                colA: { name: 'Temperature', unit: '°C', full: 'Temperature (°C)' },
+                colB: { name: 'Reaction Rate', unit: 'mL/min', full: 'Reaction Rate (mL/min)' },
+                ivCol: 'colA',
+                dvCol: 'colB',
+                customHint: 'Think about which variable the biology students controlled using the water bath before measuring oxygen gas.',
+                rows: [
+                    { colA: 10, colB: 12 },
+                    { colA: 20, colB: 24 },
+                    { colA: 30, colB: 38 },
+                    { colA: 37, colB: 46 },
+                    { colA: 50, colB: 18 },
+                    { colA: 60, colB: 4 }
                 ]
             },
             fertilizer: {
@@ -662,7 +654,7 @@
         };
 
         let appState = {
-            currentDatasetKey: 'enzyme',
+            currentDatasetKey: 'blooddrop',
             currentPhase: 1,
             completedPhases: new Set(),
             plottedPoints: [],
@@ -680,7 +672,7 @@
         };
 
         function getActiveDataset() {
-            return DATASETS[appState.currentDatasetKey] || DATASETS.enzyme;
+            return DATASETS[appState.currentDatasetKey] || DATASETS.blooddrop;
         }
 
         /**
@@ -738,7 +730,7 @@
         window.onload = function () {
             setupCanvasEvents();
             window.addEventListener('resize', renderCanvas);
-            loadDataset('enzyme');
+            loadDataset('blooddrop');
         };
 
         document.getElementById('datasetSelect').addEventListener('change', (e) => {
@@ -811,9 +803,62 @@
 
         /**
 - ============================================================================
-- 4. 5-PHASE STEPPER NAVIGATION & UI UPDATES
+- 4. 5-PHASE STEPPER NAVIGATION & STRICT VERIFICATION GATES
 - ============================================================================
          */
+        function isPhaseUnlocked(phaseNum) {
+            if (phaseNum === 1) return true;
+            for (let p = 1; p < phaseNum; p++) {
+                if (!appState.completedPhases.has(p)) return false;
+            }
+            return true;
+        }
+
+        function invalidatePhase(phaseNum) {
+            if (appState.completedPhases.has(phaseNum)) {
+                for (let p = phaseNum; p <= 5; p++) {
+                    appState.completedPhases.delete(p);
+                }
+                refreshPhaseUIState();
+                syncStudentInputs('bar');
+            }
+        }
+
+        function refreshPhaseUIState() {
+            const phaseNum = appState.currentPhase;
+            const statusBadge = document.getElementById('phaseStatusBadge');
+            if (appState.completedPhases.has(phaseNum)) {
+                statusBadge.textContent = '✓ Verified';
+                statusBadge.className = 'text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800';
+            } else {
+                statusBadge.textContent = 'Check Required';
+                statusBadge.className = 'text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800';
+            }
+
+            for (let i = 1; i <= 5; i++) {
+                const btn = document.getElementById(`step-btn-${i}`);
+                const unlocked = isPhaseUnlocked(i);
+                if (i === phaseNum) {
+                    btn.className = 'step-pill flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold transition-all whitespace-nowrap bg-teal-600 text-white shadow-sm';
+                } else if (appState.completedPhases.has(i)) {
+                    btn.className = 'step-pill flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold transition-all whitespace-nowrap bg-emerald-100 text-emerald-800 hover:bg-emerald-200 cursor-pointer';
+                } else if (unlocked) {
+                    btn.className = 'step-pill flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold transition-all whitespace-nowrap bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer';
+                } else {
+                    btn.className = 'step-pill flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold transition-all whitespace-nowrap bg-slate-100 text-slate-400 cursor-not-allowed';
+                }
+            }
+        }
+
+        function attemptStepJump(targetPhase) {
+            if (targetPhase === appState.currentPhase) return;
+            if (!isPhaseUnlocked(targetPhase)) {
+                appendTutorMessage(`Complete and verify **Phase ${appState.currentPhase} (${PHASE_META[appState.currentPhase].title})** using **Check My Step** before jumping ahead to Phase ${targetPhase}.`);
+                return;
+            }
+            goToPhase(targetPhase);
+        }
+
         function goToPhase(phaseNum) {
             appState.currentPhase = phaseNum;
 
@@ -824,25 +869,7 @@
             document.getElementById('phaseTag').textContent = PHASE_META[phaseNum].tag;
             document.getElementById('phaseTitle').textContent = PHASE_META[phaseNum].title;
 
-            const statusBadge = document.getElementById('phaseStatusBadge');
-            if (appState.completedPhases.has(phaseNum)) {
-                statusBadge.textContent = '✓ Verified';
-                statusBadge.className = 'text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800';
-            } else {
-                statusBadge.textContent = 'In Progress';
-                statusBadge.className = 'text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600';
-            }
-
-            for (let i = 1; i <= 5; i++) {
-                const btn = document.getElementById(`step-btn-${i}`);
-                if (i === phaseNum) {
-                    btn.className = 'step-pill flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold transition-all whitespace-nowrap bg-teal-600 text-white shadow-sm';
-                } else if (appState.completedPhases.has(i)) {
-                    btn.className = 'step-pill flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold transition-all whitespace-nowrap bg-emerald-100 text-emerald-800 hover:bg-emerald-200';
-                } else {
-                    btn.className = 'step-pill flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold transition-all whitespace-nowrap bg-slate-100 text-slate-600 hover:bg-slate-200';
-                }
-            }
+            refreshPhaseUIState();
 
             document.getElementById('prevPhaseBtn').disabled = (phaseNum === 1);
             const nextBtn = document.getElementById('nextPhaseBtn');
@@ -863,17 +890,21 @@
         }
 
         function nextPhase() {
-            if (appState.currentPhase < 5) {
-                goToPhase(appState.currentPhase + 1);
-            } else {
+            // Require verification of current phase before advancing
+            if (!appState.completedPhases.has(appState.currentPhase)) {
                 const diagnostic = evaluateStudentProgress();
                 if (!diagnostic.passed) {
                     appendTutorMessage(diagnostic.feedback);
                     return;
                 }
-                appState.completedPhases.add(5);
-                goToPhase(5);
+                appState.completedPhases.add(appState.currentPhase);
+                refreshPhaseUIState();
                 syncStudentInputs('bar');
+            }
+
+            if (appState.currentPhase < 5) {
+                goToPhase(appState.currentPhase + 1);
+            } else {
                 document.getElementById('celebrationModal').classList.remove('hidden');
             }
         }
@@ -1187,6 +1218,7 @@
 
                 if (appState.draggingIndex !== -1 && inBounds) {
                     appState.plottedPoints[appState.draggingIndex] = dataCoord;
+                    invalidatePhase(4);
                     updatePlottedPointsUI();
                 }
 
@@ -1210,7 +1242,7 @@
                     appState.dragMoved = false;
                 } else {
                     if (appState.currentPhase !== 4) {
-                        appendTutorMessage(`You're currently in **Phase ${appState.currentPhase}**. Complete Phases 1–3 first, or click **4. Plot Points** in the top bar when you're ready to plot!`);
+                        appendTutorMessage(`You're currently in **Phase ${appState.currentPhase}**. Complete and verify Phases 1–3 first before plotting points!`);
                         return;
                     }
                     const inBounds = px >= MARGIN.left && px <= width - MARGIN.right &&
@@ -1218,6 +1250,7 @@
                     if (inBounds) {
                         const dataCoord = pixelToData(px, py, width, height, scale);
                         appState.plottedPoints.push(dataCoord);
+                        invalidatePhase(4);
                         updatePlottedPointsUI();
                         renderCanvas();
                     }
@@ -1233,6 +1266,7 @@
             canvas.addEventListener('mouseup', () => {
                 if (appState.draggingIndex !== -1 && !appState.dragMoved) {
                     appState.plottedPoints.splice(appState.draggingIndex, 1);
+                    invalidatePhase(4);
                     updatePlottedPointsUI();
                     renderCanvas();
                 }
@@ -1255,6 +1289,7 @@
                     const dataCoord = pixelToData(px, py, width, height, scale);
                     appState.plottedPoints.push(dataCoord);
                 }
+                invalidatePhase(4);
                 updatePlottedPointsUI();
                 renderCanvas();
             }, { passive: false });
@@ -1262,12 +1297,14 @@
 
         function clearPlottedPoints() {
             appState.plottedPoints = [];
+            invalidatePhase(4);
             updatePlottedPointsUI();
             renderCanvas();
         }
 
         function removePointAtIndex(idx) {
             appState.plottedPoints.splice(idx, 1);
+            invalidatePhase(4);
             updatePlottedPointsUI();
             renderCanvas();
         }
@@ -1489,7 +1526,7 @@
                 }
                 return {
                     passed: true,
-                    feedback: `Outstanding scientific reasoning! Your conclusion clearly connects the Independent and Dependent variables based on your graph. Click **Finish Lab 🎉** to download your JPEG score card or print your report!`
+                    feedback: `Outstanding scientific reasoning! Your conclusion clearly connects the Independent and Dependent variables based on your graph. Click **Finish Lab 🎉** to download your JPEG score card!`
                 };
             }
 
@@ -1604,7 +1641,8 @@
             const diagnostic = evaluateStudentProgress();
             if (diagnostic.passed) {
                 appState.completedPhases.add(appState.currentPhase);
-                goToPhase(appState.currentPhase);
+                refreshPhaseUIState();
+                syncStudentInputs('bar');
             }
             appendStudentMessage(`Check my work for Phase ${appState.currentPhase}: ${PHASE_META[appState.currentPhase].title}`);
             appendTutorMessage(diagnostic.feedback);
