@@ -5,6 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Science Graphing Simulation | STEM Simulators</title>
 
+    <!-- CHROMEBOOK-ONLY DEVICE LOCK -->
+    <script>
+        (function enforceChromebookOnly() {
+            const ua = navigator.userAgent || "";
+            const platform = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || "";
+            const isChromebook = /\bCrOS\b/i.test(ua) || /Chrome\s*OS/i.test(platform);
+
+            if (!isChromebook) {
+                document.addEventListener("DOMContentLoaded", () => {
+                    document.body.innerHTML = `
+                        <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #0f172a; color: #f8fafc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 24px; text-align: center;">
+                            <div style="max-width: 420px; background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 32px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3);">
+                                <div style="font-size: 42px; margin-bottom: 12px;">💻</div>
+                                <h1 style="font-size: 20px; font-weight: 800; margin: 0 0 8px;">School Chromebook Required</h1>
+                                <p style="font-size: 14px; color: #94a3b8; line-height: 1.5; margin: 0;">
+                                    This lab simulation is restricted to ChromeOS devices. Please open this link on your school Chromebook to continue.
+                                </p>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+        })();
+    </script>
+
     <!-- GOOGLE ADSENSE SCRIPT -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4365444453795543"
        crossorigin="anonymous"></script>
@@ -24,7 +49,6 @@
         }
     </script>
     <style>
-        /* Custom Lab Notebook Aesthetics & Print Styles (100% Self-Contained) */
         body {
             background-color: #F1F5F9;
             color: #0F172A;
@@ -103,12 +127,7 @@
                     </svg>
                 </div>
                 <div>
-                    <div class="flex items-center gap-2">
-                        <h1 class="font-display font-bold text-lg text-slate-900 leading-tight tracking-tight">Science Graphing Simulation</h1>
-                        <span class="hidden sm:inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-full">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Offline Tutor Active
-                        </span>
-                    </div>
+                    <h1 class="font-display font-bold text-lg text-slate-900 leading-tight tracking-tight">Science Graphing Simulation</h1>
                     <p class="text-[11px] font-medium text-slate-500 uppercase tracking-wider">Interactive Science Lab Notebook</p>
                 </div>
             </div>
@@ -120,7 +139,7 @@
                     <label for="datasetSelect" class="sr-only">Choose Practice Experiment</label>
                     <select id="datasetSelect" class="text-xs sm:text-sm font-semibold bg-slate-50 border border-slate-300 text-slate-800 rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-teal-500 cursor-pointer">
                         <option value="enzyme">Practice Lab 1: Enzyme Activity vs. Temp</option>
-                        <option value="pendulum">Practice Lab 2: Pendulum Length vs. Period</option>
+                        <option value="blooddrop">Practice Lab 2: Blood Drop Height vs. Diameter</option>
                         <option value="fertilizer">Practice Lab 3: Fertilizer vs. Plant Growth</option>
                     </select>
                 </div>
@@ -155,6 +174,25 @@
             </div>
         </div>
     </header>
+
+    <!-- Student Identity Bar for Privacy-Safe JPEG Score Card -->
+    <div class="bg-slate-900 text-white border-b border-slate-800">
+        <div class="max-w-[1600px] mx-auto px-4 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+                <span class="text-xs font-bold uppercase tracking-wider text-teal-400">Student Info (For Score JPEG):</span>
+                <input type="text" id="studentFirstName" placeholder="First Name" maxlength="20" oninput="syncStudentInputs('bar')" class="text-xs bg-slate-800 border border-slate-700 text-white placeholder-slate-400 rounded-lg px-2.5 py-1.5 w-32 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                <input type="text" id="studentLastInitial" placeholder="Last Init." maxlength="1" oninput="this.value = this.value.replace(/[^a-zA-Z]/g, '').toUpperCase(); syncStudentInputs('bar');" class="text-xs text-center uppercase font-bold bg-slate-800 border border-slate-700 text-white placeholder-slate-400 rounded-lg px-2 py-1.5 w-20 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                <input type="text" inputmode="numeric" id="studentPeriod" placeholder="Period #" maxlength="2" oninput="this.value = this.value.replace(/[^0-9]/g, ''); syncStudentInputs('bar');" class="text-xs text-center font-bold bg-slate-800 border border-slate-700 text-white placeholder-slate-400 rounded-lg px-2 py-1.5 w-20 focus:outline-none focus:ring-2 focus:ring-teal-500">
+            </div>
+            <div class="flex items-center gap-3 text-xs">
+                <span id="filenamePreviewPill" class="font-mono text-[11px] text-slate-400 hidden sm:inline">File: firstname.l.period.score.jpg</span>
+                <button onclick="downloadScoreJpeg()" class="bg-teal-600 hover:bg-teal-500 text-white font-bold px-3 py-1.5 rounded-lg transition inline-flex items-center gap-1.5 shadow-sm">
+                    <span>🖼️</span>
+                    <span>Download Score JPEG</span>
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- ======================================================================== -->
     <!-- STUDENT PRACTICE WORKSPACE                                               -->
@@ -382,9 +420,9 @@
                         <textarea id="conclusionInput" rows="3" placeholder="As [Independent Variable] increases, [Dependent Variable]..." class="w-full text-sm bg-slate-50 border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-teal-500 focus:border-teal-500"></textarea>
                     </div>
                     <div class="flex flex-wrap items-center gap-2.5 pt-1">
-                        <button onclick="exportGraphPNG()" class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition shadow-sm">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                            Download Graph PNG
+                        <button onclick="downloadScoreJpeg()" class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition shadow-sm">
+                            <span>🖼️</span>
+                            <span>Download Score JPEG</span>
                         </button>
                         <button onclick="printLabHandout()" class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 text-xs font-semibold px-4 py-2.5 rounded-xl transition shadow-sm">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
@@ -435,8 +473,8 @@
             </div>
         </section>
 
-        <!-- RIGHT PANEL (4 cols on lg): 100% Offline Socratic Science Tutor ("Lab Coach") -->
-        <aside class="lg:col-span-4 bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col h-[640px] lg:h-[calc(100vh-110px)] sticky top-[76px]">
+        <!-- RIGHT PANEL (4 cols on lg): Socratic Science Tutor ("Lab Coach") -->
+        <aside class="lg:col-span-4 bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col h-[640px] lg:h-[calc(100vh-146px)] sticky top-[76px]">
             <!-- Tutor Header -->
             <div class="bg-gradient-to-r from-teal-700 to-teal-600 text-white px-4 py-3.5 rounded-t-2xl flex items-center justify-between">
                 <div class="flex items-center gap-2.5">
@@ -444,10 +482,7 @@
                         🔬
                     </div>
                     <div>
-                        <div class="flex items-center gap-1.5">
-                            <h2 class="font-display font-bold text-sm">Lab Coach</h2>
-                            <span class="text-[10px] font-semibold bg-white/20 px-2 py-0.5 rounded-full">Firewall-Proof Socratic Tutor</span>
-                        </div>
+                        <h2 class="font-display font-bold text-sm">Lab Coach</h2>
                         <p class="text-[11px] text-teal-100">Walks you through mistakes without giving answers</p>
                     </div>
                 </div>
@@ -486,22 +521,44 @@
         </aside>
     </main>
 
-    <!-- Celebration Badge Modal (Phase 5 Completion) -->
+    <!-- Celebration & JPEG Score Card Modal (Phase 5 Completion) -->
     <div id="celebrationModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-md w-full p-6 text-center space-y-4">
-            <div class="w-16 h-16 mx-auto rounded-2xl bg-amber-100 border-2 border-amber-300 flex items-center justify-center text-3xl shadow-sm">
+            <div class="w-14 h-14 mx-auto rounded-2xl bg-amber-100 border-2 border-amber-300 flex items-center justify-center text-3xl shadow-sm">
                 🏆
             </div>
             <div>
                 <span class="text-[11px] font-bold uppercase tracking-widest text-teal-600">Lab Mastery Unlocked</span>
                 <h3 class="font-display font-extrabold text-xl text-slate-900 mt-1">Certified Science Grapher!</h3>
-                <p class="text-sm text-slate-600 mt-2 leading-relaxed">
-                    Awesome work! You identified the variables, labeled your axes with units, built a clean proportional scale, plotted every point manually, and analyzed the scientific trend.
+                <p class="text-xs text-slate-600 mt-1.5 leading-relaxed">
+                    Confirm your First Name, Last Initial, and Period below to download your verified score image (<code class="font-mono bg-slate-100 px-1 rounded">.jpg</code>).
                 </p>
             </div>
-            <div class="flex flex-col sm:flex-row gap-2 pt-2">
-                <button onclick="exportGraphPNG()" class="flex-1 bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold py-3 px-4 rounded-xl transition">
-                    Download Graph PNG
+
+            <!-- Privacy-Safe Student Info Inside Modal -->
+            <div class="grid grid-cols-12 gap-2 text-left bg-slate-50 p-3 rounded-2xl border border-slate-200">
+                <div class="col-span-6">
+                    <label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">First Name</label>
+                    <input type="text" id="modalFirstName" placeholder="Maya" maxlength="20" oninput="syncStudentInputs('modal')" class="w-full text-xs font-semibold bg-white border border-slate-300 rounded-lg px-2.5 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                </div>
+                <div class="col-span-3">
+                    <label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Last Init.</label>
+                    <input type="text" id="modalLastInitial" placeholder="L" maxlength="1" oninput="this.value = this.value.replace(/[^a-zA-Z]/g, '').toUpperCase(); syncStudentInputs('modal');" class="w-full text-xs text-center uppercase font-bold bg-white border border-slate-300 rounded-lg px-2 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                </div>
+                <div class="col-span-3">
+                    <label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Period #</label>
+                    <input type="text" inputmode="numeric" id="modalPeriod" placeholder="3" maxlength="2" oninput="this.value = this.value.replace(/[^0-9]/g, ''); syncStudentInputs('modal');" class="w-full text-xs text-center font-bold bg-white border border-slate-300 rounded-lg px-2 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                </div>
+                <div class="col-span-12 pt-1 flex items-center justify-between text-[11px] text-slate-500">
+                    <span>🔒 Full last names are never stored or printed.</span>
+                    <span id="modalFilenamePreview" class="font-mono font-bold text-teal-700"></span>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2 pt-1">
+                <button onclick="downloadScoreJpeg()" class="flex-1 bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold py-3 px-4 rounded-xl transition shadow-sm flex items-center justify-center gap-1.5">
+                    <span>🖼️</span>
+                    <span>Download Score JPEG</span>
                 </button>
                 <button onclick="printLabHandout()" class="flex-1 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold py-3 px-4 rounded-xl transition">
                     Print Lab Report
@@ -512,6 +569,9 @@
             </button>
         </div>
     </div>
+
+    <!-- Offscreen Canvas for Compact JPEG Score Card Export -->
+    <canvas id="scoreExportCanvas" width="840" height="440" class="hidden"></canvas>
 
     <!-- Hidden Printable Handout Area -->
     <div id="print-report-area" class="hidden">
@@ -536,9 +596,9 @@
 
     <script>
         /**
-         * ============================================================================
-         * 1. BUILT-IN SCIENCE DATASETS & APPLICATION STATE
-         * ============================================================================
+- ============================================================================
+- 1. BUILT-IN SCIENCE DATASETS & APPLICATION STATE
+- ============================================================================
          */
         const DATASETS = {
             enzyme: {
@@ -560,24 +620,24 @@
                     { colA: 60, colB: 4 }
                 ]
             },
-            pendulum: {
-                id: 'pendulum',
-                name: 'Pendulum Length vs. Period',
-                question: 'How does changing the string length of a pendulum affect the time for one full swing (period)?',
-                context: 'Physics students tested 6 different string lengths using the same 100g brass bob and timed 10 swings to calculate the period.',
-                colA: { name: 'Swing Period', unit: 's', full: 'Swing Period (s)' },
-                colB: { name: 'String Length', unit: 'cm', full: 'String Length (cm)' },
+            blooddrop: {
+                id: 'blooddrop',
+                name: 'Blood Drop Height vs. Diameter',
+                question: 'How does the release height of a blood drop affect the diameter of the resulting bloodstain?',
+                context: 'Forensic science students released uniform 0.05 mL drops of simulated blood vertically onto smooth cardstock from 6 different heights and measured the diameter of each circular stain.',
+                colA: { name: 'Blood Drop Diameter', unit: 'mm', full: 'Blood Drop Diameter (mm)' },
+                colB: { name: 'Blood Drop Height', unit: 'cm', full: 'Blood Drop Height (cm)' },
                 // Intentionally swapped column order so students must read carefully
                 ivCol: 'colB',
                 dvCol: 'colA',
-                customHint: 'Be careful! Even though Swing Period is listed in the first column, ask yourself: did the students choose the swing time, or did they cut the string to specific lengths?',
+                customHint: 'Be careful! Even though Blood Drop Diameter is listed in the first column, ask yourself: did the forensic students choose the stain size ahead of time, or did they choose the drop height and measure the diameter?',
                 rows: [
-                    { colA: 0.9, colB: 20 },
-                    { colA: 1.3, colB: 40 },
-                    { colA: 1.6, colB: 60 },
-                    { colA: 1.8, colB: 80 },
-                    { colA: 2.0, colB: 100 },
-                    { colA: 2.2, colB: 120 }
+                    { colA: 12, colB: 20 },
+                    { colA: 16, colB: 40 },
+                    { colA: 19, colB: 60 },
+                    { colA: 21, colB: 80 },
+                    { colA: 23, colB: 100 },
+                    { colA: 24, colB: 120 }
                 ]
             },
             fertilizer: {
@@ -624,9 +684,56 @@
         }
 
         /**
-         * ============================================================================
-         * 2. INITIALIZATION & DATASET LOADING
-         * ============================================================================
+- ============================================================================
+- 2. STUDENT IDENTITY SYNC & SCORE CALCULATION
+- ============================================================================
+         */
+        function cleanFirstName(raw) {
+            const cleaned = raw.trim().replace(/[^a-zA-Z\-']/g, '');
+            if (!cleaned) return '';
+            return cleaned.charAt(0).toUpperCase() + cleaned.slice(1).toLowerCase();
+        }
+
+        function computeLabScorePct() {
+            return Math.round((appState.completedPhases.size / 5) * 100);
+        }
+
+        function syncStudentInputs(source) {
+            const barFn = document.getElementById('studentFirstName');
+            const barLi = document.getElementById('studentLastInitial');
+            const barPd = document.getElementById('studentPeriod');
+
+            const modFn = document.getElementById('modalFirstName');
+            const modLi = document.getElementById('modalLastInitial');
+            const modPd = document.getElementById('modalPeriod');
+
+            if (source === 'bar') {
+                modFn.value = barFn.value;
+                modLi.value = barLi.value;
+                modPd.value = barPd.value;
+            } else {
+                barFn.value = modFn.value;
+                barLi.value = modLi.value;
+                barPd.value = modPd.value;
+            }
+
+            const fn = cleanFirstName(barFn.value);
+            const li = barLi.value.trim().toUpperCase().replace(/[^A-Z]/g, '').slice(0, 1);
+            const pd = barPd.value.trim().replace(/[^0-9]/g, '');
+            const score = computeLabScorePct();
+
+            const previewName = (fn && li && pd)
+                ? `${fn.toLowerCase()}.${li.toLowerCase()}.${pd}.${score}.jpg`
+                : 'firstname.l.period.score.jpg';
+
+            document.getElementById('filenamePreviewPill').textContent = `File: ${previewName}`;
+            document.getElementById('modalFilenamePreview').textContent = previewName;
+        }
+
+        /**
+- ============================================================================
+- 3. INITIALIZATION & DATASET LOADING
+- ============================================================================
          */
         window.onload = function () {
             setupCanvasEvents();
@@ -696,15 +803,16 @@
             document.getElementById('lineModeSelect').value = 'none';
             document.getElementById('conclusionInput').value = '';
 
+            syncStudentInputs('bar');
             updatePlottedPointsUI();
             goToPhase(1);
             resetChat();
         }
 
         /**
-         * ============================================================================
-         * 3. 5-PHASE STEPPER NAVIGATION & UI UPDATES
-         * ============================================================================
+- ============================================================================
+- 4. 5-PHASE STEPPER NAVIGATION & UI UPDATES
+- ============================================================================
          */
         function goToPhase(phaseNum) {
             appState.currentPhase = phaseNum;
@@ -744,6 +852,7 @@
                 updateScaleRangeHints();
             }
 
+            syncStudentInputs('bar');
             renderCanvas();
         }
 
@@ -764,6 +873,7 @@
                 }
                 appState.completedPhases.add(5);
                 goToPhase(5);
+                syncStudentInputs('bar');
                 document.getElementById('celebrationModal').classList.remove('hidden');
             }
         }
@@ -781,9 +891,9 @@
         }
 
         /**
-         * ============================================================================
-         * 4. INTERACTIVE HTML5 GRAPH PAPER CANVAS (MANUAL PLOTTING ONLY)
-         * ============================================================================
+- ============================================================================
+- 5. INTERACTIVE HTML5 GRAPH PAPER CANVAS (MANUAL PLOTTING ONLY)
+- ============================================================================
          */
         const MARGIN = { top: 54, right: 32, bottom: 62, left: 68 };
 
@@ -1181,9 +1291,9 @@
         }
 
         /**
-         * ============================================================================
-         * 5. 100% OFFLINE SOCRATIC LAB COACH ENGINE (SCHOOL-FIREWALL PROOF)
-         * ============================================================================
+- ============================================================================
+- 6. SOCRATIC LAB COACH ENGINE
+- ============================================================================
          */
         function evaluateStudentProgress() {
             const ds = getActiveDataset();
@@ -1258,7 +1368,7 @@
                 if (!xLabel.includes('(') || !yLabel.includes('(')) {
                     return {
                         passed: false,
-                        feedback: `Good labels, but check your formatting: one or both axis labels is missing **measurement units in parentheses**—for example: \`Length (cm)\`. Why do scientists always include units on a graph?`
+                        feedback: `Good labels, but check your formatting: one or both axis labels is missing **measurement units in parentheses**—for example: \`Height (cm)\`. Why do scientists always include units on a graph?`
                     };
                 }
                 if (title.length < 10 || title.toLowerCase().includes(' vs ') || title.toLowerCase().includes(' vs. ')) {
@@ -1370,16 +1480,16 @@
                         feedback: `Look at the overall shape of your plotted points. Write a 1–2 sentence scientific conclusion starting with: *"As [Independent Variable] increases, [Dependent Variable]..."*`
                     };
                 }
-                const hasDirectionWord = /(increas|decreas|ris|drop|peak|optima|curve|linear|proportional|level|plateau|slow|fast|high|low)/i.test(conclusion);
+                const hasDirectionWord = /(increas|decreas|ris|drop|peak|optima|curve|linear|proportional|level|plateau|slow|fast|high|low|wider|larger|smaller)/i.test(conclusion);
                 if (!hasDirectionWord) {
                     return {
                         passed: false,
-                        feedback: `Good start! Make sure your conclusion explicitly describes **how** the Dependent Variable changes (for example, does it *increase*, *decrease*, or *peak and then drop*?) as the Independent Variable increases.`
+                        feedback: `Good start! Make sure your conclusion explicitly describes **how** the Dependent Variable changes (for example, does it *increase*, *decrease*, or *level off*?) as the Independent Variable increases.`
                     };
                 }
                 return {
                     passed: true,
-                    feedback: `Outstanding scientific reasoning! Your conclusion clearly connects the Independent and Dependent variables based on your graph. Click **Finish Lab 🎉** to export or print your lab report!`
+                    feedback: `Outstanding scientific reasoning! Your conclusion clearly connects the Independent and Dependent variables based on your graph. Click **Finish Lab 🎉** to download your JPEG score card or print your report!`
                 };
             }
 
@@ -1391,7 +1501,6 @@
             const q = userText.toLowerCase();
             const phase = appState.currentPhase;
 
-            // Intent 1: Student asks for a hint on the current step
             if (q.includes('hint') || q.includes('help') || q.includes('stuck') || q.includes('what do i do')) {
                 if (phase === 1) {
                     const hints = [
@@ -1418,27 +1527,22 @@
                 }
             }
 
-            // Intent 2: X vs Y rule / DRY MIX
             if (q.includes('x-axis') || q.includes('y-axis') || q.includes('x vs y') || q.includes('which axis') || q.includes('dry mix')) {
                 return `Scientists use **DRY MIX** to remember which axis gets which variable:\n• **DRY**: **D**ependent / **R**esponding variable goes on the **Y**-axis (vertical).\n• **MIX**: **M**anipulated / **I**ndependent variable goes on the **X**-axis (horizontal).`;
             }
 
-            // Intent 3: Choosing a scale / interval
             if (q.includes('scale') || q.includes('interval') || q.includes('step') || q.includes('50%')) {
                 return `A great scientific scale follows three rules:\n1. **Start at 0** (unless there is a specific reason not to).\n2. **Count by uniform, friendly intervals** (1s, 2s, 5s, 10s, or 20s—never count by uneven gaps!).\n3. **Use at least 50% of the grid** so your trend isn't squished into a tiny corner.`;
             }
 
-            // Intent 4: Title formatting
             if (q.includes('title')) {
-                return `Avoid short titles like *"Temperature vs Rate"*. Instead, write a descriptive title that tells the reader what was tested: **"The Effect of [Independent Variable] on [Dependent Variable]"**.`;
+                return `Avoid short titles like *"Height vs Diameter"*. Instead, write a descriptive title that tells the reader what was tested: **"The Effect of [Independent Variable] on [Dependent Variable]"**.`;
             }
 
-            // Intent 5: Best fit line vs connect the dots
             if (q.includes('line') || q.includes('best fit') || q.includes('connect')) {
-                return `In science, if your points form a straight-line trend, use a **Linear Line of Best Fit** (a straight ruler line showing the overall trend, not zig-zagging dot-to-dot). If the data curves (like enzyme activity peaking and dropping), connecting smoothly or showing the curve helps highlight the non-linear pattern!`;
+                return `In science, if your points form a straight-line trend, use a **Linear Line of Best Fit** (a straight ruler line showing the overall trend, not zig-zagging dot-to-dot). If the data curves (like bloodstain diameter leveling off at higher drop heights), connecting smoothly helps highlight the non-linear curve!`;
             }
 
-            // Default: Run live diagnostic on their current step
             const diag = evaluateStudentProgress();
             return diag.feedback;
         }
@@ -1519,24 +1623,172 @@
         }
 
         /**
-         * ============================================================================
-         * 6. PNG GRAPH EXPORT & PRINTABLE LAB REPORT
-         * ============================================================================
+- ============================================================================
+- 7. COMPACT JPEG SCORE CARD EXPORT & PRINTABLE LAB REPORT
+- ============================================================================
          */
-        function exportGraphPNG() {
-            const canvas = document.getElementById('graphCanvas');
-            const tempCanvas = document.createElement('canvas');
-            tempCanvas.width = canvas.width;
-            tempCanvas.height = canvas.height;
-            const tCtx = tempCanvas.getContext('2d');
-            tCtx.fillStyle = '#FAF9F6';
-            tCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
-            tCtx.drawImage(canvas, 0, 0);
+        function roundRectPath(ctx, x, y, w, h, r) {
+            ctx.beginPath();
+            ctx.moveTo(x + r, y);
+            ctx.arcTo(x + w, y, x + w, y + h, r);
+            ctx.arcTo(x + w, y + h, x, y + h, r);
+            ctx.arcTo(x, y + h, x, y, r);
+            ctx.arcTo(x, y, x + w, y, r);
+            ctx.closePath();
+        }
 
+        function downloadScoreJpeg() {
+            const fn = cleanFirstName(document.getElementById('studentFirstName').value);
+            const li = document.getElementById('studentLastInitial').value.trim().toUpperCase().replace(/[^A-Z]/g, '').slice(0, 1);
+            const pd = document.getElementById('studentPeriod').value.trim().replace(/[^0-9]/g, '');
+
+            if (!fn || !li || !pd) {
+                appendTutorMessage('Before downloading your score image, please enter your **First Name**, **Last Initial**, and **Period #** in the top bar!');
+                const modal = document.getElementById('celebrationModal');
+                if (!modal.classList.contains('hidden')) {
+                    document.getElementById('modalFirstName').focus();
+                } else {
+                    document.getElementById('studentFirstName').focus();
+                }
+                return;
+            }
+
+            const ds = getActiveDataset();
+            const completedCount = appState.completedPhases.size;
+            const scorePct = computeLabScorePct();
+            const displayId = `${fn} ${li}.`;
+            const filename = `${fn.toLowerCase()}.${li.toLowerCase()}.${pd}.${scorePct}.jpg`;
+            const timestamp = new Date().toLocaleString([], {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
+            // Verification hash
+            const seed = `${displayId}|P${pd}|${ds.id}|${completedCount}/5|${Date.now()}`;
+            let hash = 0;
+            for (let i = 0; i < seed.length; i++) {
+                hash = ((hash << 5) - hash) + seed.charCodeAt(i);
+                hash |= 0;
+            }
+            const receiptCode = `SCI-${Math.abs(hash).toString(16).toUpperCase().padStart(6, '0').slice(0, 6)}`;
+
+            const exportCanvas = document.getElementById('scoreExportCanvas');
+            const ctx = exportCanvas.getContext('2d');
+            const W = exportCanvas.width;
+            const H = exportCanvas.height;
+
+            // Solid white background for clean JPEG compression
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, W, H);
+
+            // Outer border
+            ctx.strokeStyle = '#cbd5e1';
+            ctx.lineWidth = 3;
+            roundRectPath(ctx, 8, 8, W - 16, H - 16, 18);
+            ctx.stroke();
+
+            // Header banner
+            ctx.fillStyle = '#0f172a';
+            roundRectPath(ctx, 8, 8, W - 16, 82, 18);
+            ctx.fill();
+            ctx.fillRect(8, 68, W - 16, 22);
+
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '800 22px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+            ctx.fillText('Science Graphing Simulation — Score Card', 28, 45);
+
+            ctx.fillStyle = '#5eead4';
+            ctx.font = '600 13px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+            ctx.fillText(ds.name, 28, 70);
+
+            // Verification pill
+            ctx.fillStyle = '#134e4a';
+            roundRectPath(ctx, W - 184, 26, 156, 40, 10);
+            ctx.fill();
+            ctx.fillStyle = '#99f6e4';
+            ctx.font = '700 15px monospace';
+            ctx.fillText(receiptCode, W - 166, 51);
+
+            // Left Column: Student Info & Score Metrics
+            ctx.fillStyle = '#64748b';
+            ctx.font = '700 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+            ctx.fillText('STUDENT', 28, 120);
+            ctx.fillText('PERIOD', 240, 120);
+
+            ctx.fillStyle = '#0f172a';
+            ctx.font = '800 22px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+            ctx.fillText(displayId, 28, 148);
+            ctx.fillText(`Period ${pd}`, 240, 148);
+
+            // Phases Completed Card
+            ctx.fillStyle = '#f0fdfa';
+            roundRectPath(ctx, 28, 172, 165, 96, 14);
+            ctx.fill();
+            ctx.fillStyle = '#0f766e';
+            ctx.font = '800 32px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+            ctx.fillText(`${completedCount} / 5`, 46, 222);
+            ctx.font = '700 12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+            ctx.fillText('PHASES VERIFIED', 46, 248);
+
+            // Percentage Score Card
+            ctx.fillStyle = '#eff6ff';
+            roundRectPath(ctx, 207, 172, 165, 96, 14);
+            ctx.fill();
+            ctx.fillStyle = '#1d4ed8';
+            ctx.font = '800 34px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+            ctx.fillText(`${scorePct}%`, 225, 222);
+            ctx.font = '700 12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+            ctx.fillText('FINAL SCORE', 225, 248);
+
+            // Phase Checklist Status
+            ctx.fillStyle = '#f8fafc';
+            roundRectPath(ctx, 28, 284, 344, 124, 12);
+            ctx.fill();
+            ctx.strokeStyle = '#e2e8f0';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
+            const phaseNames = ['1. Variables', '2. Axes & Title', '3. Scale', '4. Plot Points', '5. Analysis'];
+            ctx.font = '600 12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+            phaseNames.forEach((label, i) => {
+                const done = appState.completedPhases.has(i + 1);
+                ctx.fillStyle = done ? '#059669' : '#94a3b8';
+                ctx.fillText(`${done ? '✓' : '○'} ${label}`, 44, 308 + i * 20);
+            });
+
+            ctx.fillStyle = '#64748b';
+            ctx.font = '500 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+            ctx.fillText(`Completed: ${timestamp}`, 195, 396);
+
+            // Right Column: Student Graph Thumbnail Preview
+            const graphCanvas = document.getElementById('graphCanvas');
+            const thumbX = 394;
+            const thumbY = 110;
+            const thumbW = 418;
+            const thumbH = 298;
+
+            ctx.fillStyle = '#faf9f6';
+            roundRectPath(ctx, thumbX, thumbY, thumbW, thumbH, 12);
+            ctx.fill();
+            ctx.drawImage(graphCanvas, thumbX + 4, thumbY + 4, thumbW - 8, thumbH - 8);
+            ctx.strokeStyle = '#cbd5e1';
+            ctx.lineWidth = 2;
+            roundRectPath(ctx, thumbX, thumbY, thumbW, thumbH, 12);
+            ctx.stroke();
+
+            // Export as compressed JPEG (~45-65 KB)
+            const jpegUrl = exportCanvas.toDataURL('image/jpeg', 0.80);
             const link = document.createElement('a');
-            link.download = 'SciGraph_Lab_Graph.png';
-            link.href = tempCanvas.toDataURL('image/png');
+            link.download = filename;
+            link.href = jpegUrl;
+            document.body.appendChild(link);
             link.click();
+            document.body.removeChild(link);
+
+            appendTutorMessage(`Downloaded **${filename}**! Upload that JPEG score card to your assignment dropbox.`);
         }
 
         function printLabHandout() {
