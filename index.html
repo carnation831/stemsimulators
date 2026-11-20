@@ -1,563 +1,363 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>STEM Simulators | Interactive Science Simulations &amp; Practice Problems</title>
-  <meta name="description" content="Explore free interactive science simulations and self-checking chemistry practice problems in your browser.">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STEM Simulators | Interactive Science Simulations & Practice</title>
+    <meta name="description" content="Free, interactive science simulations and chemistry practice problems for middle and high school classrooms.">
 
-  <!-- GOOGLE ADSENSE SCRIPT -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4365444453795543"
-     crossorigin="anonymous"></script>
+    <!-- GOOGLE ADSENSE SCRIPT -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4365444453795543"
+       crossorigin="anonymous"></script>
 
-  <style>
-    :root {
-      --bg-color: #f8fafc;
-      --surface-color: #ffffff;
-      --border-color: #e2e8f0;
-      --text-primary: #0f172a;
-      --text-secondary: #475569;
-      --accent-color: #2563eb;
-      --accent-hover: #1d4ed8;
-      --practice-color: #0d9488;
-      --practice-hover: #0f766e;
-      --badge-sim: #dbeafe;
-      --badge-sim-text: #1e40af;
-      --badge-practice: #ccfbf1;
-      --badge-practice-text: #115e59;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text-primary);
-      line-height: 1.6;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-
-    /* Navigation Header */
-    header {
-      background-color: var(--surface-color);
-      border-bottom: 1px solid var(--border-color);
-      padding: 1rem 2rem;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .header-inner {
-      max-width: 1280px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo {
-      text-decoration: none;
-      color: var(--text-primary);
-      font-weight: 800;
-      font-size: 1.25rem;
-      letter-spacing: -0.02em;
-    }
-
-    .logo span {
-      color: var(--accent-color);
-    }
-
-    nav {
-      display: flex;
-      gap: 1.5rem;
-    }
-
-    nav a {
-      text-decoration: none;
-      color: var(--text-secondary);
-      font-weight: 500;
-      font-size: 0.95rem;
-      transition: color 0.15s;
-    }
-
-    nav a:hover {
-      color: var(--accent-color);
-    }
-
-    /* Hero Banner */
-    .hero {
-      background-color: var(--surface-color);
-      border-bottom: 1px solid var(--border-color);
-      padding: 3rem 1.5rem;
-      text-align: center;
-    }
-
-    .hero-inner {
-      max-width: 760px;
-      margin: 0 auto;
-    }
-
-    .hero h1 {
-      font-size: 2.25rem;
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      margin-bottom: 0.75rem;
-      color: var(--text-primary);
-    }
-
-    .hero p {
-      font-size: 1.1rem;
-      color: var(--text-secondary);
-      margin-bottom: 1.5rem;
-    }
-
-    .hero-actions {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-    }
-
-    .jump-link {
-      text-decoration: none;
-      padding: 0.55rem 1.2rem;
-      border-radius: 999px;
-      font-size: 0.9rem;
-      font-weight: 600;
-      border: 1px solid var(--border-color);
-      background-color: var(--bg-color);
-      color: var(--text-primary);
-      transition: all 0.15s;
-    }
-
-    .jump-link:hover {
-      border-color: var(--accent-color);
-      color: var(--accent-color);
-    }
-
-    /* Main Content Container */
-    .container {
-      max-width: 1100px;
-      width: 100%;
-      margin: 2.5rem auto;
-      padding: 0 1.5rem;
-      flex: 1;
-    }
-
-    /* Responsive Horizontal Leaderboard Ad Banner */
-    .ad-banner-wrapper {
-      margin-bottom: 2.5rem;
-      text-align: center;
-    }
-
-    .ad-label {
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: #94a3b8;
-      margin-bottom: 0.35rem;
-      display: block;
-    }
-
-    .ad-banner-slot {
-      background-color: #f1f5f9;
-      border: 1px dashed #cbd5e1;
-      border-radius: 8px;
-      min-height: 90px;
-      max-width: 970px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    /* Section Headings */
-    .library-section {
-      margin-bottom: 3.5rem;
-      scroll-margin-top: 5rem;
-    }
-
-    .section-header {
-      border-bottom: 2px solid var(--border-color);
-      padding-bottom: 0.6rem;
-      margin-bottom: 1.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-
-    .section-header h2 {
-      font-size: 1.4rem;
-      font-weight: 800;
-      color: var(--text-primary);
-    }
-
-    .section-header span {
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-    }
-
-    /* Card Grid */
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 1.75rem;
-    }
-
-    .card {
-      background-color: var(--surface-color);
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      transition: transform 0.15s, box-shadow 0.15s;
-    }
-
-    .card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 20px -5px rgba(15, 23, 42, 0.08);
-    }
-
-    .card-preview {
-      height: 170px;
-      background-color: #0f172a;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    .card-preview svg {
-      width: 100%;
-      height: 100%;
-    }
-
-    .card-body {
-      padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-    }
-
-    .badge-row {
-      display: flex;
-      gap: 0.5rem;
-      align-items: center;
-      margin-bottom: 0.75rem;
-    }
-
-    .badge {
-      font-size: 0.72rem;
-      font-weight: 700;
-      padding: 0.2rem 0.6rem;
-      border-radius: 999px;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-    }
-
-    .badge.sim {
-      background-color: var(--badge-sim);
-      color: var(--badge-sim-text);
-    }
-
-    .badge.practice {
-      background-color: var(--badge-practice);
-      color: var(--badge-practice-text);
-    }
-
-    .badge.subject {
-      background-color: #f1f5f9;
-      color: #475569;
-    }
-
-    .card-body h3 {
-      font-size: 1.2rem;
-      margin-bottom: 0.5rem;
-      color: var(--text-primary);
-    }
-
-    .card-body p {
-      font-size: 0.95rem;
-      color: var(--text-secondary);
-      margin-bottom: 1.5rem;
-      flex: 1;
-    }
-
-    .btn-sim {
-      display: inline-block;
-      text-align: center;
-      background-color: var(--accent-color);
-      color: #ffffff;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.95rem;
-      padding: 0.7rem 1rem;
-      border-radius: 6px;
-      transition: background-color 0.15s;
-    }
-
-    .btn-sim:hover {
-      background-color: var(--accent-hover);
-    }
-
-    .btn-practice {
-      display: inline-block;
-      text-align: center;
-      background-color: var(--practice-color);
-      color: #ffffff;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.95rem;
-      padding: 0.7rem 1rem;
-      border-radius: 6px;
-      transition: background-color 0.15s;
-    }
-
-    .btn-practice:hover {
-      background-color: var(--practice-hover);
-    }
-
-    /* Footer */
-    footer {
-      background-color: var(--surface-color);
-      border-top: 1px solid var(--border-color);
-      padding: 2rem 1.5rem;
-      margin-top: 2rem;
-      font-size: 0.875rem;
-      color: var(--text-secondary);
-    }
-
-    .footer-inner {
-      max-width: 1280px;
-      margin: 0 auto;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 1.5rem;
-    }
-
-    .footer-links a {
-      color: var(--text-secondary);
-      text-decoration: none;
-    }
-
-    .footer-links a:hover {
-      color: var(--accent-color);
-      text-decoration: underline;
-    }
-
-    @media (max-width: 640px) {
-      .hero h1 { font-size: 1.75rem; }
-      header { padding: 1rem; }
-      .footer-inner { flex-direction: column; text-align: center; }
-    }
-  </style>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', '"Liberation Mono"', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body>
+<body class="min-h-screen flex flex-col bg-slate-50 text-slate-900 font-sans antialiased selection:bg-blue-100 selection:text-blue-900">
 
-  <!-- Top Navigation -->
-  <header>
-    <div class="header-inner">
-      <a href="/" class="logo">STEM<span>Simulators</span>.org</a>
-      <nav>
-        <a href="#simulations">Simulations</a>
-        <a href="#practice">Practice Problems</a>
-        <a href="/about">About</a>
-        <a href="/privacy">Privacy Policy</a>
-      </nav>
-    </div>
-  </header>
+    <!-- Top Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+            <a href="/" class="flex items-center gap-2.5 text-decoration-none">
+                <div class="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center font-extrabold text-lg shadow-sm">
+                    ⚛️
+                </div>
+                <span class="font-extrabold text-xl tracking-tight text-slate-900">
+                    STEM<span class="text-blue-600">Simulators</span>.org
+                </span>
+            </a>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="hero-inner">
-      <h1>Interactive Science Simulations &amp; Practice</h1>
-      <p>Visual browser-based laboratories and self-checking practice modules designed for students and educators.</p>
-      <div class="hero-actions">
-        <a href="#simulations" class="jump-link">Interactive Simulations (3)</a>
-        <a href="#practice" class="jump-link">Practice Problems (1)</a>
-      </div>
-    </div>
-  </section>
+            <nav class="flex items-center gap-5 text-sm font-semibold text-slate-600">
+                <a href="#simulations" class="hover:text-blue-600 transition">Simulations</a>
+                <a href="#practice" class="hover:text-blue-600 transition">Practice</a>
+                <a href="about.html" class="hover:text-blue-600 transition hidden sm:inline">About</a>
+            </nav>
+        </div>
+    </header>
 
-  <!-- Main Hub Content -->
-  <main class="container">
-
-    <!-- Top Leaderboard Ad Slot -->
-    <div class="ad-banner-wrapper">
-      <span class="ad-label">Advertisement</span>
-      <div class="ad-banner-slot">
-        <ins class="adsbygoogle"
-             style="display:block; width:100%;"
-             data-ad-client="ca-pub-4365444453795543"
-             data-ad-slot="1234567890"
-             data-ad-format="horizontal"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-    </div>
-
-    <!-- SECTION 1: INTERACTIVE SIMULATIONS -->
-    <section id="simulations" class="library-section">
-      <div class="section-header">
-        <h2>Interactive Simulations</h2>
-        <span>Hands-on visual models and sandbox tools</span>
-      </div>
-
-      <div class="card-grid">
-        <!-- SIMULATION 1: Electron Configuration -->
-        <article class="card">
-          <div class="card-preview">
-            <svg viewBox="0 0 320 170">
-              <circle cx="160" cy="85" r="12" fill="#facc15"/>
-              <circle cx="160" cy="85" r="34" fill="none" stroke="#475569" stroke-width="1.5"/>
-              <circle cx="160" cy="51" r="5" fill="#38bdf8"/>
-              <circle cx="160" cy="119" r="5" fill="#38bdf8"/>
-              <circle cx="160" cy="85" r="62" fill="none" stroke="#475569" stroke-dasharray="4 3" stroke-width="1.5"/>
-              <circle cx="98" cy="85" r="5" fill="#4ade80"/>
-              <circle cx="222" cy="85" r="5" fill="#4ade80"/>
-              <circle cx="116" cy="41" r="5" fill="#4ade80"/>
-              <circle cx="204" cy="129" r="5" fill="#4ade80"/>
-            </svg>
-          </div>
-          <div class="card-body">
-            <div class="badge-row">
-              <span class="badge sim">Simulation</span>
-              <span class="badge subject">Chemistry</span>
+    <!-- Hero Banner -->
+    <section class="bg-gradient-to-b from-slate-900 to-slate-800 text-white border-b border-slate-800">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16 text-center space-y-4">
+            <span class="inline-block text-xs font-bold uppercase tracking-widest bg-blue-500/20 text-blue-300 border border-blue-400/30 px-3 py-1 rounded-full">
+                Classroom-Ready STEM Tools
+            </span>
+            <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight max-w-3xl mx-auto leading-tight">
+                Interactive Science Simulations &amp; Practice Labs
+            </h1>
+            <p class="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+                Zero-login, browser-based labs and self-checking practice modules built for middle and high school science students.
+            </p>
+            <div class="pt-2 flex flex-wrap items-center justify-center gap-3">
+                <a href="#simulations" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm px-5 py-3 rounded-xl shadow-sm transition">
+                    Explore Simulations
+                </a>
+                <a href="#practice" class="bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-600 font-bold text-sm px-5 py-3 rounded-xl transition">
+                    Practice Problems
+                </a>
             </div>
-            <h3>Electron Configuration</h3>
-            <p>Build atoms across the periodic table and visualize orbital filling order, Aufbau principle, Hund's rule, and valence shells.</p>
-            <a href="/simulations/electron-configuration" class="btn-sim">Launch Simulation</a>
-          </div>
-        </article>
-
-        <!-- SIMULATION 2: Science Graphing Simulation -->
-        <article class="card">
-          <div class="card-preview">
-            <svg viewBox="0 0 320 170">
-              <line x1="40" y1="130" x2="280" y2="130" stroke="#475569" stroke-width="2"/>
-              <line x1="40" y1="30" x2="40" y2="130" stroke="#475569" stroke-width="2"/>
-              <polyline points="40,110 90,95 140,70 190,75 240,40 275,35" fill="none" stroke="#38bdf8" stroke-width="3"/>
-              <circle cx="90" cy="95" r="4.5" fill="#facc15"/>
-              <circle cx="140" cy="70" r="4.5" fill="#facc15"/>
-              <circle cx="190" cy="75" r="4.5" fill="#facc15"/>
-              <circle cx="240" cy="40" r="4.5" fill="#facc15"/>
-            </svg>
-          </div>
-          <div class="card-body">
-            <div class="badge-row">
-              <span class="badge sim">Simulation</span>
-              <span class="badge subject">Lab Tools</span>
-            </div>
-            <h3>Science Graphing Simulation</h3>
-            <p>Interactive student practice lab with step-by-step guidance on variables, axes, scales, manual point plotting, and a Socratic Lab Coach.</p>
-            <a href="/simulations/science-graphing-simulation" class="btn-sim">Launch Simulation</a>
-          </div>
-        </article>
-
-        <!-- SIMULATION 3: Science Graphing Simulation - Custom Dataset -->
-        <article class="card">
-          <div class="card-preview">
-            <svg viewBox="0 0 320 170">
-              <rect x="65" y="32" width="190" height="106" rx="6" fill="none" stroke="#475569" stroke-width="2"/>
-              <line x1="65" y1="58" x2="255" y2="58" stroke="#475569" stroke-width="2"/>
-              <line x1="160" y1="32" x2="160" y2="138" stroke="#475569" stroke-width="1.5"/>
-              <line x1="65" y1="84" x2="255" y2="84" stroke="#334155" stroke-width="1"/>
-              <line x1="65" y1="110" x2="255" y2="110" stroke="#334155" stroke-width="1"/>
-              <circle cx="112" cy="45" r="4" fill="#38bdf8"/>
-              <circle cx="207" cy="45" r="4" fill="#2dd4bf"/>
-              <line x1="88" y1="71" x2="136" y2="71" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
-              <line x1="184" y1="71" x2="232" y2="71" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
-              <line x1="88" y1="97" x2="136" y2="97" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
-              <line x1="184" y1="97" x2="232" y2="97" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <div class="card-body">
-            <div class="badge-row">
-              <span class="badge sim">Simulation</span>
-              <span class="badge subject">Teacher Tools</span>
-            </div>
-            <h3>Science Graphing Simulation - Custom Dataset</h3>
-            <p>Configure custom variables, enter experimental data pairs, and generate standalone student graphing assignments.</p>
-            <a href="/simulations/science-graphing-simulation-custom-dataset" class="btn-sim">Launch Custom Studio</a>
-          </div>
-        </article>
-      </div>
+        </div>
     </section>
 
-    <!-- SECTION 2: PRACTICE PROBLEMS -->
-    <section id="practice" class="library-section">
-      <div class="section-header">
-        <h2>Practice Problems</h2>
-        <span>Interactive drills and instant-feedback exercises</span>
-      </div>
+    <!-- Main Content -->
+    <main class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-10 space-y-14">
 
-      <div class="card-grid">
-        <!-- PRACTICE 1: 5 Types of Reactions -->
-        <article class="card">
-          <div class="card-preview">
-            <svg viewBox="0 0 320 170">
-              <circle cx="70" cy="85" r="18" fill="#2dd4bf"/>
-              <text x="70" y="90" text-anchor="middle" fill="#0f172a" font-weight="bold" font-size="14" font-family="sans-serif">A</text>
-              
-              <text x="108" y="91" text-anchor="middle" fill="#94a3b8" font-weight="bold" font-size="18" font-family="sans-serif">+</text>
-              
-              <circle cx="145" cy="85" r="18" fill="#f472b6"/>
-              <text x="145" y="90" text-anchor="middle" fill="#0f172a" font-weight="bold" font-size="14" font-family="sans-serif">B</text>
-
-              <line x1="178" y1="85" x2="205" y2="85" stroke="#e2e8f0" stroke-width="2.5"/>
-              <polygon points="205,80 214,85 205,90" fill="#e2e8f0"/>
-
-              <circle cx="242" cy="85" r="18" fill="#2dd4bf"/>
-              <text x="242" y="90" text-anchor="middle" fill="#0f172a" font-weight="bold" font-size="14" font-family="sans-serif">A</text>
-              <circle cx="274" cy="85" r="18" fill="#f472b6"/>
-              <text x="274" y="90" text-anchor="middle" fill="#0f172a" font-weight="bold" font-size="14" font-family="sans-serif">B</text>
-            </svg>
-          </div>
-          <div class="card-body">
-            <div class="badge-row">
-              <span class="badge practice">Practice Set</span>
-              <span class="badge subject">Chemistry</span>
+        <!-- ================================================================== -->
+        <!-- SECTION 1: INTERACTIVE SIMULATIONS                                 -->
+        <!-- ================================================================== -->
+        <section id="simulations" class="space-y-5">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between border-b border-slate-200 pb-3 gap-2">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-blue-600">Hands-On Exploration</span>
+                    <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Interactive Simulations</h2>
+                </div>
+                <p class="text-xs sm:text-sm text-slate-500">Step-by-step interactive lab workspaces</p>
             </div>
-            <h3>5 Types of Chemical Reactions</h3>
-            <p>Practice identifying synthesis, decomposition, single replacement, double replacement, and combustion equations with instant feedback.</p>
-            <a href="/practice/reactions" class="btn-practice">Start Practice</a>
-          </div>
-        </article>
-      </div>
-    </section>
 
-  </main>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-  <!-- Footer -->
-  <footer>
-    <div class="footer-inner">
-      <div>&copy; 2026 STEMSimulators.org. All rights reserved.</div>
-      <div class="footer-links">
-        <a href="/">Home</a>
-        <a href="/about">About</a>
-        <a href="/privacy">Privacy Policy</a>
-      </div>
-    </div>
-  </footer>
+                <!-- SIMULATION 1: Electron Configuration -->
+                <a href="simulations/electron-configuration.html" class="group bg-white rounded-2xl border border-slate-200 hover:border-blue-400 shadow-sm hover:shadow-md transition-all p-6 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="w-11 h-11 rounded-xl bg-blue-50 text-blue-600 border border-blue-100 flex items-center justify-center text-2xl">
+                                ⚛️
+                            </span>
+                            <span class="text-[11px] font-bold uppercase tracking-wider bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full">
+                                Chemistry
+                            </span>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-slate-900 group-hover:text-blue-600 transition">
+                            Electron Configuration Simulator
+                        </h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            Fill orbital diagrams using the Aufbau principle, Pauli exclusion principle, and Hund's rule across the periodic table.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-blue-600">
+                        <span>Launch Simulation</span>
+                        <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
+                    </div>
+                </a>
+
+                <!-- SIMULATION 2: Science Graphing Simulation -->
+                <a href="simulations/scigraph.html" class="group bg-white rounded-2xl border border-slate-200 hover:border-teal-400 shadow-sm hover:shadow-md transition-all p-6 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="w-11 h-11 rounded-xl bg-teal-50 text-teal-600 border border-teal-100 flex items-center justify-center text-2xl">
+                                📈
+                            </span>
+                            <span class="text-[11px] font-bold uppercase tracking-wider bg-teal-50 text-teal-700 px-2.5 py-1 rounded-full">
+                                Lab Skills
+                            </span>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-slate-900 group-hover:text-teal-600 transition">
+                            Science Graphing Simulation
+                        </h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            Identify IV/DV variables, apply DRY MIX axis rules, build uniform grid scales, plot data points, and analyze lab trends.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-teal-600">
+                        <span>Launch Simulation</span>
+                        <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
+                    </div>
+                </a>
+
+                <!-- ============================================================ -->
+                <!-- COPY & UNCOMMENT SLOT A (NEW SIMULATION)                     -->
+                <!-- ============================================================ -->
+                <!--
+                <a href="simulations/YOUR-FILE-NAME.html" class="group bg-white rounded-2xl border border-slate-200 hover:border-blue-400 shadow-sm hover:shadow-md transition-all p-6 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="w-11 h-11 rounded-xl bg-blue-50 text-blue-600 border border-blue-100 flex items-center justify-center text-2xl">
+                                🧪
+                            </span>
+                            <span class="text-[11px] font-bold uppercase tracking-wider bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full">
+                                Subject Tag
+                            </span>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-slate-900 group-hover:text-blue-600 transition">
+                            New Simulation Title
+                        </h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            Short 1-2 sentence description of what students explore in this simulation.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-blue-600">
+                        <span>Launch Simulation</span>
+                        <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
+                    </div>
+                </a>
+                -->
+
+                <!-- ============================================================ -->
+                <!-- COPY & UNCOMMENT SLOT B (NEW SIMULATION)                     -->
+                <!-- ============================================================ -->
+                <!--
+                <a href="simulations/YOUR-FILE-NAME.html" class="group bg-white rounded-2xl border border-slate-200 hover:border-teal-400 shadow-sm hover:shadow-md transition-all p-6 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="w-11 h-11 rounded-xl bg-teal-50 text-teal-600 border border-teal-100 flex items-center justify-center text-2xl">
+                                🔬
+                            </span>
+                            <span class="text-[11px] font-bold uppercase tracking-wider bg-teal-50 text-teal-700 px-2.5 py-1 rounded-full">
+                                Subject Tag
+                            </span>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-slate-900 group-hover:text-teal-600 transition">
+                            New Simulation Title
+                        </h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            Short 1-2 sentence description of what students explore in this simulation.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-teal-600">
+                        <span>Launch Simulation</span>
+                        <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
+                    </div>
+                </a>
+                -->
+
+                <!-- ============================================================ -->
+                <!-- COPY & UNCOMMENT SLOT C (NEW SIMULATION)                     -->
+                <!-- ============================================================ -->
+                <!--
+                <a href="simulations/YOUR-FILE-NAME.html" class="group bg-white rounded-2xl border border-slate-200 hover:border-indigo-400 shadow-sm hover:shadow-md transition-all p-6 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="w-11 h-11 rounded-xl bg-indigo-50 text-indigo-600 border border-indigo-100 flex items-center justify-center text-2xl">
+                                🧲
+                            </span>
+                            <span class="text-[11px] font-bold uppercase tracking-wider bg-indigo-50 text-indigo-700 px-2.5 py-1 rounded-full">
+                                Subject Tag
+                            </span>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-slate-900 group-hover:text-indigo-600 transition">
+                            New Simulation Title
+                        </h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            Short 1-2 sentence description of what students explore in this simulation.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-indigo-600">
+                        <span>Launch Simulation</span>
+                        <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
+                    </div>
+                </a>
+                -->
+
+            </div>
+        </section>
+
+        <!-- ================================================================== -->
+        <!-- SECTION 2: PRACTICE PROBLEMS                                       -->
+        <!-- ================================================================== -->
+        <section id="practice" class="space-y-5">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between border-b border-slate-200 pb-3 gap-2">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-600">Mastery &amp; Skill Checks</span>
+                    <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Practice Problems</h2>
+                </div>
+                <p class="text-xs sm:text-sm text-slate-500">Self-paced drills with instant feedback &amp; score cards</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <!-- PRACTICE 1: 5 Types of Chemical Reactions -->
+                <a href="practice/types-of-reactions.html" class="group bg-white rounded-2xl border border-slate-200 hover:border-emerald-400 shadow-sm hover:shadow-md transition-all p-6 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center justify-center text-2xl">
+                                🔥
+                            </span>
+                            <span class="text-[11px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-full">
+                                Chemistry
+                            </span>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-slate-900 group-hover:text-emerald-600 transition">
+                            5 Types of Chemical Reactions
+                        </h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            Classify synthesis, decomposition, single replacement, double replacement, and combustion equations with instant feedback.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-emerald-600">
+                        <span>Start Practice</span>
+                        <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
+                    </div>
+                </a>
+
+                <!-- ============================================================ -->
+                <!-- COPY & UNCOMMENT SLOT 1 (NEW PRACTICE SET)                   -->
+                <!-- ============================================================ -->
+                <!--
+                <a href="practice/YOUR-FILE-NAME.html" class="group bg-white rounded-2xl border border-slate-200 hover:border-emerald-400 shadow-sm hover:shadow-md transition-all p-6 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center justify-center text-2xl">
+                                ⚖️
+                            </span>
+                            <span class="text-[11px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-full">
+                                Subject Tag
+                            </span>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-slate-900 group-hover:text-emerald-600 transition">
+                            New Practice Set Title
+                        </h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            Short 1-2 sentence description of the concept or skill students will practice.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-emerald-600">
+                        <span>Start Practice</span>
+                        <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
+                    </div>
+                </a>
+                -->
+
+                <!-- ============================================================ -->
+                <!-- COPY & UNCOMMENT SLOT 2 (NEW PRACTICE SET)                   -->
+                <!-- ============================================================ -->
+                <!--
+                <a href="practice/YOUR-FILE-NAME.html" class="group bg-white rounded-2xl border border-slate-200 hover:border-amber-400 shadow-sm hover:shadow-md transition-all p-6 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="w-11 h-11 rounded-xl bg-amber-50 text-amber-600 border border-amber-100 flex items-center justify-center text-2xl">
+                                🧬
+                            </span>
+                            <span class="text-[11px] font-bold uppercase tracking-wider bg-amber-50 text-amber-700 px-2.5 py-1 rounded-full">
+                                Subject Tag
+                            </span>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-slate-900 group-hover:text-amber-600 transition">
+                            New Practice Set Title
+                        </h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            Short 1-2 sentence description of the concept or skill students will practice.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-amber-600">
+                        <span>Start Practice</span>
+                        <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
+                    </div>
+                </a>
+                -->
+
+                <!-- ============================================================ -->
+                <!-- COPY & UNCOMMENT SLOT 3 (NEW PRACTICE SET)                   -->
+                <!-- ============================================================ -->
+                <!--
+                <a href="practice/YOUR-FILE-NAME.html" class="group bg-white rounded-2xl border border-slate-200 hover:border-purple-400 shadow-sm hover:shadow-md transition-all p-6 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="w-11 h-11 rounded-xl bg-purple-50 text-purple-600 border border-purple-100 flex items-center justify-center text-2xl">
+                                📐
+                            </span>
+                            <span class="text-[11px] font-bold uppercase tracking-wider bg-purple-50 text-purple-700 px-2.5 py-1 rounded-full">
+                                Subject Tag
+                            </span>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-slate-900 group-hover:text-purple-600 transition">
+                            New Practice Set Title
+                        </h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            Short 1-2 sentence description of the concept or skill students will practice.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-purple-600">
+                        <span>Start Practice</span>
+                        <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
+                    </div>
+                </a>
+                -->
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 mt-12">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+            <p>&copy; 2026 STEMSimulators.org. Free interactive educational tools for science classrooms.</p>
+            <div class="flex items-center gap-5 font-semibold">
+                <a href="about.html" class="hover:text-slate-900 transition">About</a>
+                <a href="privacy.html" class="hover:text-slate-900 transition">Privacy Policy</a>
+            </div>
+        </div>
+    </footer>
 
 </body>
 </html>
