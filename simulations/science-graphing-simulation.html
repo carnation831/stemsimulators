@@ -5,23 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Science Graphing Simulation | STEM Simulators</title>
 
-    <!-- CHROMEBOOK-ONLY DEVICE LOCK (SILENT BLACK SCREEN ON NON-CHROMEOS) -->
-    <script>
-        (function enforceChromebookOnly() {
-            const ua = navigator.userAgent || "";
-            const platform = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || "";
-            const isChromebook = /\bCrOS\b/i.test(ua) || /Chrome\s*OS/i.test(platform);
-
-            if (!isChromebook) {
-                document.documentElement.style.backgroundColor = "#000000";
-                document.addEventListener("DOMContentLoaded", () => {
-                    document.body.style.cssText = "margin:0;padding:0;background:#000000;min-height:100vh;overflow:hidden;";
-                    document.body.innerHTML = "";
-                });
-            }
-        })();
-    </script>
-
     <!-- GOOGLE ADSENSE SCRIPT -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4365444453795543"
        crossorigin="anonymous"></script>
@@ -32,9 +15,9 @@
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
-                        display: ['-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
-                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', '"Liberation Mono"', 'monospace'],
+                        sans: ['Nunito', '"Segoe UI"', 'Helvetica', 'Arial', 'sans-serif'],
+                        display: ['Nunito', '"Segoe UI"', 'Helvetica', 'Arial', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Consolas', 'monospace'],
                     }
                 }
             }
@@ -42,8 +25,16 @@
     </script>
     <style>
         body {
-            background-color: #F1F5F9;
-            color: #0F172A;
+            background-color: #f4f7fb;
+            color: #142033;
+        }
+        #canvasContainer,
+        #graphCanvas {
+            touch-action: none;
+        }
+        .custom-scrollbar {
+            scrollbar-width: thin;
+            scrollbar-color: #CBD5E1 transparent;
         }
         .graph-paper-bg {
             background-color: #FAF9F6;
@@ -73,6 +64,9 @@
         .animate-pulse-glow {
             animation: pulseGlow 2.6s infinite;
         }
+    </style>
+    <link rel="stylesheet" href="../assets/site.css">
+    <style>
         @media print {
             body * {
                 visibility: hidden;
@@ -93,18 +87,34 @@
 </head>
 <body class="min-h-screen flex flex-col font-sans antialiased selection:bg-teal-100 selection:text-teal-900">
 
-    <!-- Back to Home Navigation Bar -->
-    <div style="width: 100%; box-sizing: border-box; background-color: #ffffff; border-bottom: 1px solid #e2e8f0; padding: 0.75rem 1.5rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; display: flex; justify-content: space-between; align-items: center; z-index: 40;">
-        <a href="https://stemsimulators.org/" style="text-decoration: none; color: #2563eb; font-weight: 600; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 0.4rem;">
-            &larr; Back to Home
-        </a>
-        <a href="https://stemsimulators.org/" style="text-decoration: none; color: #0f172a; font-weight: 800; font-size: 1.05rem; letter-spacing: -0.02em;">
-            STEM<span style="color: #2563eb;">Simulators</span>.org
-        </a>
-    </div>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+        <div class="header-inner">
+            <a href="../index.html" class="logo">
+                <svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true">
+                    <rect width="32" height="32" rx="9" fill="currentColor"/>
+                    <circle cx="16" cy="16" r="3" fill="#fde68a"/>
+                    <ellipse cx="16" cy="16" rx="11" ry="4.6" fill="none" stroke="#fff" stroke-width="1.6"/>
+                    <ellipse cx="16" cy="16" rx="11" ry="4.6" fill="none" stroke="#fff" stroke-width="1.6" transform="rotate(60 16 16)"/>
+                    <ellipse cx="16" cy="16" rx="11" ry="4.6" fill="none" stroke="#fff" stroke-width="1.6" transform="rotate(120 16 16)"/>
+                </svg>
+                <span class="logo-word">STEM<span>Simulators</span>.org</span>
+            </a>
+            <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+                <span class="sr-only">Open menu</span>
+                <span></span><span></span><span></span>
+            </button>
+            <nav id="site-nav" class="site-nav" aria-label="Primary">
+                <a href="../index.html#simulations">Simulations</a>
+                <a href="../index.html#practice">Practice Problems</a>
+                <a href="../about.html">About</a>
+                <a href="../privacy.html">Privacy Policy</a>
+            </nav>
+        </div>
+    </header>
 
     <!-- Top Navigation: Brand, Practice Lab Selector & 5-Phase Stepper -->
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+    <header class="bg-white border-b border-slate-200 shadow-sm">
         <div class="max-w-[1600px] mx-auto px-4 sm:px-6 py-3 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-3">
             
             <!-- Brand -->
@@ -189,7 +199,7 @@
     <!-- ======================================================================== -->
     <!-- STUDENT PRACTICE WORKSPACE                                               -->
     <!-- ======================================================================== -->
-    <main id="studentWorkspace" class="flex-1 max-w-[1600px] w-full mx-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+    <main id="main" class="flex-1 max-w-[1600px] w-full mx-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
 
         <!-- LEFT PANEL (3 cols on lg): Experiment Context & Raw Data Table -->
         <section class="lg:col-span-3 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
@@ -466,7 +476,7 @@
         </section>
 
         <!-- RIGHT PANEL (4 cols on lg): Socratic Science Tutor ("Lab Coach") -->
-        <aside class="lg:col-span-4 bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col h-[640px] lg:h-[calc(100vh-146px)] sticky top-[76px]">
+        <aside class="lg:col-span-4 bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col h-[640px] lg:h-[calc(100vh-7.5rem)] sticky top-20">
             <!-- Tutor Header -->
             <div class="bg-gradient-to-r from-teal-700 to-teal-600 text-white px-4 py-3.5 rounded-t-2xl flex items-center justify-between">
                 <div class="flex items-center gap-2.5">
@@ -586,6 +596,18 @@
         </div>
     </div>
 
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <p>&copy; 2026 STEMSimulators.org. All rights reserved.</p>
+            <nav class="footer-links" aria-label="Footer">
+                <a href="../index.html">Home</a>
+                <a href="../about.html">About</a>
+                <a href="../privacy.html">Privacy Policy</a>
+            </nav>
+        </div>
+    </footer>
+    <script src="../assets/site.js" defer></script>
+
     <script>
         /**
 - ============================================================================
@@ -663,6 +685,9 @@
             hintIndex: 0
         };
 
+        const UI_FONT = '"Nunito", "Segoe UI", Helvetica, Arial, sans-serif';
+        const MONO_FONT = '"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
+
         const PHASE_META = {
             1: { tag: 'Phase 1 of 5', title: 'Identify Variables' },
             2: { tag: 'Phase 2 of 5', title: 'Axis Assignment & Labeling' },
@@ -730,7 +755,19 @@
         window.onload = function () {
             setupCanvasEvents();
             window.addEventListener('resize', renderCanvas);
+            const canvasContainer = document.getElementById('canvasContainer');
+            if (canvasContainer && window.ResizeObserver) {
+                let frame = 0;
+                const observer = new ResizeObserver(() => {
+                    cancelAnimationFrame(frame);
+                    frame = requestAnimationFrame(renderCanvas);
+                });
+                observer.observe(canvasContainer);
+            }
             loadDataset('blooddrop');
+            if (document.fonts && document.fonts.ready) {
+                document.fonts.ready.then(() => renderCanvas());
+            }
         };
 
         document.getElementById('datasetSelect').addEventListener('change', (e) => {
@@ -979,18 +1016,19 @@
         function renderCanvas() {
             const canvas = document.getElementById('graphCanvas');
             const container = document.getElementById('canvasContainer');
-            if (!canvas || !container || container.offsetParent === null) return;
+            if (!canvas || !container) return;
 
             const dpr = window.devicePixelRatio || 1;
-            const rect = container.getBoundingClientRect();
-            canvas.width = rect.width * dpr;
-            canvas.height = rect.height * dpr;
-
-            const ctx = canvas.getContext('2d');
-            ctx.scale(dpr, dpr);
+            const rect = canvas.getBoundingClientRect();
+            if (rect.width < 2 || rect.height < 2) return;
 
             const W = rect.width;
             const H = rect.height;
+            canvas.width = Math.max(1, Math.round(W * dpr));
+            canvas.height = Math.max(1, Math.round(H * dpr));
+
+            const ctx = canvas.getContext('2d');
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
             const plotW = W - MARGIN.left - MARGIN.right;
             const plotH = H - MARGIN.top - MARGIN.bottom;
             const scale = getScaleParams();
@@ -1025,7 +1063,7 @@
             ctx.lineWidth = 1;
             ctx.strokeStyle = 'rgba(100, 116, 139, 0.35)';
             ctx.fillStyle = '#334155';
-            ctx.font = '500 11px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
+            ctx.font = `500 11px ${MONO_FONT}`;
 
             ctx.textAlign = 'center';
             ctx.textBaseline = 'top';
@@ -1070,20 +1108,20 @@
             const yLabelText = document.getElementById('yAxisLabelInput').value.trim() || 'Y-Axis Label (units)';
 
             ctx.fillStyle = titleText === 'Untitled Scientific Graph' ? '#94A3B8' : '#0F172A';
-            ctx.font = '700 13px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+            ctx.font = `700 13px ${UI_FONT}`;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillText(titleText, MARGIN.left + plotW / 2, 24);
 
             ctx.fillStyle = xLabelText.includes('(units)') ? '#94A3B8' : '#0F172A';
-            ctx.font = '600 12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+            ctx.font = `600 12px ${UI_FONT}`;
             ctx.fillText(xLabelText, MARGIN.left + plotW / 2, H - 16);
 
             ctx.save();
             ctx.translate(18, MARGIN.top + plotH / 2);
             ctx.rotate(-Math.PI / 2);
             ctx.fillStyle = yLabelText.includes('(units)') ? '#94A3B8' : '#0F172A';
-            ctx.font = '600 12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+            ctx.font = `600 12px ${UI_FONT}`;
             ctx.fillText(yLabelText, 0, 0);
             ctx.restore();
 
@@ -1167,7 +1205,7 @@
                 ctx.stroke();
 
                 ctx.fillStyle = '#0F172A';
-                ctx.font = '600 10px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
+                ctx.font = `600 10px ${MONO_FONT}`;
                 ctx.textAlign = 'left';
                 ctx.textBaseline = 'bottom';
                 ctx.fillText(`(${pt.x}, ${pt.y})`, px + 8, py - 4);
@@ -1177,17 +1215,22 @@
 
         function setupCanvasEvents() {
             const canvas = document.getElementById('graphCanvas');
+            // Pointer events cover mouse, touch, and pen in current Chrome, Edge, Firefox, and Safari.
+            canvas.style.touchAction = 'none';
 
             function getEventCoords(e) {
                 const rect = canvas.getBoundingClientRect();
-                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
                 return {
-                    px: clientX - rect.left,
-                    py: clientY - rect.top,
+                    px: e.clientX - rect.left,
+                    py: e.clientY - rect.top,
                     width: rect.width,
                     height: rect.height
                 };
+            }
+
+            function inPlot(px, py, width, height) {
+                return px >= MARGIN.left && px <= width - MARGIN.right &&
+                       py >= MARGIN.top && py <= height - MARGIN.bottom;
             }
 
             function findNearbyPoint(px, py, width, height, scale) {
@@ -1200,99 +1243,99 @@
                 return -1;
             }
 
-            canvas.addEventListener('mousemove', (e) => {
-                const { px, py, width, height } = getEventCoords(e);
-                const scale = getScaleParams();
-                const dataCoord = pixelToData(px, py, width, height, scale);
-
-                const inBounds = px >= MARGIN.left && px <= width - MARGIN.right &&
-                                 py >= MARGIN.top && py <= height - MARGIN.bottom;
-
-                if (inBounds) {
-                    appState.hoverPoint = dataCoord;
-                    document.getElementById('cursorReadout').textContent = `Cursor: (${dataCoord.x}, ${dataCoord.y})`;
-                } else {
-                    appState.hoverPoint = null;
-                    document.getElementById('cursorReadout').textContent = `Cursor: ( — , — )`;
-                }
-
-                if (appState.draggingIndex !== -1 && inBounds) {
-                    appState.plottedPoints[appState.draggingIndex] = dataCoord;
-                    invalidatePhase(4);
-                    updatePlottedPointsUI();
-                }
-
-                renderCanvas();
-            });
-
-            canvas.addEventListener('mouseleave', () => {
+            function clearHover() {
                 appState.hoverPoint = null;
-                appState.draggingIndex = -1;
-                document.getElementById('cursorReadout').textContent = `Cursor: ( — , — )`;
-                renderCanvas();
-            });
+                const readout = document.getElementById('cursorReadout');
+                if (readout) readout.textContent = 'Cursor: ( — , — )';
+            }
 
-            canvas.addEventListener('mousedown', (e) => {
+            canvas.addEventListener('pointerdown', (e) => {
+                if (e.button !== undefined && e.button !== 0) return;
                 const { px, py, width, height } = getEventCoords(e);
                 const scale = getScaleParams();
                 const hitIdx = findNearbyPoint(px, py, width, height, scale);
+                const inside = inPlot(px, py, width, height);
 
                 if (hitIdx !== -1) {
                     appState.draggingIndex = hitIdx;
                     appState.dragMoved = false;
-                } else {
-                    if (appState.currentPhase !== 4) {
+                    appState.dragOrigin = { px, py };
+                    if (canvas.setPointerCapture) canvas.setPointerCapture(e.pointerId);
+                    e.preventDefault();
+                    return;
+                }
+
+                if (appState.currentPhase !== 4) {
+                    if (inside) {
                         appendTutorMessage(`You're currently in **Phase ${appState.currentPhase}**. Complete and verify Phases 1–3 first before plotting points!`);
-                        return;
                     }
-                    const inBounds = px >= MARGIN.left && px <= width - MARGIN.right &&
-                                     py >= MARGIN.top && py <= height - MARGIN.bottom;
-                    if (inBounds) {
-                        const dataCoord = pixelToData(px, py, width, height, scale);
-                        appState.plottedPoints.push(dataCoord);
+                    return;
+                }
+
+                if (inside) {
+                    const dataCoord = pixelToData(px, py, width, height, scale);
+                    appState.plottedPoints.push(dataCoord);
+                    invalidatePhase(4);
+                    updatePlottedPointsUI();
+                    renderCanvas();
+                    e.preventDefault();
+                }
+            });
+
+            canvas.addEventListener('pointermove', (e) => {
+                const { px, py, width, height } = getEventCoords(e);
+                const scale = getScaleParams();
+                const dataCoord = pixelToData(px, py, width, height, scale);
+                const inside = inPlot(px, py, width, height);
+
+                if (e.pointerType !== 'touch') {
+                    if (inside) {
+                        appState.hoverPoint = dataCoord;
+                        document.getElementById('cursorReadout').textContent = `Cursor: (${dataCoord.x}, ${dataCoord.y})`;
+                    } else if (appState.draggingIndex === -1) {
+                        clearHover();
+                    }
+                }
+
+                if (appState.draggingIndex !== -1 && inside) {
+                    const origin = appState.dragOrigin || { px, py };
+                    if (Math.hypot(px - origin.px, py - origin.py) > 4) {
+                        appState.dragMoved = true;
+                        appState.plottedPoints[appState.draggingIndex] = dataCoord;
                         invalidatePhase(4);
                         updatePlottedPointsUI();
-                        renderCanvas();
                     }
                 }
+
+                renderCanvas();
             });
 
-            canvas.addEventListener('mousemove', () => {
-                if (appState.draggingIndex !== -1) {
-                    appState.dragMoved = true;
-                }
-            });
-
-            canvas.addEventListener('mouseup', () => {
+            canvas.addEventListener('pointerup', (e) => {
                 if (appState.draggingIndex !== -1 && !appState.dragMoved) {
                     appState.plottedPoints.splice(appState.draggingIndex, 1);
                     invalidatePhase(4);
                     updatePlottedPointsUI();
-                    renderCanvas();
                 }
                 appState.draggingIndex = -1;
+                appState.dragOrigin = null;
+                if (canvas.hasPointerCapture && canvas.hasPointerCapture(e.pointerId)) {
+                    canvas.releasePointerCapture(e.pointerId);
+                }
+                renderCanvas();
             });
 
-            canvas.addEventListener('touchstart', (e) => {
-                if (appState.currentPhase !== 4) return;
-                const { px, py, width, height } = getEventCoords(e);
-                const scale = getScaleParams();
-                const inBounds = px >= MARGIN.left && px <= width - MARGIN.right &&
-                                 py >= MARGIN.top && py <= height - MARGIN.bottom;
-                if (!inBounds) return;
-                e.preventDefault();
-
-                const hitIdx = findNearbyPoint(px, py, width, height, scale);
-                if (hitIdx !== -1) {
-                    appState.plottedPoints.splice(hitIdx, 1);
-                } else {
-                    const dataCoord = pixelToData(px, py, width, height, scale);
-                    appState.plottedPoints.push(dataCoord);
-                }
-                invalidatePhase(4);
-                updatePlottedPointsUI();
+            canvas.addEventListener('pointercancel', () => {
+                appState.draggingIndex = -1;
+                appState.dragOrigin = null;
+                clearHover();
                 renderCanvas();
-            }, { passive: false });
+            });
+
+            canvas.addEventListener('pointerleave', () => {
+                if (appState.draggingIndex !== -1) return;
+                clearHover();
+                renderCanvas();
+            });
         }
 
         function clearPlottedPoints() {
@@ -1790,7 +1833,7 @@
             ctx.stroke();
 
             const phaseNames = ['1. Variables', '2. Axes & Title', '3. Scale', '4. Plot Points', '5. Analysis'];
-            ctx.font = '600 12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+            ctx.font = `600 12px ${UI_FONT}`;
             phaseNames.forEach((label, i) => {
                 const done = appState.completedPhases.has(i + 1);
                 ctx.fillStyle = done ? '#059669' : '#94a3b8';
