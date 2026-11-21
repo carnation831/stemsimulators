@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Types of Reactions - Chemistry Practice</title>
+  <meta name="description" content="Count the reactants and products, then name the reaction type. Three levels, including polyatomic ions and states of matter.">
+
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4365444453795543"
+       crossorigin="anonymous"
+       data-tag-for-age-treatment="1"></script>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Nunito', '"Segoe UI"', 'Helvetica', 'Arial', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'ui-monospace', 'Menlo', 'Consolas', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="../assets/site.css">
+  <style>
+    body {
+      font-family: "Nunito", "Segoe UI", sans-serif;
+      background-color: #f4f7fb;
+      color: #142033;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .font-mono-code { font-family: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace; }
+    .formula-break { overflow-wrap: anywhere; }
+    .fade-in { animation: fadeIn 0.25s ease-out forwards; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .fade-in { animation: none; }
+    }
+    .answer-select.is-right { border-color: #047857; background: #ecfdf5; }
+    .answer-select.is-wrong { border-color: #be123c; background: #fff1f2; }
+    #feedback-header,
+    #cheat-sheet-drawer { scroll-margin-top: 5.5rem; }
+  </style>
+</head>
+<body class="min-h-screen">
+
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="../index.html" class="logo">
+        <svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true">
+          <rect width="32" height="32" rx="9" fill="currentColor"/>
+          <circle cx="16" cy="16" r="3" fill="#fde68a"/>
+          <ellipse cx="16" cy="16" rx="11" ry="4.6" fill="none" stroke="#fff" stroke-width="1.6"/>
+          <ellipse cx="16" cy="16" rx="11" ry="4.6" fill="none" stroke="#fff" stroke-width="1.6" transform="rotate(60 16 16)"/>
+          <ellipse cx="16" cy="16" rx="11" ry="4.6" fill="none" stroke="#fff" stroke-width="1.6" transform="rotate(120 16 16)"/>
+        </svg>
+        <span class="logo-word">STEM<span>Simulators</span>.org</span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+        <span class="sr-only">Open menu</span>
+        <span></span><span></span><span></span>
+      </button>
+      <nav id="site-nav" class="site-nav" aria-label="Primary">
+        <a href="../index.html#simulations">Simulations</a>
+        <a href="../index.html#practice">Practice Problems</a>
+        <a href="../about.html">About</a>
+        <a href="../privacy.html">Privacy Policy</a>
+      </nav>
+    </div>
+  </header>
+
+  <div id="main" class="tool-page">
+  <div id="app-shell" class="w-full bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
+
+    <header class="bg-slate-900 text-white px-4 py-3.5 sm:px-6 flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2.5">
+        <span class="text-2xl" role="img" aria-label="Chemistry flask">⚗️</span>
+        <div>
+          <h1 class="font-extrabold text-base sm:text-lg leading-tight tracking-tight">Types of Reactions</h1>
+          <p class="text-xs text-slate-300 hidden sm:block">Count each side, then name the type.</p>
+        </div>
+      </div>
+      <button id="toggle-cheatsheet-btn" type="button" class="min-h-11 bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs sm:text-sm font-bold px-3.5 py-2 rounded-xl border border-slate-700" aria-expanded="false" aria-controls="cheat-sheet-drawer">
+        Reference Guide
+      </button>
+    </header>
+
+    <div id="cheat-sheet-drawer" class="hidden bg-amber-50 border-b border-amber-200 px-4 py-4 sm:px-6 max-h-[70vh] overflow-y-auto">
+      <div class="flex items-center justify-between mb-2 gap-2">
+        <h2 class="font-bold text-amber-950 text-sm">Counting and the five types</h2>
+        <button id="close-cheatsheet-btn" type="button" class="text-amber-900 text-xs font-bold px-2.5 py-1 rounded-lg bg-amber-100 min-h-11">Close</button>
+      </div>
+      <div class="bg-white p-3 rounded-xl border border-amber-200 text-sm text-slate-800 mb-2.5">
+        <p class="font-bold text-slate-900 mb-1">How to count</p>
+        <p>Count each formula once. The big number in front is a coefficient. It does not add a substance. <span class="font-mono-code">2H₂ + O₂</span> is <strong>2 reactants</strong>. <span class="font-mono-code">3CO₂ + 4H₂O</span> is <strong>2 products</strong>. A count of 2 and 2 can be single replacement, double replacement, or combustion, so look at the substances too.</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-sm text-slate-800">
+        <div class="bg-white p-3 rounded-xl border border-amber-200">
+          <p class="font-bold text-blue-800 mb-1">Five patterns</p>
+          <ul class="list-disc pl-4 space-y-1">
+            <li><strong>Synthesis:</strong> substances combine into one product. Usually 2 reactants and 1 product.</li>
+            <li><strong>Decomposition:</strong> one reactant breaks into 2 or more products.</li>
+            <li><strong>Single replacement:</strong> one element takes the place of another element.</li>
+            <li><strong>Double replacement:</strong> two compounds swap partners.</li>
+            <li><strong>Combustion:</strong> a carbon compound burns in O₂ and makes CO₂ and H₂O.</li>
+          </ul>
+        </div>
+        <div class="bg-white p-3 rounded-xl border border-amber-200">
+          <p class="font-bold text-blue-800 mb-1">Level 3 product states</p>
+          <ul class="list-disc pl-4 space-y-1">
+            <li><strong>(s)</strong> solid metals, ionic solids with no water, and precipitates such as BaSO₄, CaSO₄, and Al(OH)₃.</li>
+            <li><strong>(l)</strong> water in this course, and elemental bromine, Br₂.</li>
+            <li><strong>(g)</strong> CO₂, NH₃, and the diatomic gases H₂, N₂, O₂, F₂, and Cl₂.</li>
+            <li><strong>(aq)</strong> dissolved Group 1 salts, nitrates, soluble sulfates, and acids in water such as H₃PO₄.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="mt-2.5 bg-white p-3 rounded-xl border border-amber-200 text-sm text-slate-800">
+        <p>Hydrogen plus oxygen making only water is <strong>synthesis</strong> on this site, not combustion. Level 1 has no polyatomic ions. Levels 2 and 3 include ions such as nitrate, sulfate, hydroxide, carbonate, phosphate, ammonium, chlorate, and hydrogen carbonate.</p>
+      </div>
+    </div>
+
+    <div id="toast-banner" role="status" class="hidden mx-4 mt-4 sm:mx-6 px-4 py-3 rounded-xl text-sm font-bold flex items-center justify-between gap-3 border">
+      <span id="toast-message"></span>
+      <button id="toast-close" type="button" class="font-bold min-h-11 px-2" aria-label="Dismiss message">✕</button>
+    </div>
+
+    <main id="screen-checkin" class="p-5 sm:p-8">
+      <div class="max-w-3xl mx-auto">
+        <div class="text-center mb-5">
+          <h2 class="text-2xl font-extrabold text-slate-900">Types of Reactions</h2>
+          <p class="text-sm text-slate-700 mt-1">Count the reactants and the products, then name the type. Enter your <strong>first name</strong>, <strong>last initial</strong>, and <strong>class period</strong> to make a score card.</p>
+        </div>
+
+        <div class="bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-3 text-sm text-slate-800 mb-5">
+          <p class="font-bold text-slate-900 mb-1">How an answer works</p>
+          <p class="mb-1">Count each substance once. Ignore coefficients. In <span class="font-mono-code">2H₂ + O₂ → 2H₂O</span> there are <strong>2 reactants</strong> and <strong>1 product</strong>.</p>
+          <p class="mb-1">Then choose synthesis, decomposition, single replacement, double replacement, or combustion.</p>
+          <p>Level 3 also asks for the state of each product. Those states are left off the equation. Choose (s), (l), (g), or (aq).</p>
+        </div>
+
+        <form id="checkin-form" class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+            <div class="sm:col-span-6">
+              <label for="first-name-input" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">First Name</label>
+              <input type="text" id="first-name-input" placeholder="e.g., Maya" maxlength="20" autocomplete="given-name" class="w-full px-3.5 py-3 text-base rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div class="sm:col-span-3">
+              <label for="last-initial-input" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Last Initial</label>
+              <input type="text" id="last-initial-input" placeholder="L" maxlength="1" autocomplete="off" class="w-full text-center uppercase font-bold px-3 py-3 text-base rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div class="sm:col-span-3">
+              <label for="period-input" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Period #</label>
+              <input type="text" inputmode="numeric" id="period-input" placeholder="3" maxlength="2" autocomplete="off" class="w-full text-center font-bold px-3 py-3 text-base rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+          </div>
+
+          <div id="privacy-preview" class="bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-700 min-h-11 flex items-center justify-between gap-2 flex-wrap">
+            <span>Full last names are never collected or printed on your score image.</span>
+          </div>
+
+          <div>
+            <p id="level-picker-label" class="text-sm font-bold text-slate-800 mb-2">Choose a level</p>
+            <div id="level-picker" role="group" aria-labelledby="level-picker-label" class="grid grid-cols-1 md:grid-cols-3 gap-3"></div>
+          </div>
+
+          <button id="start-quiz-btn" type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-6 rounded-xl shadow-md text-base min-h-11">
+            <span id="start-btn-label">Start Level 1 (15 Questions)</span>
+          </button>
+        </form>
+        <p class="text-center text-sm text-slate-700 mt-4">The other half of the old quiz is <a class="font-bold text-blue-800 underline" href="ionic-covalent.html">Ionic vs Covalent</a>.</p>
+      </div>
+    </main>
+
+    <main id="screen-quiz" class="hidden p-4 sm:p-7 max-w-2xl mx-auto">
+      <h2 id="question-heading" class="sr-only">Question</h2>
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+        <div class="flex flex-wrap items-center gap-1.5">
+          <span id="quiz-student-badge" class="bg-slate-100 text-slate-800 font-bold text-xs sm:text-sm px-2.5 py-1.5 rounded-xl border border-slate-200"></span>
+          <span id="quiz-level-badge" class="bg-indigo-100 text-indigo-900 font-bold text-xs px-2.5 py-1.5 rounded-xl">Level 1</span>
+          <span id="quiz-score-badge" class="bg-emerald-50 text-emerald-800 font-bold text-xs sm:text-sm px-2.5 py-1.5 rounded-xl border border-emerald-200">0 correct</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span id="quiz-progress-badge" class="bg-blue-100 text-blue-900 font-bold text-xs sm:text-sm px-3 py-1.5 rounded-xl">Question 1 of 15</span>
+          <button id="exit-quiz-btn" type="button" class="text-xs font-bold text-slate-700 hover:text-rose-700 px-2.5 py-1.5 rounded-xl border border-slate-300 min-h-11">Exit</button>
+        </div>
+      </div>
+
+      <div id="quiz-progress" class="w-full bg-slate-200 h-2 rounded-full overflow-hidden mb-5" role="progressbar" aria-valuemin="1" aria-valuemax="15" aria-valuenow="1" aria-label="Quiz progress">
+        <div id="quiz-progress-bar" class="bg-blue-600 h-full" style="width: 6%"></div>
+      </div>
+
+      <div class="bg-slate-900 text-white rounded-2xl p-5 sm:p-6 text-center mb-4">
+        <span class="text-[11px] uppercase tracking-widest text-slate-300 font-bold block mb-1">Reaction</span>
+        <p id="equation-display" class="formula-break text-lg sm:text-2xl font-mono-code font-bold"></p>
+      </div>
+
+      <p id="quiz-reminder" class="text-sm text-slate-700 mb-4"></p>
+
+      <form id="answer-form" class="space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label for="reactant-count" class="block text-sm font-extrabold text-slate-900 mb-1.5">Step 1. How many reactants?</label>
+            <select id="reactant-count" class="answer-select w-full bg-white border-2 border-slate-300 text-slate-900 font-bold rounded-xl px-3 py-3 min-h-11"></select>
+            <p id="reactant-note" class="mt-1.5 text-sm font-bold"></p>
+          </div>
+          <div>
+            <label for="product-count" class="block text-sm font-extrabold text-slate-900 mb-1.5">Step 2. How many products?</label>
+            <select id="product-count" class="answer-select w-full bg-white border-2 border-slate-300 text-slate-900 font-bold rounded-xl px-3 py-3 min-h-11"></select>
+            <p id="product-note" class="mt-1.5 text-sm font-bold"></p>
+          </div>
+        </div>
+
+        <div>
+          <label for="reaction-type" class="block text-sm font-extrabold text-slate-900 mb-1.5">Step 3. What type of reaction is it?</label>
+          <select id="reaction-type" class="answer-select w-full bg-white border-2 border-slate-300 text-slate-900 font-bold rounded-xl px-3 py-3 min-h-11"></select>
+          <p id="type-note" class="mt-1.5 text-sm font-bold"></p>
+        </div>
+
+        <div id="states-section" class="hidden bg-indigo-50 border border-indigo-200 rounded-2xl p-4">
+          <div class="flex items-center justify-between gap-2 mb-1">
+            <h3 class="text-sm sm:text-base font-extrabold text-indigo-950">Step 4. State of each product</h3>
+            <button id="open-states-guide" type="button" class="text-xs font-bold text-indigo-800 underline min-h-11">State rules</button>
+          </div>
+          <p class="text-sm text-slate-700 mb-3">The equation leaves these off. Choose solid (s), liquid (l), gas (g), or aqueous (aq).</p>
+          <div id="states-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+        </div>
+
+        <button id="check-answer-btn" type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-6 rounded-xl text-base min-h-11">Check My Answer</button>
+      </form>
+
+      <button id="next-question-btn" type="button" class="hidden mt-2.5 w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-3.5 px-6 rounded-xl text-base min-h-11">Next Question</button>
+
+      <div id="feedback-container" role="status" aria-live="polite" class="hidden mt-5 rounded-2xl border overflow-hidden">
+        <div id="feedback-header" tabindex="-1" class="px-4 py-3.5 font-bold text-sm sm:text-base"></div>
+        <div id="feedback-body" class="px-4 py-4 bg-white text-sm text-slate-800 space-y-2"></div>
+      </div>
+    </main>
+
+    <main id="screen-summary" class="hidden p-5 sm:p-8 max-w-xl mx-auto">
+      <div class="text-center mb-5">
+        <h2 class="text-2xl font-extrabold text-slate-900" id="summary-heading">Level complete</h2>
+        <p id="summary-student-name" class="text-base font-bold text-slate-800 mt-1"></p>
+        <p id="summary-sync-confirmation" class="text-xs font-bold text-indigo-800 mt-1"></p>
+      </div>
+
+      <div class="bg-indigo-50 border-2 border-indigo-300 rounded-2xl p-4 sm:p-5 mb-5">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+          <span class="inline-block text-[11px] font-extrabold uppercase tracking-wider bg-indigo-700 text-white px-2.5 py-0.5 rounded-full">Turn in your score image</span>
+          <span id="summary-filename-badge" class="font-mono-code text-xs font-bold bg-white text-indigo-950 border border-indigo-200 px-2.5 py-1 rounded-lg formula-break"></span>
+        </div>
+        <p class="text-xs text-slate-700 mb-3">The file name includes this practice and the level. Download the image and turn it in the way your teacher asked.</p>
+        <div class="mb-3 rounded-xl overflow-hidden border border-indigo-200 bg-white">
+          <img id="score-card-preview-img" alt="Score card preview" class="w-full h-auto block">
+        </div>
+        <button id="download-score-btn" type="button" class="w-full bg-indigo-700 hover:bg-indigo-800 text-white font-bold py-3.5 px-5 rounded-xl text-sm sm:text-base min-h-11">Download Score Image</button>
+      </div>
+
+      <div class="grid grid-cols-3 gap-3 mb-5 text-center">
+        <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-3.5">
+          <span class="block text-2xl sm:text-3xl font-extrabold text-emerald-800" id="summary-right">0</span>
+          <span class="text-xs font-bold text-emerald-900 uppercase">Right</span>
+        </div>
+        <div class="bg-rose-50 border border-rose-200 rounded-2xl p-3.5">
+          <span class="block text-2xl sm:text-3xl font-extrabold text-rose-800" id="summary-wrong">0</span>
+          <span class="text-xs font-bold text-rose-900 uppercase">Wrong</span>
+        </div>
+        <div class="bg-blue-50 border border-blue-200 rounded-2xl p-3.5">
+          <span class="block text-2xl sm:text-3xl font-extrabold text-blue-800" id="summary-percent">0%</span>
+          <span class="text-xs font-bold text-blue-900 uppercase">Score</span>
+        </div>
+      </div>
+
+      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 mb-5">
+        <p class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Skills missed</p>
+        <p id="summary-missed-topics" class="text-sm text-slate-900 font-bold"></p>
+      </div>
+
+      <div class="space-y-2.5">
+        <button id="continue-level-btn" type="button" class="hidden w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-3.5 px-4 rounded-xl text-sm sm:text-base min-h-11">Continue</button>
+        <button id="another-level-btn" type="button" class="w-full bg-slate-200 hover:bg-slate-300 text-slate-900 font-bold py-3 px-4 rounded-xl text-sm min-h-11">Choose a Different Level</button>
+        <button id="finish-btn" type="button" class="w-full bg-white border border-slate-300 hover:bg-slate-50 text-slate-800 font-bold py-3 px-4 rounded-xl text-sm min-h-11">Finish and Return to Start</button>
+      </div>
+    </main>
+
+  </div>
+  </div>
+
+  <div class="ad-banner-wrapper">
+    <span class="ad-label">Advertisement</span>
+    <div class="ad-banner-slot">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-4365444453795543"
+           data-ad-slot="4468511317"
+           data-ad-format="auto"
+           data-full-width-responsive="true"
+           data-tag-for-age-treatment="1"></ins>
+      <script>
+           (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>&copy; 2026 STEMSimulators.org. All rights reserved.</p>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="../index.html">Home</a>
+        <a href="../about.html">About</a>
+        <a href="../privacy.html">Privacy Policy</a>
+      </nav>
+    </div>
+  </footer>
+  <script src="../assets/site.js" defer></script>
+  <canvas id="score-export-canvas" width="760" height="410" class="hidden" aria-hidden="true"></canvas>
+  <script src="../assets/reaction-types.js"></script>
+  <script>
+    (function () {
+      var SESSION_KEY = "reaction_types_quiz_v1";
+      var PAGE_TITLE = "Types of Reactions — Score Card";
+      var CODE_PREFIX = "TYP";
+      var SELECTED = "text-left p-3.5 rounded-xl border-2 border-blue-600 bg-blue-50";
+      var IDLE = "text-left p-3.5 rounded-xl border-2 border-slate-200 bg-slate-50 hover:bg-slate-100";
+      var TYPE_LABELS = {
+        "Synthesis": "Synthesis (combination)",
+        "Decomposition": "Decomposition",
+        "Single Replacement": "Single replacement",
+        "Double Replacement": "Double replacement",
+        "Combustion": "Combustion"
+      };
+      var REMINDERS = {
+        1: "Count each formula once. A coefficient, the big number in front, does not add a substance. 2H₂ + O₂ is 2 reactants.",
+        2: "Polyatomic ions stay inside one formula. Nitrate, sulfate, and hydroxide do not change the count. A count of 2 and 2 still needs the pattern.",
+        3: "Count the same way. Reactant states are already printed. Choose the missing state of each product. In this course water is (l) and bromine is (l)."
+      };
+
+      var studentFirstName = "";
+      var studentLastInitial = "";
+      var studentPeriod = "";
+      var studentDisplayId = "";
+      var selectedLevelId = "level1";
+      var activeQuestions = [];
+      var currentDeckOrder = [];
+      var currentQuestionIndex = 0;
+      var rightCount = 0;
+      var wrongCount = 0;
+      var missedTopicCounts = {};
+      var awaitingAdvance = false;
+      var completionReceiptCode = "";
+      var completedTimestamp = "";
+      var latestJpegDataUrl = "";
+      var latestJpegFilename = "";
+      var inputLocked = false;
+      var toastTimer = 0;
+
+      function $(id) { return document.getElementById(id); }
+
+      function levelById(id) {
+        return ReactionTypes.LEVELS.filter(function (level) { return level.id === id; })[0] || ReactionTypes.LEVELS[0];
+      }
+
+      function currentLevel() { return levelById(selectedLevelId); }
+
+      function prefersReducedMotion() {
+        return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      }
+
+      function scrollTop() {
+        window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? "auto" : "smooth" });
+      }
+
+      function appendPretty(parent, plain) {
+        var text = String(plain);
+        var re = /([A-Za-z)])(\d+)/g;
+        var last = 0;
+        var match;
+        while ((match = re.exec(text))) {
+          if (match.index > last) parent.appendChild(document.createTextNode(text.slice(last, match.index)));
+          parent.appendChild(document.createTextNode(match[1]));
+          var sub = document.createElement("sub");
+          sub.textContent = match[2];
+          parent.appendChild(sub);
+          last = match.index + match[0].length;
+        }
+        if (last < text.length) parent.appendChild(document.createTextNode(text.slice(last)));
+      }
+
+      function fillFormula(node, plain) {
+        node.replaceChildren();
+        appendPretty(node, plain);
+      }
+
+      function showToast(msg, type) {
+        var banner = $("toast-banner");
+        banner.classList.remove("hidden", "bg-rose-100", "text-rose-900", "border-rose-300", "bg-emerald-100", "text-emerald-900", "border-emerald-300", "bg-blue-100", "text-blue-900", "border-blue-300");
+        if (type === "error") banner.classList.add("bg-rose-100", "text-rose-900", "border-rose-300");
+        else if (type === "success") banner.classList.add("bg-emerald-100", "text-emerald-900", "border-emerald-300");
+        else banner.classList.add("bg-blue-100", "text-blue-900", "border-blue-300");
+        $("toast-message").textContent = msg;
+        window.clearTimeout(toastTimer);
+        toastTimer = window.setTimeout(hideToast, 4500);
+      }
+
+      function hideToast() { $("toast-banner").classList.add("hidden"); }
+
+      function cleanFirstName(raw) {
+        var lettersOnly = String(raw || "").trim().replace(/[^a-zA-Z\-']/g, "");
+        if (!lettersOnly) return "";
+        return lettersOnly.charAt(0).toUpperCase() + lettersOnly.slice(1).toLowerCase();
+      }
+
+      function updateCheckinPreview() {
+        var fn = cleanFirstName($("first-name-input").value);
+        var li = $("last-initial-input").value.trim().toUpperCase().replace(/[^A-Z]/g, "").slice(0, 1);
+        var pd = $("period-input").value.trim().replace(/[^0-9]/g, "");
+        var preview = $("privacy-preview");
+        preview.replaceChildren();
+        if (fn && li && pd) {
+          var left = document.createElement("span");
+          left.textContent = "Card ID: " + fn + " " + li + ". (Pd " + pd + ")";
+          var right = document.createElement("span");
+          right.className = "font-mono-code text-[11px] text-indigo-800 font-bold formula-break";
+          right.textContent = fn.toLowerCase() + "." + li.toLowerCase() + "." + pd + "." + currentLevel().fileSlug + ".[score].jpg";
+          preview.appendChild(left);
+          preview.appendChild(right);
+        } else {
+          preview.textContent = "Full last names are never collected or printed on your score image.";
+        }
+      }
+
+      function renderLevelPicker() {
+        var box = $("level-picker");
+        box.replaceChildren();
+        ReactionTypes.LEVELS.forEach(function (level) {
+          var btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = level.id === selectedLevelId ? SELECTED : IDLE;
+          btn.setAttribute("aria-pressed", level.id === selectedLevelId ? "true" : "false");
+          var title = document.createElement("span");
+          title.className = "block font-extrabold text-sm text-slate-900 mb-1";
+          title.textContent = level.name;
+          var copy = document.createElement("span");
+          copy.className = "block text-xs text-slate-700";
+          copy.textContent = level.blurb;
+          btn.appendChild(title);
+          btn.appendChild(copy);
+          btn.addEventListener("click", function () { selectLevel(level.id); });
+          box.appendChild(btn);
+        });
+      }
+
+      function selectLevel(id) {
+        selectedLevelId = levelById(id).id;
+        renderLevelPicker();
+        var level = currentLevel();
+        $("start-btn-label").textContent = "Start " + level.shortName + " (" + level.questions.length + " Questions)";
+        updateCheckinPreview();
+      }
+
+      function switchScreen(screenId) {
+        ["screen-checkin", "screen-quiz", "screen-summary"].forEach(function (id) {
+          $(id).classList.add("hidden");
+        });
+        $(screenId).classList.remove("hidden");
+        scrollTop();
+      }
+
+      function shuffle(length) {
+        var indices = [];
+        for (var i = 0; i < length; i++) indices.push(i);
+        for (var j = indices.length - 1; j > 0; j--) {
+          var k = Math.floor(Math.random() * (j + 1));
+          var swap = indices[j];
+          indices[j] = indices[k];
+          indices[k] = swap;
+        }
+        return indices;
+      }
+
+      function saveSession(isCompleted) {
+        if (!studentFirstName || !currentDeckOrder.length) return;
+        try {
+          sessionStorage.setItem(SESSION_KEY, JSON.stringify({
+            studentFirstName: studentFirstName,
+            studentLastInitial: studentLastInitial,
+            studentPeriod: studentPeriod,
+            selectedLevelId: selectedLevelId,
+            deckOrder: currentDeckOrder,
+            currentQuestionIndex: currentQuestionIndex,
+            rightCount: rightCount,
+            wrongCount: wrongCount,
+            missedTopicCounts: missedTopicCounts,
+            awaitingAdvance: awaitingAdvance,
+            completionReceiptCode: completionReceiptCode,
+            completedTimestamp: completedTimestamp,
+            isCompleted: !!isCompleted
+          }));
+        } catch (err) {}
+      }
+
+      function clearSession() {
+        try { sessionStorage.removeItem(SESSION_KEY); } catch (err) {}
+      }
+
+      function loadDeck() {
+        var level = currentLevel();
+        activeQuestions = currentDeckOrder.map(function (idx) { return level.questions[idx]; }).filter(Boolean);
+      }
+
+      function fillCountSelect(select) {
+        select.replaceChildren();
+        var blank = document.createElement("option");
+        blank.value = "";
+        blank.textContent = "Choose";
+        select.appendChild(blank);
+        for (var n = 1; n <= 4; n++) {
+          var opt = document.createElement("option");
+          opt.value = String(n);
+          opt.textContent = String(n);
+          select.appendChild(opt);
+        }
+        select.value = "";
+        select.disabled = false;
+        select.classList.remove("is-right", "is-wrong");
+      }
+
+      function fillTypeSelect() {
+        var select = $("reaction-type");
+        select.replaceChildren();
+        var blank = document.createElement("option");
+        blank.value = "";
+        blank.textContent = "Choose a type";
+        select.appendChild(blank);
+        ReactionTypes.TYPES.forEach(function (type) {
+          var opt = document.createElement("option");
+          opt.value = type;
+          opt.textContent = TYPE_LABELS[type] || type;
+          select.appendChild(opt);
+        });
+        select.value = "";
+        select.disabled = false;
+        select.classList.remove("is-right", "is-wrong");
+      }
+
+      function setNote(id, ok, text) {
+        var note = $(id);
+        note.className = "mt-1.5 text-sm font-bold " + (text ? (ok ? "text-emerald-800" : "text-rose-800") : "");
+        note.textContent = text;
+      }
+
+      function renderQuestion() {
+        var q = activeQuestions[currentQuestionIndex];
+        var level = currentLevel();
+        var total = activeQuestions.length;
+        inputLocked = false;
+        awaitingAdvance = false;
+        $("question-heading").textContent = "Question " + (currentQuestionIndex + 1) + " of " + total;
+        $("quiz-student-badge").textContent = studentDisplayId + " · Pd " + studentPeriod;
+        $("quiz-level-badge").textContent = level.name;
+        $("quiz-score-badge").textContent = rightCount + " correct";
+        $("quiz-progress-badge").textContent = "Question " + (currentQuestionIndex + 1) + " of " + total;
+        $("quiz-progress").setAttribute("aria-valuemax", String(total));
+        $("quiz-progress").setAttribute("aria-valuenow", String(currentQuestionIndex + 1));
+        $("quiz-progress-bar").style.width = (((currentQuestionIndex + 1) / total) * 100) + "%";
+        fillFormula($("equation-display"), q.equation);
+        $("quiz-reminder").textContent = REMINDERS[level.number];
+        fillCountSelect($("reactant-count"));
+        fillCountSelect($("product-count"));
+        fillTypeSelect();
+        setNote("reactant-note", true, "");
+        setNote("product-note", true, "");
+        setNote("type-note", true, "");
+
+        var statesSection = $("states-section");
+        var statesBox = $("states-container");
+        statesBox.replaceChildren();
+        if (level.number === 3 && q.states) {
+          statesSection.classList.remove("hidden");
+          q.states.forEach(function (item, index) {
+            var wrap = document.createElement("div");
+            wrap.className = "bg-white border border-indigo-200 rounded-xl p-3";
+            var label = document.createElement("label");
+            label.htmlFor = "product-state-" + index;
+            label.className = "block font-mono-code font-bold text-lg text-slate-900 mb-2";
+            fillFormula(label, item.formula);
+            var select = document.createElement("select");
+            select.id = "product-state-" + index;
+            select.className = "answer-select state-select w-full bg-white border-2 border-slate-300 text-slate-900 font-bold rounded-xl px-3 py-3 min-h-11";
+            var blank = document.createElement("option");
+            blank.value = "";
+            blank.textContent = "Choose a state";
+            select.appendChild(blank);
+            ReactionTypes.STATE_OPTIONS.forEach(function (opt) {
+              var option = document.createElement("option");
+              option.value = opt.value;
+              option.textContent = opt.label;
+              select.appendChild(option);
+            });
+            var note = document.createElement("p");
+            note.className = "state-note mt-1.5 text-sm font-bold";
+            wrap.appendChild(label);
+            wrap.appendChild(select);
+            wrap.appendChild(note);
+            statesBox.appendChild(wrap);
+          });
+        } else {
+          statesSection.classList.add("hidden");
+        }
+
+        $("check-answer-btn").classList.remove("hidden");
+        $("check-answer-btn").disabled = false;
+        $("next-question-btn").classList.add("hidden");
+        $("feedback-container").classList.add("hidden");
+        $("feedback-body").replaceChildren();
+      }
+
+      function addFeedbackLine(label, text) {
+        var p = document.createElement("p");
+        var strong = document.createElement("span");
+        strong.className = "font-bold";
+        strong.textContent = label + " ";
+        p.appendChild(strong);
+        p.appendChild(document.createTextNode(text));
+        $("feedback-body").appendChild(p);
+      }
+
+      function markSelect(select, ok) {
+        select.disabled = true;
+        select.classList.add(ok ? "is-right" : "is-wrong");
+      }
+
+      function submitAnswer(event) {
+        event.preventDefault();
+        if (inputLocked) return;
+        var q = activeQuestions[currentQuestionIndex];
+        var reactants = $("reactant-count").value;
+        var products = $("product-count").value;
+        var type = $("reaction-type").value;
+        if (!reactants) {
+          showToast("Choose the number of reactants.", "error");
+          $("reactant-count").focus();
+          return;
+        }
+        if (!products) {
+          showToast("Choose the number of products.", "error");
+          $("product-count").focus();
+          return;
+        }
+        if (!type) {
+          showToast("Choose the type of reaction.", "error");
+          $("reaction-type").focus();
+          return;
+        }
+        var statePicks = [];
+        if (q.states) {
+          for (var i = 0; i < q.states.length; i++) {
+            var sel = $("product-state-" + i);
+            if (!sel.value) {
+              showToast("Choose a state for " + q.states[i].formula + ".", "error");
+              sel.focus();
+              return;
+            }
+            statePicks.push(sel.value);
+          }
+        }
+
+        var reactantsOk = reactants === String(q.reactants);
+        var productsOk = products === String(q.products);
+        var typeOk = type === q.type;
+        var statesOk = true;
+        if (q.states) {
+          q.states.forEach(function (item, index) {
+            if (statePicks[index] !== item.state) statesOk = false;
+          });
+        }
+        var allOk = reactantsOk && productsOk && typeOk && statesOk;
+        inputLocked = true;
+        awaitingAdvance = true;
+
+        markSelect($("reactant-count"), reactantsOk);
+        markSelect($("product-count"), productsOk);
+        markSelect($("reaction-type"), typeOk);
+        setNote("reactant-note", reactantsOk, reactantsOk ? "Correct. " + q.reactants + "." : "You chose " + reactants + ". Correct answer: " + q.reactants + ".");
+        setNote("product-note", productsOk, productsOk ? "Correct. " + q.products + "." : "You chose " + products + ". Correct answer: " + q.products + ".");
+        setNote("type-note", typeOk, typeOk ? "Correct. " + q.type + "." : "You chose " + type + ". Correct answer: " + q.type + ".");
+        if (q.states) {
+          q.states.forEach(function (item, index) {
+            var sel = $("product-state-" + index);
+            var ok = statePicks[index] === item.state;
+            markSelect(sel, ok);
+            var note = sel.parentNode.querySelector(".state-note");
+            note.className = "state-note mt-1.5 text-sm font-bold " + (ok ? "text-emerald-800" : "text-rose-800");
+            note.textContent = ok ? "Correct. " + item.state + "." : "You chose " + statePicks[index] + ". Correct answer: " + item.state + ".";
+          });
+        }
+
+        if (allOk) rightCount++;
+        else {
+          wrongCount++;
+          if (!reactantsOk) missedTopicCounts["Reactant count"] = (missedTopicCounts["Reactant count"] || 0) + 1;
+          if (!productsOk) missedTopicCounts["Product count"] = (missedTopicCounts["Product count"] || 0) + 1;
+          if (!typeOk) missedTopicCounts[q.type] = (missedTopicCounts[q.type] || 0) + 1;
+          if (!statesOk) missedTopicCounts["States of matter"] = (missedTopicCounts["States of matter"] || 0) + 1;
+        }
+        $("quiz-score-badge").textContent = rightCount + " correct";
+        $("check-answer-btn").classList.add("hidden");
+        var nextBtn = $("next-question-btn");
+        nextBtn.classList.remove("hidden");
+        nextBtn.textContent = currentQuestionIndex === activeQuestions.length - 1 ? "View and Download Score Image" : "Next Question";
+
+        var box = $("feedback-container");
+        var header = $("feedback-header");
+        box.classList.remove("hidden", "border-emerald-300", "border-rose-300");
+        header.classList.remove("bg-emerald-100", "text-emerald-950", "bg-rose-100", "text-rose-950");
+        header.replaceChildren();
+        if (allOk) {
+          box.classList.add("border-emerald-300");
+          header.classList.add("bg-emerald-100", "text-emerald-950");
+          header.textContent = q.states ? "Spot on. The count, the type, and every product state are correct." : "Spot on. The count and the reaction type are correct.";
+        } else {
+          box.classList.add("border-rose-300");
+          header.classList.add("bg-rose-100", "text-rose-950");
+          header.textContent = "Not quite. Compare each part with the answer below.";
+        }
+        var body = $("feedback-body");
+        body.replaceChildren();
+        addFeedbackLine("Reactants:", String(q.reactants) + ".");
+        addFeedbackLine("Products:", String(q.products) + ".");
+        addFeedbackLine("Type:", q.type + ".");
+        if (q.states) {
+          q.states.forEach(function (item) {
+            addFeedbackLine(item.formula + ":", item.state + ". " + item.reason);
+          });
+        }
+        var why = document.createElement("p");
+        why.textContent = q.explanation;
+        body.appendChild(why);
+        saveSession(currentQuestionIndex === activeQuestions.length - 1);
+        header.focus();
+      }
+
+      function nextQuestion() {
+        awaitingAdvance = false;
+        currentQuestionIndex++;
+        if (currentQuestionIndex < activeQuestions.length) {
+          saveSession(false);
+          renderQuestion();
+          scrollTop();
+        } else {
+          completeQuiz();
+        }
+      }
+
+      function generateCode(displayId, period, levelId, right, total) {
+        var seed = displayId + "|P" + period + "|" + levelId + "|" + right + "/" + total + "|" + Date.now();
+        var hash = 0;
+        for (var i = 0; i < seed.length; i++) {
+          hash = ((hash << 5) - hash) + seed.charCodeAt(i);
+          hash |= 0;
+        }
+        return CODE_PREFIX + "-" + Math.abs(hash).toString(16).toUpperCase().padStart(6, "0").slice(0, 6);
+      }
+
+      function roundRect(ctx, x, y, w, h, r) {
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.arcTo(x + w, y, x + w, y + h, r);
+        ctx.arcTo(x + w, y + h, x, y + h, r);
+        ctx.arcTo(x, y + h, x, y, r);
+        ctx.arcTo(x, y, x + w, y, r);
+        ctx.closePath();
+      }
+
+      function renderScoreCard(pct, total, missedString) {
+        function draw() {
+          var canvas = $("score-export-canvas");
+          var ctx = canvas.getContext("2d");
+          var W = canvas.width;
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(0, 0, W, canvas.height);
+          ctx.strokeStyle = "#cbd5e1";
+          ctx.lineWidth = 3;
+          roundRect(ctx, 8, 8, W - 16, canvas.height - 16, 18);
+          ctx.stroke();
+          ctx.fillStyle = "#0f172a";
+          roundRect(ctx, 8, 8, W - 16, 86, 18);
+          ctx.fill();
+          ctx.fillRect(8, 72, W - 16, 22);
+          ctx.fillStyle = "#ffffff";
+          ctx.font = "800 22px Nunito, sans-serif";
+          if (ctx.measureText(PAGE_TITLE).width > 500) ctx.font = "800 18px Nunito, sans-serif";
+          ctx.fillText(PAGE_TITLE, 32, 48);
+          ctx.fillStyle = "#cbd5e1";
+          ctx.font = "700 15px Nunito, sans-serif";
+          ctx.fillText(currentLevel().name, 32, 74);
+          ctx.fillStyle = "#312e81";
+          roundRect(ctx, W - 188, 28, 156, 42, 10);
+          ctx.fill();
+          ctx.fillStyle = "#c7d2fe";
+          ctx.font = "700 16px monospace";
+          ctx.fillText(completionReceiptCode, W - 170, 55);
+          ctx.fillStyle = "#475569";
+          ctx.font = "700 13px Nunito, sans-serif";
+          ctx.fillText("STUDENT", 32, 128);
+          ctx.fillText("CLASS PERIOD", 340, 128);
+          ctx.fillText("COMPLETED", 510, 128);
+          ctx.fillStyle = "#0f172a";
+          ctx.font = "800 22px Nunito, sans-serif";
+          ctx.fillText(studentDisplayId, 32, 156);
+          ctx.fillText("Period " + studentPeriod, 340, 156);
+          ctx.font = "600 15px Nunito, sans-serif";
+          ctx.fillText(completedTimestamp, 510, 154);
+          var boxY = 182;
+          var boxH = 104;
+          var boxW = 218;
+          function scoreBox(x, fill, ink, big, small) {
+            ctx.fillStyle = fill;
+            roundRect(ctx, x, boxY, boxW, boxH, 14);
+            ctx.fill();
+            ctx.fillStyle = ink;
+            ctx.font = "800 34px Nunito, sans-serif";
+            ctx.fillText(big, x + 22, boxY + 52);
+            ctx.font = "700 13px Nunito, sans-serif";
+            ctx.fillText(small, x + 22, boxY + 80);
+          }
+          scoreBox(32, "#ecfdf5", "#047857", rightCount + " / " + total, "QUESTIONS RIGHT");
+          scoreBox(271, "#fff1f2", "#be123c", String(wrongCount), "QUESTIONS MISSED");
+          scoreBox(510, "#eff6ff", "#1d4ed8", pct + "%", "FINAL SCORE");
+          ctx.fillStyle = "#f8fafc";
+          roundRect(ctx, 32, 306, W - 64, 76, 12);
+          ctx.fill();
+          ctx.strokeStyle = "#e2e8f0";
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+          ctx.fillStyle = "#475569";
+          ctx.font = "700 12px Nunito, sans-serif";
+          ctx.fillText("SKILLS MISSED:", 48, 330);
+          ctx.fillStyle = "#0f172a";
+          ctx.font = "600 14px Nunito, sans-serif";
+          var truncated = missedString.length > 82 ? missedString.slice(0, 79) + "..." : missedString;
+          ctx.fillText(truncated, 48, 356);
+          latestJpegDataUrl = canvas.toDataURL("image/jpeg", 0.8);
+          $("score-card-preview-img").src = latestJpegDataUrl;
+        }
+        draw();
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
+      }
+
+      function completeQuiz() {
+        var total = activeQuestions.length;
+        var pct = Math.round((rightCount / total) * 100);
+        var missedList = Object.keys(missedTopicCounts).filter(function (topic) {
+          return missedTopicCounts[topic] > 0;
+        }).map(function (topic) {
+          return topic + " (" + missedTopicCounts[topic] + ")";
+        });
+        var missedString = missedList.length ? missedList.join(", ") : "None (100% Mastery!)";
+        if (!completionReceiptCode) completionReceiptCode = generateCode(studentDisplayId, studentPeriod, selectedLevelId, rightCount, total);
+        if (!completedTimestamp) {
+          completedTimestamp = new Date().toLocaleString([], {
+            year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
+          });
+        }
+        awaitingAdvance = false;
+        saveSession(true);
+        var level = currentLevel();
+        var safeFirst = studentFirstName.toLowerCase().replace(/[^a-z0-9]/g, "");
+        var safeLast = studentLastInitial.toLowerCase().replace(/[^a-z]/g, "");
+        var safePeriod = studentPeriod.replace(/[^0-9]/g, "");
+        latestJpegFilename = safeFirst + "." + safeLast + "." + safePeriod + "." + level.fileSlug + "." + pct + ".jpg";
+        $("summary-heading").textContent = level.name + " complete";
+        $("summary-student-name").textContent = studentDisplayId + " · Period " + studentPeriod;
+        $("summary-sync-confirmation").textContent = "Completed " + completedTimestamp + " · Verification ID: " + completionReceiptCode;
+        $("summary-filename-badge").textContent = latestJpegFilename;
+        $("download-score-btn").textContent = "Download Score Image (" + latestJpegFilename + ")";
+        $("score-card-preview-img").alt = "Score card for " + studentDisplayId + ", " + level.name + ", " + pct + " percent";
+        $("summary-right").textContent = String(rightCount);
+        $("summary-wrong").textContent = String(wrongCount);
+        $("summary-percent").textContent = pct + "%";
+        $("summary-missed-topics").textContent = missedString;
+        var nextLevel = ReactionTypes.LEVELS.filter(function (item) { return item.number === level.number + 1; })[0];
+        var continueBtn = $("continue-level-btn");
+        if (nextLevel) {
+          continueBtn.classList.remove("hidden");
+          continueBtn.textContent = "Continue to " + nextLevel.name;
+          continueBtn.dataset.next = nextLevel.id;
+        } else {
+          continueBtn.classList.add("hidden");
+        }
+        renderScoreCard(pct, total, missedString);
+        switchScreen("screen-summary");
+      }
+
+      function startLevel(levelId) {
+        selectedLevelId = levelById(levelId).id;
+        currentQuestionIndex = 0;
+        rightCount = 0;
+        wrongCount = 0;
+        missedTopicCounts = {};
+        awaitingAdvance = false;
+        completionReceiptCode = "";
+        completedTimestamp = "";
+        currentDeckOrder = shuffle(currentLevel().questions.length);
+        loadDeck();
+        saveSession(false);
+        switchScreen("screen-quiz");
+        renderQuestion();
+      }
+
+      function startQuiz(event) {
+        if (event) event.preventDefault();
+        var fn = cleanFirstName($("first-name-input").value);
+        var li = $("last-initial-input").value.trim().toUpperCase().replace(/[^A-Z]/g, "").slice(0, 1);
+        var pd = $("period-input").value.trim().replace(/[^0-9]/g, "");
+        if (!fn) {
+          showToast("Please enter your first name.", "error");
+          $("first-name-input").focus();
+          return;
+        }
+        if (!li) {
+          showToast("Please enter your 1-letter last initial.", "error");
+          $("last-initial-input").focus();
+          return;
+        }
+        if (!pd) {
+          showToast("Please enter your class period number.", "error");
+          $("period-input").focus();
+          return;
+        }
+        studentFirstName = fn;
+        studentLastInitial = li;
+        studentPeriod = pd;
+        studentDisplayId = fn + " " + li + ".";
+        hideToast();
+        startLevel(selectedLevelId);
+      }
+
+      function fillCheckinFromStudent() {
+        $("first-name-input").value = studentFirstName;
+        $("last-initial-input").value = studentLastInitial;
+        $("period-input").value = studentPeriod;
+        selectLevel(selectedLevelId);
+      }
+
+      function chooseAnotherLevel() {
+        clearSession();
+        currentDeckOrder = [];
+        awaitingAdvance = false;
+        completionReceiptCode = "";
+        completedTimestamp = "";
+        fillCheckinFromStudent();
+        switchScreen("screen-checkin");
+      }
+
+      function exitToStart() {
+        clearSession();
+        studentFirstName = "";
+        studentLastInitial = "";
+        studentPeriod = "";
+        studentDisplayId = "";
+        currentDeckOrder = [];
+        completionReceiptCode = "";
+        completedTimestamp = "";
+        latestJpegDataUrl = "";
+        $("first-name-input").value = "";
+        $("last-initial-input").value = "";
+        $("period-input").value = "";
+        updateCheckinPreview();
+        switchScreen("screen-checkin");
+      }
+
+      function downloadScore() {
+        if (!latestJpegDataUrl) return;
+        var a = document.createElement("a");
+        a.href = latestJpegDataUrl;
+        a.download = latestJpegFilename || "score.jpg";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        showToast("Downloaded " + latestJpegFilename + ".", "success");
+      }
+
+      function setGuide(open) {
+        var drawer = $("cheat-sheet-drawer");
+        drawer.classList.toggle("hidden", !open);
+        $("toggle-cheatsheet-btn").setAttribute("aria-expanded", open ? "true" : "false");
+        if (open) drawer.scrollIntoView({ block: "start", behavior: prefersReducedMotion() ? "auto" : "smooth" });
+      }
+
+      function restoreSession() {
+        var raw = null;
+        try { raw = sessionStorage.getItem(SESSION_KEY); } catch (err) { return; }
+        if (!raw) return;
+        try {
+          var st = JSON.parse(raw);
+          if (!st || !st.studentFirstName || !st.studentLastInitial || !st.studentPeriod || !Array.isArray(st.deckOrder) || !st.deckOrder.length) return;
+          studentFirstName = st.studentFirstName;
+          studentLastInitial = st.studentLastInitial;
+          studentPeriod = st.studentPeriod;
+          studentDisplayId = studentFirstName + " " + studentLastInitial + ".";
+          selectedLevelId = st.selectedLevelId || "level1";
+          currentDeckOrder = st.deckOrder;
+          currentQuestionIndex = st.currentQuestionIndex || 0;
+          rightCount = st.rightCount || 0;
+          wrongCount = st.wrongCount || 0;
+          missedTopicCounts = st.missedTopicCounts || {};
+          awaitingAdvance = !!st.awaitingAdvance;
+          completionReceiptCode = st.completionReceiptCode || "";
+          completedTimestamp = st.completedTimestamp || "";
+          loadDeck();
+          selectLevel(selectedLevelId);
+          fillCheckinFromStudent();
+          if (st.isCompleted || currentQuestionIndex >= activeQuestions.length) {
+            completeQuiz();
+            return;
+          }
+          if (awaitingAdvance) {
+            nextQuestion();
+            if ($("screen-summary").classList.contains("hidden")) switchScreen("screen-quiz");
+            return;
+          }
+          switchScreen("screen-quiz");
+          renderQuestion();
+        } catch (err) {
+          clearSession();
+        }
+      }
+
+      function init() {
+        renderLevelPicker();
+        selectLevel("level1");
+        $("toggle-cheatsheet-btn").addEventListener("click", function () {
+          setGuide($("cheat-sheet-drawer").classList.contains("hidden"));
+        });
+        $("close-cheatsheet-btn").addEventListener("click", function () { setGuide(false); });
+        $("open-states-guide").addEventListener("click", function () { setGuide(true); });
+        $("toast-close").addEventListener("click", hideToast);
+        ["first-name-input", "last-initial-input", "period-input"].forEach(function (id) {
+          $(id).addEventListener("input", function () {
+            if (id === "last-initial-input") this.value = this.value.replace(/[^a-zA-Z]/g, "").toUpperCase();
+            if (id === "period-input") this.value = this.value.replace(/[^0-9]/g, "");
+            updateCheckinPreview();
+          });
+        });
+        $("checkin-form").addEventListener("submit", startQuiz);
+        $("answer-form").addEventListener("submit", submitAnswer);
+        $("next-question-btn").addEventListener("click", nextQuestion);
+        $("exit-quiz-btn").addEventListener("click", exitToStart);
+        $("continue-level-btn").addEventListener("click", function () {
+          startLevel(this.dataset.next || "level2");
+        });
+        $("another-level-btn").addEventListener("click", chooseAnotherLevel);
+        $("finish-btn").addEventListener("click", exitToStart);
+        $("download-score-btn").addEventListener("click", downloadScore);
+        document.addEventListener("keydown", function (event) {
+          if (event.key === "Escape") setGuide(false);
+        });
+        restoreSession();
+      }
+
+      if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+      else init();
+    })();
+  </script>
+</body>
+</html>
