@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Predicting Products - Chemistry Practice</title>
+  <meta name="description" content="Predict the products and states of matter for synthesis, decomposition, single replacement, double replacement, combustion, and two mixed practice levels.">
+
+  <!-- Google AdSense Script -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4365444453795543"
+       crossorigin="anonymous"
+       data-tag-for-age-treatment="1"></script>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Nunito', '"Segoe UI"', 'Helvetica', 'Arial', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'ui-monospace', 'Menlo', 'Consolas', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="../assets/site.css">
+  <style>
+    body {
+      font-family: "Nunito", "Segoe UI", sans-serif;
+      background-color: #f4f7fb;
+      color: #142033;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .font-mono-code {
+      font-family: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+    }
+    .formula-break {
+      overflow-wrap: anywhere;
+    }
+    .fade-in {
+      animation: fadeIn 0.25s ease-out forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .fade-in { animation: none; }
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="../index.html" class="logo">
+        <svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true">
+          <rect width="32" height="32" rx="9" fill="currentColor"/>
+          <circle cx="16" cy="16" r="3" fill="#fde68a"/>
+          <ellipse cx="16" cy="16" rx="11" ry="4.6" fill="none" stroke="#fff" stroke-width="1.6"/>
+          <ellipse cx="16" cy="16" rx="11" ry="4.6" fill="none" stroke="#fff" stroke-width="1.6" transform="rotate(60 16 16)"/>
+          <ellipse cx="16" cy="16" rx="11" ry="4.6" fill="none" stroke="#fff" stroke-width="1.6" transform="rotate(120 16 16)"/>
+        </svg>
+        <span class="logo-word">STEM<span>Simulators</span>.org</span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+        <span class="sr-only">Open menu</span>
+        <span></span><span></span><span></span>
+      </button>
+      <nav id="site-nav" class="site-nav" aria-label="Primary">
+        <a href="../index.html#simulations">Simulations</a>
+        <a href="../index.html#practice">Practice Problems</a>
+        <a href="../about.html">About</a>
+        <a href="../privacy.html">Privacy Policy</a>
+      </nav>
+    </div>
+  </header>
+
+  <div id="main" class="tool-page">
+  <div id="app-shell" class="w-full bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden transition-all duration-300">
+
+    <header class="bg-slate-900 text-white px-4 py-3.5 sm:px-6 flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2.5">
+        <span class="text-2xl" role="img" aria-label="Chemistry flask">⚗️</span>
+        <div>
+          <h1 class="font-extrabold text-base sm:text-lg leading-tight tracking-tight">Predicting Products</h1>
+          <p class="text-xs text-slate-300 hidden sm:block">Reactants in. You predict the products and their states.</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="toggle-cheatsheet-btn" type="button" class="bg-slate-800 hover:bg-slate-700 active:bg-slate-600 text-slate-200 text-xs sm:text-sm font-medium px-3.5 py-2 rounded-xl border border-slate-700 transition flex items-center gap-1.5">
+          <span aria-hidden="true">📋</span>
+          <span>Reference Guide</span>
+        </button>
+      </div>
+    </header>
+
+    <div id="cheat-sheet-drawer" class="hidden bg-amber-50 border-b border-amber-200 px-4 py-4 sm:px-6 fade-in max-h-[70vh] overflow-y-auto">
+      <div class="flex items-center justify-between mb-2 gap-2">
+        <h2 class="font-bold text-amber-900 text-sm">Chemistry reference: products and states</h2>
+        <button id="close-cheatsheet-btn" type="button" class="text-amber-700 hover:text-amber-900 text-xs font-bold px-2.5 py-1 rounded-lg bg-amber-100">Close ✕</button>
+      </div>
+      <div class="bg-white p-3 rounded-xl border border-amber-200 text-xs text-slate-700 mb-2.5">
+        <p class="font-bold text-slate-900 mb-1">How to type an answer</p>
+        <p class="mb-1">Type the <strong>products only</strong>, with a state on each one. Separate products with +. Order does not matter. Example: <span class="font-mono-code">Zn(s) + CuSO₄(aq) →</span> you type <span class="font-mono-code">ZnSO4(aq) + Cu(s)</span>.</p>
+        <p>Plain numbers and subscripts both work (<span class="font-mono-code">H2O</span> or <span class="font-mono-code">H₂O</span>). Capitals are corrected when we check. A coefficient in front, such as the 2 in <span class="font-mono-code">2H2O(l)</span>, is ignored. Use parentheses when a polyatomic ion needs a subscript: <span class="font-mono-code">Fe(NO3)2</span>, <span class="font-mono-code">Al2(SO4)3</span>.</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs text-slate-700">
+        <div class="bg-white p-3 rounded-xl border border-amber-200">
+          <p class="font-bold text-blue-800 mb-1">States of matter</p>
+          <ul class="list-disc pl-4 space-y-0.5">
+            <li><strong>(s)</strong> solid metals (except mercury), ionic salts with no water, and precipitates.</li>
+            <li><strong>(l)</strong> liquid water in this course, and bromine, Br₂.</li>
+            <li><strong>(g)</strong> H₂, N₂, O₂, F₂, Cl₂, CO₂, NH₃, H₂S.</li>
+            <li><strong>(aq)</strong> dissolved in water. Mercury metal is <strong>Hg(l)</strong>. Iodine is <strong>I₂(s)</strong>.</li>
+          </ul>
+        </div>
+        <div class="bg-white p-3 rounded-xl border border-amber-200">
+          <p class="font-bold text-blue-800 mb-1">Water on this page</p>
+          <ul class="list-disc pl-4 space-y-0.5">
+            <li>Neutralization, peroxide, and acid reactions in water: <strong>H₂O(l)</strong> only.</li>
+            <li>Complete combustion, and H₂ + O₂: prefer <strong>H₂O(l)</strong>. H₂O(g) is also accepted.</li>
+            <li>A heated hydrate: prefer <strong>H₂O(g)</strong>. H₂O(l) is also accepted.</li>
+            <li>Bromine or iodine made in water: prefer Br₂(l) and I₂(s). (aq) is also accepted.</li>
+          </ul>
+        </div>
+        <div class="bg-white p-3 rounded-xl border border-amber-200">
+          <p class="font-bold text-emerald-800 mb-1">Five patterns</p>
+          <ul class="list-disc pl-4 space-y-0.5">
+            <li><strong>Synthesis:</strong> one product. Metal + nonmetal, or an oxide + water.</li>
+            <li><strong>Decomposition:</strong> carbonates (not Group 1) → oxide + CO₂. Chlorates → chloride + O₂. Hydrates lose water. Some binaries split into elements.</li>
+            <li><strong>Single replacement:</strong> an element replaces an ion below it on the activity series.</li>
+            <li><strong>Double replacement:</strong> partners swap. A reaction needs a solid, a gas, or water.</li>
+            <li><strong>Combustion:</strong> complete burning makes CO₂(g) and water.</li>
+          </ul>
+        </div>
+        <div class="bg-white p-3 rounded-xl border border-amber-200">
+          <p class="font-bold text-emerald-800 mb-1">Activity series</p>
+          <p class="mb-1">Most reactive to least: Li K Ba Ca Na Mg Al Zn Fe Ni Sn Pb <strong>(H)</strong> Cu Ag Au.</p>
+          <p class="mb-1">A metal replaces ions below it. It replaces hydrogen in an acid only if it is above H. Halogens: F₂ &gt; Cl₂ &gt; Br₂ &gt; I₂.</p>
+          <p>Iron metal with an acid, Cu²⁺, or Ag⁺ makes Fe²⁺. Iron with Cl₂ makes FeCl₃. Tin with HCl makes SnCl₂.</p>
+        </div>
+      </div>
+      <div class="mt-2.5 bg-white p-3 rounded-xl border border-amber-200 text-xs text-slate-700">
+        <p class="font-bold text-rose-800 mb-1">Solubility, using cold-water rules</p>
+        <ul class="list-disc pl-4 space-y-0.5">
+          <li><strong>Soluble (aq):</strong> Li⁺, Na⁺, K⁺, NH₄⁺, and NO₃⁻ salts. Most Cl⁻, Br⁻, and I⁻ salts, except Ag⁺ and Pb²⁺. Most SO₄²⁻ salts, except Ba²⁺, Pb²⁺, Ca²⁺, and Sr²⁺.</li>
+          <li><strong>Insoluble (s):</strong> most CO₃²⁻, PO₄³⁻, OH⁻, and S²⁻ compounds, except with Li⁺, Na⁺, K⁺, or NH₄⁺. Group 1 hydroxides are (aq).</li>
+          <li><strong>Gases:</strong> acid + carbonate → salt + H₂O(l) + CO₂(g). Acid + sulfide → salt + H₂S(g). Ammonium salt + hydroxide → salt + NH₃(g) + H₂O(l). NaCl(aq) + NH₄OH(aq) is also accepted for that last case.</li>
+        </ul>
+      </div>
+      <div class="mt-2.5 bg-white px-3 py-2 rounded-xl border border-amber-200 text-xs text-slate-700">
+        <strong>No reaction</strong> is only in Mixed Practice Level 2. Type <span class="font-mono-code">no reaction</span> or <span class="font-mono-code">NR</span> when a metal or halogen is too unreactive, or when a double replacement would make two soluble salts and no gas or water.
+      </div>
+    </div>
+
+    <div id="toast-banner" role="status" class="hidden mx-4 mt-4 sm:mx-6 px-4 py-3 rounded-xl text-sm font-medium flex items-center justify-between fade-in">
+      <span id="toast-message"></span>
+      <button id="toast-close" type="button" class="ml-3 font-bold opacity-75 hover:opacity-100" aria-label="Dismiss message">✕</button>
+    </div>
+
+    <main id="screen-checkin" class="p-5 sm:p-8 fade-in">
+      <div class="max-w-3xl mx-auto">
+        <div class="text-center mb-6">
+          <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-teal-100 text-teal-700 text-3xl mb-3" aria-hidden="true">⚗️</div>
+          <h2 class="text-2xl font-extrabold text-slate-900">Predicting Products</h2>
+          <p class="text-sm text-slate-600 mt-1">
+            You get the reactants. Type the products, including states of matter. Enter your <strong>first name</strong>, <strong>last initial</strong>, and <strong>class period</strong> to make a score card at the end.
+          </p>
+        </div>
+
+        <div class="bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-3 text-sm text-slate-700 mb-5">
+          <p class="font-bold text-slate-900 mb-1">Answer format</p>
+          <p>Example: <span class="font-mono-code font-bold">Zn(s) + CuSO₄(aq) →</span> you type <span class="font-mono-code font-bold">ZnSO4(aq) + Cu(s)</span>. Product order does not matter. H2O and H₂O both work. Coefficients are ignored.</p>
+        </div>
+
+        <div class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+            <div class="sm:col-span-6">
+              <label for="first-name-input" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">First Name</label>
+              <input type="text" id="first-name-input" placeholder="e.g., Maya" maxlength="20" autocomplete="given-name" class="w-full px-3.5 py-3 text-base rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+            </div>
+            <div class="sm:col-span-3">
+              <label for="last-initial-input" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Last Initial</label>
+              <input type="text" id="last-initial-input" placeholder="L" maxlength="1" autocomplete="off" class="w-full text-center uppercase font-bold px-3 py-3 text-base rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+            </div>
+            <div class="sm:col-span-3">
+              <label for="period-input" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Period #</label>
+              <input type="text" inputmode="numeric" id="period-input" placeholder="3" maxlength="2" autocomplete="off" class="w-full text-center font-bold px-3 py-3 text-base rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+            </div>
+          </div>
+
+          <div id="privacy-preview" class="bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-600 min-h-[2.25rem] flex items-center justify-between gap-2">
+            <span>Full last names are never collected or printed on your score image.</span>
+          </div>
+
+          <div>
+            <p id="set-picker-label" class="block text-sm font-semibold text-slate-700 mb-2">Choose a practice set:</p>
+            <div id="set-picker" role="group" aria-labelledby="set-picker-label" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+          </div>
+
+          <button id="start-quiz-btn" type="button" class="w-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold py-3.5 px-6 rounded-xl shadow-md transition text-base flex items-center justify-center gap-2">
+            <span id="start-btn-label">Start Synthesis (12 Questions)</span>
+            <span aria-hidden="true">➔</span>
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <main id="screen-quiz" class="hidden p-4 sm:p-7 fade-in max-w-2xl mx-auto">
+      <h2 id="question-heading" class="sr-only">Question</h2>
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+        <div class="flex flex-wrap items-center gap-1.5">
+          <span id="quiz-student-badge" class="bg-slate-100 text-slate-800 font-semibold text-xs sm:text-sm px-2.5 py-1.5 rounded-xl border border-slate-200"></span>
+          <span id="quiz-set-badge" class="bg-indigo-100 text-indigo-800 font-bold text-xs px-2.5 py-1.5 rounded-xl">Synthesis</span>
+          <span id="quiz-score-badge" class="bg-emerald-50 text-emerald-700 font-semibold text-xs sm:text-sm px-2.5 py-1.5 rounded-xl border border-emerald-200">✓ 0</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span id="quiz-progress-badge" class="bg-blue-100 text-blue-800 font-bold text-xs sm:text-sm px-3 py-1.5 rounded-xl">Question 1 of 12</span>
+          <button id="exit-quiz-btn" type="button" class="text-xs font-bold text-slate-500 hover:text-rose-600 px-2.5 py-1.5 rounded-xl border border-slate-200 hover:border-rose-200 transition">Exit</button>
+        </div>
+      </div>
+
+      <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden mb-5" id="quiz-progress" role="progressbar" aria-valuemin="1" aria-valuemax="12" aria-valuenow="1" aria-label="Quiz progress">
+        <div id="quiz-progress-bar" class="bg-blue-600 h-full transition-all duration-300" style="width: 8%"></div>
+      </div>
+
+      <div class="bg-slate-900 text-white rounded-2xl p-5 sm:p-6 text-center shadow-inner mb-4">
+        <span class="text-[11px] uppercase tracking-widest text-slate-300 font-semibold block mb-1">Reactants</span>
+        <p id="equation-display" class="formula-break text-lg sm:text-2xl font-mono-code font-bold tracking-wide"></p>
+      </div>
+
+      <form id="answer-form">
+        <label for="products-input" class="block text-sm sm:text-base font-bold text-slate-800 mb-1">Predict the products, including states of matter</label>
+        <p id="format-hint" class="text-xs text-slate-600 mb-2.5"></p>
+        <input id="products-input" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done" placeholder="ZnSO4(aq) + Cu(s)" aria-describedby="format-hint" class="font-mono-code w-full px-3.5 py-3 text-base rounded-xl border-2 border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+        <p id="preview-line" class="formula-break hidden mt-2 text-sm" aria-hidden="true"></p>
+
+        <div id="formula-pad" role="group" aria-label="Formula keys" class="flex flex-wrap gap-2 mt-3"></div>
+        <details class="mt-3">
+          <summary class="cursor-pointer font-bold text-sm text-blue-800 py-2">Element and ion keys</summary>
+          <div id="element-pad" role="group" aria-label="Element and ion keys" class="flex flex-wrap gap-2 mt-1"></div>
+        </details>
+
+        <button id="check-answer-btn" type="submit" class="mt-4 w-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold py-3.5 px-6 rounded-xl shadow-md transition text-base">Check My Answer</button>
+      </form>
+
+      <button id="next-question-btn" type="button" class="hidden mt-2.5 w-full bg-slate-800 hover:bg-slate-900 active:bg-black text-white font-bold py-3.5 px-6 rounded-xl shadow-md transition text-base">Next Question ➔</button>
+
+      <div id="feedback-container" role="status" aria-live="polite" class="hidden mt-6 rounded-2xl border overflow-hidden fade-in">
+        <div id="feedback-header" tabindex="-1" class="px-4 py-3.5 sm:px-5 font-bold text-sm sm:text-base flex items-center gap-2"></div>
+        <div id="feedback-body" class="px-4 py-4 sm:px-5 bg-white text-sm text-slate-800 space-y-2"></div>
+      </div>
+    </main>
+
+    <main id="screen-summary" class="hidden p-5 sm:p-8 fade-in max-w-xl mx-auto">
+      <div class="text-center mb-5">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-600 text-3xl mb-3" aria-hidden="true">🏆</div>
+        <h2 class="text-2xl font-extrabold text-slate-900" id="summary-heading">Set complete!</h2>
+        <p id="summary-student-name" class="text-base font-semibold text-slate-700 mt-1"></p>
+        <p id="summary-sync-confirmation" class="text-xs font-semibold text-indigo-700 mt-1"></p>
+      </div>
+
+      <div class="bg-indigo-50 border-2 border-indigo-300 rounded-2xl p-4 sm:p-5 mb-5">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+          <span class="inline-block text-[11px] font-extrabold uppercase tracking-wider bg-indigo-600 text-white px-2.5 py-0.5 rounded-full">Turn in your score image</span>
+          <span id="summary-filename-badge" class="font-mono-code text-xs font-bold bg-white text-indigo-900 border border-indigo-200 px-2.5 py-1 rounded-lg"></span>
+        </div>
+        <p class="text-xs text-slate-600 mb-3">Download your score card image and turn it in the way your teacher asked.</p>
+        <div class="mb-3 rounded-xl overflow-hidden border border-indigo-200 bg-white">
+          <img id="score-card-preview-img" alt="Score card preview" class="w-full h-auto block">
+        </div>
+        <button id="download-score-btn" type="button" class="w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold py-3.5 px-5 rounded-xl shadow-md transition text-sm sm:text-base">Download Score Image</button>
+      </div>
+
+      <div class="grid grid-cols-3 gap-3 mb-5 text-center">
+        <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-3.5">
+          <span class="block text-2xl sm:text-3xl font-extrabold text-emerald-700" id="summary-right">0</span>
+          <span class="text-xs font-semibold text-emerald-800 uppercase">Right</span>
+        </div>
+        <div class="bg-rose-50 border border-rose-200 rounded-2xl p-3.5">
+          <span class="block text-2xl sm:text-3xl font-extrabold text-rose-700" id="summary-wrong">0</span>
+          <span class="text-xs font-semibold text-rose-800 uppercase">Wrong</span>
+        </div>
+        <div class="bg-blue-50 border border-blue-200 rounded-2xl p-3.5">
+          <span class="block text-2xl sm:text-3xl font-extrabold text-blue-700" id="summary-percent">0%</span>
+          <span class="text-xs font-semibold text-blue-800 uppercase">Score</span>
+        </div>
+      </div>
+
+      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 mb-5">
+        <p class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Patterns missed</p>
+        <p id="summary-missed-topics" class="text-sm text-slate-800 font-medium"></p>
+      </div>
+
+      <div class="space-y-2.5">
+        <button id="another-set-btn" type="button" class="w-full bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-bold py-3.5 px-4 rounded-xl shadow-md transition text-sm sm:text-base">Pick Another Set ➔</button>
+        <button id="finish-btn" type="button" class="w-full bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-3 px-4 rounded-xl transition text-sm">Finish &amp; Return to Start</button>
+      </div>
+    </main>
+
+  </div>
+  </div>
+
+  <div class="ad-banner-wrapper">
+    <span class="ad-label">Advertisement</span>
+    <div class="ad-banner-slot">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-4365444453795543"
+           data-ad-slot="4468511317"
+           data-ad-format="auto"
+           data-full-width-responsive="true"
+           data-tag-for-age-treatment="1"></ins>
+      <script>
+           (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>&copy; 2026 STEMSimulators.org. All rights reserved.</p>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="../index.html">Home</a>
+        <a href="../about.html">About</a>
+        <a href="../privacy.html">Privacy Policy</a>
+      </nav>
+    </div>
+  </footer>
+  <script src="../assets/site.js" defer></script>
+
+  <canvas id="score-export-canvas" width="760" height="410" class="hidden" aria-hidden="true"></canvas>
+  <script src="../assets/predict-products.js"></script>
+  <script>
+    (function () {
+      var SESSION_KEY = "predict_products_quiz_v1";
+      var BASE_HINT = "Type the products only. Put a state on each one: (s), (l), (g), or (aq). Separate them with +. Order and extra spaces do not matter. H2O and H₂O both work. A coefficient such as the 2 in 2H2O(l) is ignored.";
+      var NR_HINT = " If nothing happens, type no reaction. NR and nothing happens also work.";
+      var SELECTED = "text-left p-3.5 rounded-xl border-2 border-blue-600 bg-blue-50 transition";
+      var IDLE = "text-left p-3.5 rounded-xl border-2 border-slate-200 bg-slate-50 hover:bg-slate-100 transition";
+      var KEY_CLASS = "min-h-11 px-3 py-2 rounded-xl border-2 border-slate-300 bg-white hover:bg-slate-50 active:bg-slate-100 font-bold text-sm text-slate-800 disabled:opacity-50";
+
+      var studentFirstName = "";
+      var studentLastInitial = "";
+      var studentPeriod = "";
+      var studentDisplayId = "";
+      var selectedSetId = "synthesis";
+      var activeQuestions = [];
+      var currentDeckOrder = [];
+      var currentQuestionIndex = 0;
+      var rightCount = 0;
+      var wrongCount = 0;
+      var missedTopicCounts = {};
+      var awaitingAdvance = false;
+      var completionReceiptCode = "";
+      var completedTimestamp = "";
+      var latestJpegDataUrl = "";
+      var latestJpegFilename = "";
+      var inputLocked = false;
+      var toastTimer = 0;
+
+      function $(id) { return document.getElementById(id); }
+
+      function setById(id) {
+        return PredictProducts.SETS.filter(function (set) { return set.id === id; })[0] || PredictProducts.SETS[0];
+      }
+
+      function prefersReducedMotion() {
+        return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      }
+
+      function scrollTop() {
+        window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? "auto" : "smooth" });
+      }
+
+      function appendPretty(parent, plain) {
+        var text = String(plain);
+        var re = /([A-Za-z)])(\d+)/g;
+        var last = 0;
+        var match;
+        while ((match = re.exec(text))) {
+          if (match.index > last) parent.appendChild(document.createTextNode(text.slice(last, match.index)));
+          parent.appendChild(document.createTextNode(match[1]));
+          var sub = document.createElement("sub");
+          sub.textContent = match[2];
+          parent.appendChild(sub);
+          last = match.index + match[0].length;
+        }
+        if (last < text.length) parent.appendChild(document.createTextNode(text.slice(last)));
+      }
+
+      function showToast(msg, type) {
+        var banner = $("toast-banner");
+        banner.classList.remove("hidden", "bg-rose-100", "text-rose-800", "border-rose-300", "bg-emerald-100", "text-emerald-800", "border-emerald-300", "bg-blue-100", "text-blue-800", "border-blue-300");
+        banner.classList.add("border");
+        if (type === "error") banner.classList.add("bg-rose-100", "text-rose-800", "border-rose-300");
+        else if (type === "success") banner.classList.add("bg-emerald-100", "text-emerald-800", "border-emerald-300");
+        else banner.classList.add("bg-blue-100", "text-blue-800", "border-blue-300");
+        $("toast-message").textContent = msg;
+        window.clearTimeout(toastTimer);
+        toastTimer = window.setTimeout(hideToast, 4500);
+      }
+
+      function hideToast() {
+        $("toast-banner").classList.add("hidden");
+      }
+
+      function cleanFirstName(raw) {
+        var lettersOnly = String(raw || "").trim().replace(/[^a-zA-Z\-']/g, "");
+        if (!lettersOnly) return "";
+        return lettersOnly.charAt(0).toUpperCase() + lettersOnly.slice(1).toLowerCase();
+      }
+
+      function updateCheckinPreview() {
+        var fn = cleanFirstName($("first-name-input").value);
+        var li = $("last-initial-input").value.trim().toUpperCase().replace(/[^A-Z]/g, "").slice(0, 1);
+        var pd = $("period-input").value.trim().replace(/[^0-9]/g, "");
+        var preview = $("privacy-preview");
+        preview.replaceChildren();
+        if (fn && li && pd) {
+          var set = setById(selectedSetId);
+          var left = document.createElement("span");
+          left.textContent = "Card ID: " + fn + " " + li + ". (Pd " + pd + ")";
+          var right = document.createElement("span");
+          right.className = "font-mono-code text-[11px] text-indigo-700 font-bold";
+          right.textContent = fn.toLowerCase() + "." + li.toLowerCase() + "." + pd + "." + set.fileSlug + ".[score].jpg";
+          preview.appendChild(left);
+          preview.appendChild(right);
+        } else {
+          preview.textContent = "Full last names are never collected or printed on your score image.";
+        }
+      }
+
+      function renderSetPicker() {
+        var box = $("set-picker");
+        box.replaceChildren();
+        PredictProducts.SETS.forEach(function (set) {
+          var btn = document.createElement("button");
+          btn.type = "button";
+          btn.dataset.set = set.id;
+          btn.setAttribute("aria-pressed", "false");
+          var row = document.createElement("span");
+          row.className = "flex items-center justify-between gap-2 mb-1";
+          var title = document.createElement("span");
+          title.className = "font-extrabold text-sm text-slate-900";
+          title.textContent = set.name;
+          var meta = document.createElement("span");
+          meta.className = "flex items-center gap-1.5 shrink-0";
+          if (set.levelLabel) {
+            var pill = document.createElement("span");
+            pill.className = "text-[11px] font-extrabold uppercase tracking-wide bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded-full";
+            pill.textContent = set.levelLabel;
+            meta.appendChild(pill);
+          }
+          var count = document.createElement("span");
+          count.className = "text-[11px] font-bold text-slate-500";
+          count.textContent = set.questions.length + " Q";
+          meta.appendChild(count);
+          row.appendChild(title);
+          row.appendChild(meta);
+          var blurb = document.createElement("span");
+          blurb.className = "block text-xs text-slate-600";
+          blurb.textContent = set.blurb;
+          btn.appendChild(row);
+          btn.appendChild(blurb);
+          btn.addEventListener("click", function () { selectSet(set.id); });
+          box.appendChild(btn);
+        });
+      }
+
+      function selectSet(id) {
+        selectedSetId = setById(id).id;
+        document.querySelectorAll("#set-picker [data-set]").forEach(function (btn) {
+          var on = btn.dataset.set === selectedSetId;
+          btn.setAttribute("aria-pressed", on ? "true" : "false");
+          btn.className = on ? SELECTED : IDLE;
+        });
+        var set = setById(selectedSetId);
+        $("start-btn-label").textContent = "Start " + set.name + " (" + set.questions.length + " Questions)";
+        updateCheckinPreview();
+      }
+
+      function buildKeys(container, keys) {
+        container.replaceChildren();
+        keys.forEach(function (key) {
+          var btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = KEY_CLASS;
+          btn.dataset.insert = key.insert || "";
+          btn.dataset.action = key.action || "";
+          if (key.id) btn.id = key.id;
+          btn.textContent = key.label;
+          btn.setAttribute("aria-label", key.action === "backspace" ? "Backspace" : key.action === "clear" ? "Clear the answer" : key.action === "nr" ? "Enter no reaction" : "Insert " + key.label);
+          container.appendChild(btn);
+        });
+      }
+
+      function renderKeypads() {
+        buildKeys($("formula-pad"), [
+          { label: "1", insert: "1" }, { label: "2", insert: "2" }, { label: "3", insert: "3" },
+          { label: "4", insert: "4" }, { label: "5", insert: "5" }, { label: "6", insert: "6" },
+          { label: "7", insert: "7" }, { label: "8", insert: "8" }, { label: "9", insert: "9" },
+          { label: "(", insert: "(" }, { label: ")", insert: ")" }, { label: "+", insert: " + " },
+          { label: "·", insert: "·" }, { label: "(s)", insert: "(s)" }, { label: "(l)", insert: "(l)" },
+          { label: "(g)", insert: "(g)" }, { label: "(aq)", insert: "(aq)" },
+          { label: "Backspace", action: "backspace" }, { label: "Clear", action: "clear" },
+          { label: "No reaction", action: "nr", id: "nr-key" }
+        ]);
+        buildKeys($("element-pad"), ["H","C","N","O","P","S","F","Cl","Br","I","Li","Na","K","Mg","Ca","Ba","Al","Zn","Fe","Cu","Ag","Sn","Pb","Cr","Hg","NH4","OH","NO3","SO4","CO3","PO4","HCO3","ClO3","H2O"].map(function (symbol) {
+          return { label: symbol, insert: symbol };
+        }));
+      }
+
+      function padClick(event) {
+        var btn = event.target.closest("button");
+        if (!btn || inputLocked) return;
+        if (btn.dataset.action === "backspace") backspace();
+        else if (btn.dataset.action === "clear") replaceAnswer("");
+        else if (btn.dataset.action === "nr") replaceAnswer("no reaction");
+        else if (btn.dataset.insert) insertAtCursor(btn.dataset.insert);
+      }
+
+      function insertAtCursor(text) {
+        var el = $("products-input");
+        var start = el.selectionStart;
+        var end = el.selectionEnd;
+        if (start == null) el.value += text;
+        else {
+          el.value = el.value.slice(0, start) + text + el.value.slice(end);
+          var pos = start + text.length;
+          el.setSelectionRange(pos, pos);
+        }
+        el.focus();
+        updatePreview();
+      }
+
+      function backspace() {
+        var el = $("products-input");
+        var start = el.selectionStart;
+        var end = el.selectionEnd;
+        if (start == null) el.value = el.value.slice(0, -1);
+        else if (start !== end) {
+          el.value = el.value.slice(0, start) + el.value.slice(end);
+          el.setSelectionRange(start, start);
+        } else if (start > 0) {
+          el.value = el.value.slice(0, start - 1) + el.value.slice(end);
+          el.setSelectionRange(start - 1, start - 1);
+        }
+        el.focus();
+        updatePreview();
+      }
+
+      function replaceAnswer(text) {
+        var el = $("products-input");
+        el.value = text;
+        el.focus();
+        updatePreview();
+      }
+
+      function updatePreview() {
+        var line = $("preview-line");
+        var value = $("products-input").value;
+        if (!value.trim()) {
+          line.classList.add("hidden");
+          line.replaceChildren();
+          return;
+        }
+        line.classList.remove("hidden");
+        line.replaceChildren();
+        var label = document.createElement("span");
+        label.className = "text-slate-500";
+        label.textContent = "Looks like: ";
+        var formula = document.createElement("span");
+        formula.className = "font-mono-code font-bold text-slate-900";
+        appendPretty(formula, value);
+        line.appendChild(label);
+        line.appendChild(formula);
+      }
+
+      function setInputsLocked(locked) {
+        inputLocked = locked;
+        $("products-input").disabled = locked;
+        document.querySelectorAll("#formula-pad button, #element-pad button").forEach(function (btn) {
+          btn.disabled = locked;
+        });
+      }
+
+      function shuffle(length) {
+        var indices = [];
+        for (var i = 0; i < length; i++) indices.push(i);
+        for (var j = indices.length - 1; j > 0; j--) {
+          var k = Math.floor(Math.random() * (j + 1));
+          var swap = indices[j];
+          indices[j] = indices[k];
+          indices[k] = swap;
+        }
+        return indices;
+      }
+
+      function saveSession(isCompleted) {
+        if (!studentFirstName || !currentDeckOrder.length) return;
+        try {
+          sessionStorage.setItem(SESSION_KEY, JSON.stringify({
+            studentFirstName: studentFirstName,
+            studentLastInitial: studentLastInitial,
+            studentPeriod: studentPeriod,
+            selectedSetId: selectedSetId,
+            deckOrder: currentDeckOrder,
+            currentQuestionIndex: currentQuestionIndex,
+            rightCount: rightCount,
+            wrongCount: wrongCount,
+            missedTopicCounts: missedTopicCounts,
+            awaitingAdvance: awaitingAdvance,
+            completionReceiptCode: completionReceiptCode,
+            completedTimestamp: completedTimestamp,
+            isCompleted: !!isCompleted
+          }));
+        } catch (err) { /* private mode can block storage */ }
+      }
+
+      function clearSession() {
+        try { sessionStorage.removeItem(SESSION_KEY); } catch (err) { /* ignore */ }
+      }
+
+      function switchScreen(screenId) {
+        ["screen-checkin", "screen-quiz", "screen-summary"].forEach(function (id) {
+          $(id).classList.add("hidden");
+        });
+        $(screenId).classList.remove("hidden");
+        scrollTop();
+      }
+
+      function currentSet() { return setById(selectedSetId); }
+
+      function loadDeck() {
+        var source = currentSet().questions;
+        activeQuestions = currentDeckOrder.map(function (idx) { return source[idx]; }).filter(Boolean);
+      }
+
+      function startQuiz() {
+        var fn = cleanFirstName($("first-name-input").value);
+        var li = $("last-initial-input").value.trim().toUpperCase().replace(/[^A-Z]/g, "").slice(0, 1);
+        var pd = $("period-input").value.trim().replace(/[^0-9]/g, "");
+        if (!fn) { showToast("Please enter your first name.", "error"); $("first-name-input").focus(); return; }
+        if (!li) { showToast("Please enter your 1-letter last initial.", "error"); $("last-initial-input").focus(); return; }
+        if (!pd) { showToast("Please enter your class period number.", "error"); $("period-input").focus(); return; }
+        studentFirstName = fn;
+        studentLastInitial = li;
+        studentPeriod = pd;
+        studentDisplayId = fn + " " + li + ".";
+        currentQuestionIndex = 0;
+        rightCount = 0;
+        wrongCount = 0;
+        missedTopicCounts = {};
+        awaitingAdvance = false;
+        completionReceiptCode = "";
+        completedTimestamp = "";
+        hideToast();
+        currentDeckOrder = shuffle(currentSet().questions.length);
+        loadDeck();
+        saveSession(false);
+        $("quiz-student-badge").textContent = studentDisplayId + " · Pd " + studentPeriod;
+        switchScreen("screen-quiz");
+        renderQuestion();
+      }
+
+      function renderQuestion() {
+        var q = activeQuestions[currentQuestionIndex];
+        var set = currentSet();
+        var total = activeQuestions.length;
+        $("quiz-set-badge").textContent = set.name;
+        $("quiz-score-badge").textContent = "✓ " + rightCount;
+        $("quiz-progress-badge").textContent = "Question " + (currentQuestionIndex + 1) + " of " + total;
+        $("question-heading").textContent = "Question " + (currentQuestionIndex + 1) + " of " + total + ". Predict the products.";
+        var progress = $("quiz-progress");
+        progress.setAttribute("aria-valuemax", String(total));
+        progress.setAttribute("aria-valuenow", String(currentQuestionIndex + 1));
+        progress.setAttribute("aria-valuetext", "Question " + (currentQuestionIndex + 1) + " of " + total);
+        $("quiz-progress-bar").style.width = (((currentQuestionIndex + 1) / total) * 100) + "%";
+        var equation = $("equation-display");
+        equation.replaceChildren();
+        appendPretty(equation, q.reactants);
+        equation.appendChild(document.createTextNode(" →"));
+        equation.setAttribute("aria-label", q.reactants + ". Predict the products.");
+        $("format-hint").textContent = BASE_HINT + (set.allowsNR ? NR_HINT : "");
+        $("products-input").value = "";
+        updatePreview();
+        setInputsLocked(false);
+        var nrKey = $("nr-key");
+        if (nrKey) {
+          nrKey.classList.toggle("hidden", !set.allowsNR);
+          nrKey.disabled = !set.allowsNR;
+          nrKey.setAttribute("aria-hidden", set.allowsNR ? "false" : "true");
+        }
+        $("check-answer-btn").classList.remove("hidden");
+        $("next-question-btn").classList.add("hidden");
+        $("feedback-container").classList.add("hidden");
+        $("feedback-body").replaceChildren();
+      }
+
+      function addLine(parent, label, value, pretty) {
+        var p = document.createElement("p");
+        var strong = document.createElement("span");
+        strong.className = "font-bold";
+        strong.textContent = label + " ";
+        var span = document.createElement("span");
+        span.className = "font-mono-code formula-break";
+        if (pretty) appendPretty(span, value);
+        else span.textContent = value;
+        p.appendChild(strong);
+        p.appendChild(span);
+        parent.appendChild(p);
+      }
+
+      function showFeedback(result, typed) {
+        var box = $("feedback-container");
+        var header = $("feedback-header");
+        box.classList.remove("hidden", "border-emerald-300", "border-rose-300");
+        header.classList.remove("bg-emerald-100", "text-emerald-900", "bg-rose-100", "text-rose-900");
+        header.replaceChildren();
+        var icon = document.createElement("span");
+        icon.setAttribute("aria-hidden", "true");
+        var words = document.createElement("span");
+        if (result.correct) {
+          box.classList.add("border-emerald-300");
+          header.classList.add("bg-emerald-100", "text-emerald-900");
+          icon.textContent = "🎉";
+          words.textContent = "Spot on! Those products and states are correct.";
+        } else {
+          box.classList.add("border-rose-300");
+          header.classList.add("bg-rose-100", "text-rose-900");
+          icon.textContent = "🧐";
+          words.textContent = "Not quite. Compare your products with the answer below.";
+        }
+        header.appendChild(icon);
+        header.appendChild(words);
+        var body = $("feedback-body");
+        body.replaceChildren();
+        if (!result.correct) addLine(body, "You typed:", typed, false);
+        addLine(body, "Correct products:", result.expectedPlain, true);
+        result.alternates.forEach(function (alt) {
+          addLine(body, "Also accepted:", alt, true);
+        });
+        var why = document.createElement("p");
+        why.textContent = result.explanation;
+        body.appendChild(why);
+        header.focus();
+      }
+
+      function submitAnswer(event) {
+        event.preventDefault();
+        if (inputLocked) return;
+        var q = activeQuestions[currentQuestionIndex];
+        var typed = $("products-input").value;
+        var parsed = PredictProducts.parseAnswer(typed);
+        if (parsed.empty) {
+          showToast("Type the products, including a state such as (s) or (aq).", "error");
+          $("products-input").focus();
+          return;
+        }
+        if (!parsed.nr && parsed.species.some(function (sp) { return !sp.state; })) {
+          showToast("Add a state of matter to every product: (s), (l), (g), or (aq).", "error");
+          $("products-input").focus();
+          return;
+        }
+        var result = PredictProducts.gradeAnswer(q, typed);
+        setInputsLocked(true);
+        $("check-answer-btn").classList.add("hidden");
+        var nextBtn = $("next-question-btn");
+        nextBtn.classList.remove("hidden");
+        nextBtn.textContent = currentQuestionIndex === activeQuestions.length - 1 ? "View & Download Score Image ➔" : "Next Question ➔";
+        if (result.correct) rightCount++;
+        else {
+          wrongCount++;
+          missedTopicCounts[result.topic] = (missedTopicCounts[result.topic] || 0) + 1;
+        }
+        $("quiz-score-badge").textContent = "✓ " + rightCount;
+        awaitingAdvance = true;
+        var isFinal = currentQuestionIndex === activeQuestions.length - 1;
+        saveSession(isFinal);
+        showFeedback(result, typed.trim());
+      }
+
+      function nextQuestion() {
+        awaitingAdvance = false;
+        currentQuestionIndex++;
+        if (currentQuestionIndex < activeQuestions.length) {
+          saveSession(false);
+          renderQuestion();
+        } else {
+          completeQuiz();
+        }
+      }
+
+      function generateCode(displayId, period, setId, right, total) {
+        var seed = displayId + "|P" + period + "|" + setId + "|" + right + "/" + total + "|" + Date.now();
+        var hash = 0;
+        for (var i = 0; i < seed.length; i++) {
+          hash = ((hash << 5) - hash) + seed.charCodeAt(i);
+          hash |= 0;
+        }
+        return "PRD-" + Math.abs(hash).toString(16).toUpperCase().padStart(6, "0").slice(0, 6);
+      }
+
+      function completeQuiz() {
+        var total = activeQuestions.length;
+        var pct = Math.round((rightCount / total) * 100);
+        var missedList = Object.keys(missedTopicCounts).filter(function (topic) {
+          return missedTopicCounts[topic] > 0;
+        }).map(function (topic) {
+          return topic + " (" + missedTopicCounts[topic] + ")";
+        });
+        var missedString = missedList.length ? missedList.join(", ") : "None (100% Mastery!)";
+        if (!completionReceiptCode) completionReceiptCode = generateCode(studentDisplayId, studentPeriod, selectedSetId, rightCount, total);
+        if (!completedTimestamp) {
+          completedTimestamp = new Date().toLocaleString([], {
+            year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
+          });
+        }
+        awaitingAdvance = false;
+        saveSession(true);
+        var set = currentSet();
+        var safeFirst = studentFirstName.toLowerCase().replace(/[^a-z0-9]/g, "");
+        var safeLast = studentLastInitial.toLowerCase().replace(/[^a-z]/g, "");
+        var safePeriod = studentPeriod.replace(/[^0-9]/g, "");
+        latestJpegFilename = safeFirst + "." + safeLast + "." + safePeriod + "." + set.fileSlug + "." + pct + ".jpg";
+        $("summary-heading").textContent = set.name + " complete!";
+        $("summary-student-name").textContent = studentDisplayId + " · Period " + studentPeriod;
+        $("summary-sync-confirmation").textContent = "Completed " + completedTimestamp + " · Verification ID: " + completionReceiptCode;
+        $("summary-filename-badge").textContent = latestJpegFilename;
+        $("download-score-btn").textContent = "Download Score Image";
+        $("summary-right").textContent = String(rightCount);
+        $("summary-wrong").textContent = String(wrongCount);
+        $("summary-percent").textContent = pct + "%";
+        $("summary-missed-topics").textContent = missedString;
+        renderScoreCard(pct, total, missedString);
+        switchScreen("screen-summary");
+      }
+
+      function roundRect(ctx, x, y, w, h, r) {
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.arcTo(x + w, y, x + w, y + h, r);
+        ctx.arcTo(x + w, y + h, x, y + h, r);
+        ctx.arcTo(x, y + h, x, y, r);
+        ctx.arcTo(x, y, x + w, y, r);
+        ctx.closePath();
+      }
+
+      function renderScoreCard(pct, total, missedString) {
+        function draw() {
+        var canvas = $("score-export-canvas");
+        var ctx = canvas.getContext("2d");
+        var W = canvas.width;
+        var H = canvas.height;
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, W, H);
+        ctx.strokeStyle = "#cbd5e1";
+        ctx.lineWidth = 3;
+        roundRect(ctx, 8, 8, W - 16, H - 16, 18);
+        ctx.stroke();
+        ctx.fillStyle = "#0f172a";
+        roundRect(ctx, 8, 8, W - 16, 86, 18);
+        ctx.fill();
+        ctx.fillRect(8, 72, W - 16, 22);
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "800 24px Nunito, sans-serif";
+        ctx.fillText("Predicting Products — Score Card", 32, 48);
+        ctx.fillStyle = "#cbd5e1";
+        ctx.font = "700 15px Nunito, sans-serif";
+        ctx.fillText(currentSet().name, 32, 74);
+        ctx.fillStyle = "#312e81";
+        roundRect(ctx, W - 188, 28, 156, 42, 10);
+        ctx.fill();
+        ctx.fillStyle = "#c7d2fe";
+        ctx.font = "700 16px monospace";
+        ctx.fillText(completionReceiptCode, W - 170, 55);
+        ctx.fillStyle = "#475569";
+        ctx.font = "700 13px Nunito, sans-serif";
+        ctx.fillText("STUDENT", 32, 128);
+        ctx.fillText("CLASS PERIOD", 340, 128);
+        ctx.fillText("COMPLETED", 510, 128);
+        ctx.fillStyle = "#0f172a";
+        ctx.font = "800 22px Nunito, sans-serif";
+        ctx.fillText(studentDisplayId, 32, 156);
+        ctx.fillText("Period " + studentPeriod, 340, 156);
+        ctx.font = "600 15px Nunito, sans-serif";
+        ctx.fillText(completedTimestamp, 510, 154);
+        var boxY = 182;
+        var boxH = 104;
+        var boxW = 218;
+        function scoreBox(x, fill, ink, big, small) {
+          ctx.fillStyle = fill;
+          roundRect(ctx, x, boxY, boxW, boxH, 14);
+          ctx.fill();
+          ctx.fillStyle = ink;
+          ctx.font = "800 34px Nunito, sans-serif";
+          ctx.fillText(big, x + 22, boxY + 52);
+          ctx.font = "700 13px Nunito, sans-serif";
+          ctx.fillText(small, x + 22, boxY + 80);
+        }
+        scoreBox(32, "#ecfdf5", "#047857", rightCount + " / " + total, "QUESTIONS RIGHT");
+        scoreBox(271, "#fff1f2", "#be123c", String(wrongCount), "QUESTIONS MISSED");
+        scoreBox(510, "#eff6ff", "#1d4ed8", pct + "%", "FINAL SCORE");
+        ctx.fillStyle = "#f8fafc";
+        roundRect(ctx, 32, 306, W - 64, 76, 12);
+        ctx.fill();
+        ctx.strokeStyle = "#e2e8f0";
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        ctx.fillStyle = "#475569";
+        ctx.font = "700 12px Nunito, sans-serif";
+        ctx.fillText("PATTERNS MISSED:", 48, 330);
+        ctx.fillStyle = "#0f172a";
+        ctx.font = "600 14px Nunito, sans-serif";
+        var truncated = missedString.length > 82 ? missedString.slice(0, 79) + "..." : missedString;
+        ctx.fillText(truncated, 48, 356);
+        latestJpegDataUrl = canvas.toDataURL("image/jpeg", 0.8);
+        $("score-card-preview-img").src = latestJpegDataUrl;
+        }
+        draw();
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
+      }
+
+      function downloadScore() {
+        if (!latestJpegDataUrl) return;
+        var a = document.createElement("a");
+        a.href = latestJpegDataUrl;
+        a.download = latestJpegFilename || "score.jpg";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        showToast("Downloaded " + latestJpegFilename + ".", "success");
+      }
+
+      function fillCheckinFromStudent() {
+        $("first-name-input").value = studentFirstName;
+        $("last-initial-input").value = studentLastInitial;
+        $("period-input").value = studentPeriod;
+        selectSet(selectedSetId);
+      }
+
+      function pickAnotherSet() {
+        clearSession();
+        currentDeckOrder = [];
+        awaitingAdvance = false;
+        completionReceiptCode = "";
+        completedTimestamp = "";
+        fillCheckinFromStudent();
+        switchScreen("screen-checkin");
+      }
+
+      function exitToStart() {
+        clearSession();
+        studentFirstName = "";
+        studentLastInitial = "";
+        studentPeriod = "";
+        studentDisplayId = "";
+        currentDeckOrder = [];
+        completionReceiptCode = "";
+        completedTimestamp = "";
+        latestJpegDataUrl = "";
+        $("first-name-input").value = "";
+        $("last-initial-input").value = "";
+        $("period-input").value = "";
+        updateCheckinPreview();
+        switchScreen("screen-checkin");
+      }
+
+      function restoreSession() {
+        var raw = null;
+        try { raw = sessionStorage.getItem(SESSION_KEY); } catch (err) { return; }
+        if (!raw) return;
+        try {
+          var st = JSON.parse(raw);
+          if (!st || !st.studentFirstName || !st.studentLastInitial || !st.studentPeriod || !Array.isArray(st.deckOrder) || !st.deckOrder.length) return;
+          studentFirstName = st.studentFirstName;
+          studentLastInitial = st.studentLastInitial;
+          studentPeriod = st.studentPeriod;
+          studentDisplayId = studentFirstName + " " + studentLastInitial + ".";
+          selectedSetId = st.selectedSetId || "synthesis";
+          currentDeckOrder = st.deckOrder;
+          currentQuestionIndex = st.currentQuestionIndex || 0;
+          rightCount = st.rightCount || 0;
+          wrongCount = st.wrongCount || 0;
+          missedTopicCounts = st.missedTopicCounts || {};
+          awaitingAdvance = !!st.awaitingAdvance;
+          completionReceiptCode = st.completionReceiptCode || "";
+          completedTimestamp = st.completedTimestamp || "";
+          loadDeck();
+          selectSet(selectedSetId);
+          fillCheckinFromStudent();
+          $("quiz-student-badge").textContent = studentDisplayId + " · Pd " + studentPeriod;
+          if (st.isCompleted || currentQuestionIndex >= activeQuestions.length) {
+            completeQuiz();
+            return;
+          }
+          if (awaitingAdvance) {
+            nextQuestion();
+            if ($("screen-summary").classList.contains("hidden")) switchScreen("screen-quiz");
+            return;
+          }
+          switchScreen("screen-quiz");
+          renderQuestion();
+        } catch (err) {
+          clearSession();
+        }
+      }
+
+      function init() {
+        renderKeypads();
+        renderSetPicker();
+        selectSet("synthesis");
+        ["formula-pad", "element-pad"].forEach(function (id) {
+          var fromPointer = false;
+          $(id).addEventListener("pointerdown", function (event) {
+            if (!event.target.closest("button")) return;
+            event.preventDefault();
+            fromPointer = true;
+            padClick(event);
+          });
+          $(id).addEventListener("click", function (event) {
+            if (fromPointer) { fromPointer = false; return; }
+            padClick(event);
+          });
+        });
+        $("toggle-cheatsheet-btn").addEventListener("click", function () {
+          $("cheat-sheet-drawer").classList.toggle("hidden");
+        });
+        $("close-cheatsheet-btn").addEventListener("click", function () {
+          $("cheat-sheet-drawer").classList.add("hidden");
+        });
+        $("toast-close").addEventListener("click", hideToast);
+        ["first-name-input", "last-initial-input", "period-input"].forEach(function (id) {
+          $(id).addEventListener("input", function () {
+            if (id === "last-initial-input") this.value = this.value.replace(/[^a-zA-Z]/g, "").toUpperCase();
+            if (id === "period-input") this.value = this.value.replace(/[^0-9]/g, "");
+            updateCheckinPreview();
+          });
+          $(id).addEventListener("keydown", function (event) {
+            if (event.key === "Enter") startQuiz();
+          });
+        });
+        $("start-quiz-btn").addEventListener("click", startQuiz);
+        $("answer-form").addEventListener("submit", submitAnswer);
+        $("products-input").addEventListener("input", updatePreview);
+        $("next-question-btn").addEventListener("click", nextQuestion);
+        $("exit-quiz-btn").addEventListener("click", exitToStart);
+        $("another-set-btn").addEventListener("click", pickAnotherSet);
+        $("finish-btn").addEventListener("click", exitToStart);
+        $("download-score-btn").addEventListener("click", downloadScore);
+        restoreSession();
+      }
+
+      if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+      else init();
+    })();
+  </script>
+</body>
+</html>
