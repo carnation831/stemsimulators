@@ -270,7 +270,12 @@ img {
 }
 
 .ad-banner-wrapper {
-  margin-bottom: 2.25rem;
+  width: min(1120px, calc(100% - 2.5rem));
+  margin-top: auto;
+  margin-right: auto;
+  margin-bottom: 1.35rem;
+  margin-left: auto;
+  padding-top: 2.5rem;
   text-align: center;
 }
 
@@ -288,13 +293,16 @@ img {
   background: #eef3f8;
   border: 1px dashed #b7c6d6;
   border-radius: 12px;
-  min-height: 90px;
+  min-height: 280px;
   max-width: 970px;
   margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   overflow: hidden;
+}
+
+.ad-banner-slot .adsbygoogle {
+  display: block;
+  width: 100%;
+  min-height: 280px;
 }
 
 .library-section {
@@ -500,7 +508,7 @@ img {
 }
 
 .site-footer {
-  margin-top: auto;
+  margin-top: 0;
   background: var(--surface);
   border-top: 1px solid var(--line);
   padding: 1.35rem 1.25rem;
@@ -579,9 +587,22 @@ img {
     width: min(1120px, calc(100% - 1.5rem));
   }
 
+  .ad-banner-wrapper {
+    width: min(1120px, calc(100% - 1.5rem));
+  }
+
   .footer-inner {
     flex-direction: column;
     text-align: center;
+  }
+}
+
+/* Narrow screens: this responsive unit resolves to a square, so reserve that
+   height up front. Wider screens keep the 280px block above. */
+@media (max-width: 499px) {
+  .ad-banner-slot,
+  .ad-banner-slot .adsbygoogle {
+    min-height: 100vw;
   }
 }
 
