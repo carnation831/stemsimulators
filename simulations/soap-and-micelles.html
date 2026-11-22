@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How Soap Works | STEM Simulators</title>
+  <meta name="description" content="Interactive simulation of a soap molecule, micelles, and why soap washes away grease. Explore polar and nonpolar, hydrophilic and hydrophobic, and soluble and insoluble.">
+  <link rel="stylesheet" href="../assets/site.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4365444453795543"
+     crossorigin="anonymous"
+     data-tag-for-age-treatment="1"></script>
+  <style>
+    .soap-page {
+      width: min(1120px, calc(100% - 1.5rem));
+      margin: 1.25rem auto 2rem;
+      flex: 1;
+    }
+
+    .soap-intro {
+      margin-bottom: 1.1rem;
+    }
+
+    .soap-intro h1 {
+      margin: 0.35rem 0 0.45rem;
+      font-size: clamp(1.7rem, 3vw, 2.2rem);
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+    }
+
+    .soap-intro p {
+      margin: 0;
+      max-width: 68ch;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .soap-jumps {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.9rem;
+    }
+
+    .soap-jumps a {
+      text-decoration: none;
+      color: var(--ink);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 0.45rem 0.8rem;
+      font-weight: 800;
+      font-size: 0.92rem;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .soap-jumps a:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+
+    .companion {
+      text-decoration: none;
+      background: var(--blue);
+      color: #fff;
+      border-radius: 999px;
+      padding: 0.45rem 0.9rem;
+      font-weight: 800;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      margin-top: 0.85rem;
+    }
+
+    .companion:hover {
+      background: var(--blue-dark);
+      color: #fff;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 1px 2px rgba(20, 32, 51, 0.04);
+      padding: clamp(0.9rem, 2vw, 1.25rem);
+      margin: 0 0 1.15rem;
+      scroll-margin-top: 5.5rem;
+    }
+
+    .panel h2 {
+      margin: 0 0 0.3rem;
+      font-size: 1.35rem;
+      letter-spacing: -0.03em;
+    }
+
+    .lede {
+      margin: 0 0 0.9rem;
+      color: var(--muted);
+      max-width: 75ch;
+    }
+
+    .formula {
+      font-family: var(--mono);
+      font-weight: 700;
+      font-size: 0.98rem;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 0.75rem 0.9rem;
+      overflow-x: auto;
+      margin: 0 0 0.9rem;
+    }
+
+    .formula p {
+      margin: 0.2rem 0;
+    }
+
+    .formula .eq {
+      color: var(--ink);
+      font-size: 1.02rem;
+    }
+
+    .learn-more {
+      margin: 0.75rem 0 0;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #f8fafc;
+      padding: 0.15rem 0.9rem 0.75rem;
+    }
+
+    .learn-more summary {
+      cursor: pointer;
+      font-weight: 800;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+    }
+
+    .learn-more p {
+      margin: 0.35rem 0;
+      color: var(--muted);
+    }
+
+    .ideas {
+      margin: 0;
+      padding-left: 1.15rem;
+      max-width: 68ch;
+    }
+
+    .ideas li {
+      margin: 0.45rem 0;
+      color: var(--muted);
+    }
+
+    .ideas strong {
+      color: var(--ink);
+    }
+
+    .toggle {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 0.25rem;
+      padding: 0.25rem;
+      background: #e8eef5;
+      border-radius: 14px;
+      margin-bottom: 0.75rem;
+    }
+
+    .soap-page button {
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .toggle button {
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      font-weight: 800;
+      min-height: 44px;
+      padding: 0.4rem 0.85rem;
+      border-radius: 10px;
+    }
+
+    .toggle button[aria-checked="true"] {
+      background: #fff;
+      color: var(--blue-text);
+      box-shadow: 0 1px 3px rgba(20, 32, 51, 0.12);
+    }
+
+    .stage {
+      background: #f3f8fd;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .stage-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .molecule-svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .structural-svg {
+      width: 860px;
+      min-width: 860px;
+      max-width: none;
+    }
+
+    .soap-page [data-part] {
+      cursor: pointer;
+    }
+
+    .tail-halo,
+    .head-halo {
+      opacity: 0;
+    }
+
+    #molecule.is-tail .tail-halo,
+    #molecule.is-head .head-halo {
+      opacity: 1;
+    }
+
+    #molecule.is-tail .tail-mark {
+      stroke: #1d4ed8;
+    }
+
+    .hint {
+      margin: 0.55rem 0 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .part-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.6rem;
+      margin-top: 0.75rem;
+    }
+
+    .part-btn {
+      text-align: left;
+      background: #fff;
+      border: 2px solid var(--line);
+      border-radius: 14px;
+      padding: 0.7rem 0.8rem;
+      min-height: 64px;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    .part-btn span {
+      display: block;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .part-btn[aria-pressed="true"] {
+      border-color: var(--blue);
+      background: var(--blue-soft);
+      box-shadow: inset 0 0 0 2px var(--blue);
+    }
+
+    .explain {
+      margin-top: 0.75rem;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-left: 6px solid var(--blue);
+      border-radius: 12px;
+      padding: 0.85rem 1rem;
+      max-width: 78ch;
+    }
+
+    .explain h3 {
+      margin: 0 0 0.25rem;
+      font-size: 1.02rem;
+    }
+
+    .explain p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .dissolve-grid,
+    .wash-grid {
+      display: grid;
+      gap: 1rem;
+      align-items: start;
+    }
+
+    .dissolve-grid {
+      grid-template-columns: minmax(250px, 320px) minmax(0, 1fr);
+    }
+
+    .wash-grid {
+      grid-template-columns: minmax(0, 1.45fr) minmax(240px, 0.7fr);
+    }
+
+    .water-card,
+    .diagram-card,
+    .canvas-frame {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #f3f8fd;
+    }
+
+    .water-card,
+    .diagram-card {
+      padding: 0.75rem 0.8rem 0.9rem;
+    }
+
+    .water-card h3,
+    .diagram-card h3 {
+      margin: 0 0 0.35rem;
+      font-size: 1.02rem;
+    }
+
+    .water-card svg,
+    .diagram-card svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .water-card p,
+    .diagram-card p {
+      margin: 0.55rem 0 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .substance-list {
+      list-style: none;
+      margin: 0.75rem 0 0;
+      padding: 0;
+      display: grid;
+      gap: 0.45rem;
+    }
+
+    .substance {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      text-align: left;
+      background: #fff;
+      border: 2px solid var(--line);
+      border-radius: 14px;
+      padding: 0.45rem 0.65rem;
+      min-height: 58px;
+      font-weight: 800;
+      color: var(--ink);
+      touch-action: none;
+      cursor: grab;
+    }
+
+    .substance:active {
+      cursor: grabbing;
+    }
+
+    .substance[aria-pressed="true"] {
+      border-color: var(--blue);
+      background: var(--blue-soft);
+      box-shadow: inset 0 0 0 2px var(--blue);
+    }
+
+    .sub-icon {
+      width: 36px;
+      height: 36px;
+      flex: none;
+    }
+
+    .sub-name {
+      display: block;
+      line-height: 1.2;
+    }
+
+    .sub-meta {
+      display: block;
+      font-weight: 700;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .text-btn {
+      margin-top: 0.55rem;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      min-height: 44px;
+      padding: 0.4rem 0.8rem;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    .text-btn:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+
+    .canvas-frame {
+      overflow: hidden;
+      background: #e7f0f7;
+    }
+
+    .canvas-frame.is-drop {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.28);
+    }
+
+    .beaker-canvas {
+      width: 100%;
+      height: 460px;
+      display: block;
+      touch-action: pan-y;
+    }
+
+    .wash-canvas {
+      width: 100%;
+      height: 440px;
+      display: block;
+      touch-action: pan-y;
+    }
+
+    .legend {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem 0.9rem;
+      margin: 0.7rem 0 0;
+      padding: 0;
+      color: var(--muted);
+      font-weight: 800;
+      font-size: 0.88rem;
+    }
+
+    .legend li {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      min-height: 28px;
+    }
+
+    .swatch {
+      width: 18px;
+      height: 18px;
+      flex: none;
+      box-sizing: border-box;
+    }
+
+    .swatch-head {
+      background: #0f766e;
+      border: 2px solid #134e4a;
+      border-radius: 50%;
+    }
+
+    .swatch-tail {
+      width: 22px;
+      height: 0;
+      border-top: 4px solid #b45309;
+      background: transparent;
+      position: relative;
+    }
+
+    .swatch-oil {
+      background: #fbbf24;
+      border: 2px solid #92400e;
+      border-radius: 50%;
+    }
+
+    .swatch-water {
+      width: 22px;
+      height: 16px;
+      border-bottom: 3px solid #0369a1;
+      border-left: 3px solid #0369a1;
+      border-right: 3px solid transparent;
+      border-top: 3px solid transparent;
+      border-radius: 0 0 0 8px;
+      transform: rotate(-10deg);
+    }
+
+    .swatch-na {
+      background: #dbeafe;
+      border: 2px solid #1d4ed8;
+      border-radius: 50%;
+    }
+
+    .swatch-cl {
+      background: #ede9fe;
+      border: 2px solid #5b21b6;
+      border-radius: 3px;
+    }
+
+    .swatch-sugar {
+      width: 16px;
+      height: 16px;
+      background: #fbcfe8;
+      border: 2px solid #9d174d;
+      clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+    }
+
+    .result-line {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 0.1rem 0.55rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      border: 2px solid #94a3b8;
+      color: #334155;
+      background: #fff;
+    }
+
+    .pill-yes {
+      border-style: solid;
+      border-color: #0f766e;
+      color: #134e4a;
+      background: #ccfbf1;
+    }
+
+    .pill-no {
+      border-style: dashed;
+      border-color: #9a3412;
+      color: #7c2d12;
+      background: #ffedd5;
+    }
+
+    .mix-log {
+      margin: 0.7rem 0 0;
+      padding-left: 1.15rem;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .mix-log:empty {
+      display: none;
+    }
+
+    .steps {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      list-style: none;
+      margin: 0 0 0.75rem;
+      padding: 0;
+    }
+
+    .steps li {
+      min-height: 32px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0.15rem 0.65rem;
+      border-radius: 999px;
+      background: #eef2f6;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 800;
+      border: 2px solid transparent;
+    }
+
+    .steps li.is-now {
+      background: var(--blue);
+      color: #fff;
+    }
+
+    .steps li.is-done {
+      background: var(--teal-soft);
+      color: var(--teal-text);
+      border-style: solid;
+      border-color: #99f6e4;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .action {
+      flex: 1 1 9.2rem;
+      min-height: 46px;
+      padding: 0.45rem 0.75rem;
+      border-radius: 12px;
+      border: 2px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      font-weight: 800;
+    }
+
+    .action.is-primary {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: #fff;
+    }
+
+    .action.is-primary:hover:not(:disabled) {
+      background: var(--blue-dark);
+    }
+
+    .action.is-reset {
+      color: #9f1239;
+      border-color: #fecdd3;
+    }
+
+    .action.is-primary.is-reset {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: #fff;
+    }
+
+    .soap-page button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .speed {
+      flex: 1 1 220px;
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      min-height: 46px;
+      font-weight: 800;
+    }
+
+    .speed input {
+      flex: 1;
+      min-width: 110px;
+      accent-color: var(--blue);
+    }
+
+    .motion-note {
+      display: none;
+      margin: -0.35rem 0 0.75rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .vocab {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 0.7rem;
+      margin: 0;
+    }
+
+    .vocab div {
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 0.75rem 0.85rem;
+    }
+
+    .vocab dt {
+      font-weight: 800;
+      margin-bottom: 0.2rem;
+    }
+
+    .vocab dd {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .vocab a {
+      font-weight: 800;
+      color: var(--blue);
+    }
+
+    .drag-ghost {
+      position: fixed;
+      z-index: 70;
+      pointer-events: none;
+      background: #fff;
+      border: 2px solid var(--blue);
+      border-radius: 12px;
+      padding: 0.35rem 0.6rem;
+      font-weight: 800;
+      box-shadow: var(--shadow);
+    }
+
+    .drag-ghost[hidden] {
+      display: none !important;
+    }
+
+    .rule {
+      margin: 0 0 0.8rem;
+      padding: 0.65rem 0.8rem;
+      border-radius: 12px;
+      background: var(--blue-soft);
+      color: var(--blue-text);
+      font-weight: 800;
+    }
+
+    @media (max-width: 860px) {
+      .dissolve-grid,
+      .wash-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .substance-list {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .beaker-canvas {
+        height: 520px;
+      }
+
+      .wash-canvas {
+        height: 420px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .svg-caption {
+        display: none;
+      }
+
+      .part-buttons,
+      .substance-list {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .motion-note {
+        display: block;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="../index.html" class="logo">
+        <svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true">
+          <rect width="32" height="32" rx="9" fill="currentColor"/>
+          <circle cx="16" cy="16" r="3" fill="#fde68a"/>
+          <ellipse cx="16" cy="16" rx="11" ry="4.6" fill="none" stroke="#fff" stroke-width="1.6"/>
+          <ellipse cx="16" cy="16" rx="11" ry="4.6" fill="none" stroke="#fff" stroke-width="1.6" transform="rotate(60 16 16)"/>
+          <ellipse cx="16" cy="16" rx="11" ry="4.6" fill="none" stroke="#fff" stroke-width="1.6" transform="rotate(120 16 16)"/>
+        </svg>
+        <span class="logo-word">STEM<span>Simulators</span>.org</span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+        <span class="sr-only">Open menu</span>
+        <span></span><span></span><span></span>
+      </button>
+      <nav id="site-nav" class="site-nav" aria-label="Primary">
+        <a href="../index.html#simulations">Simulations</a>
+        <a href="../index.html#practice">Practice Problems</a>
+        <a href="../about.html">About</a>
+        <a href="../privacy.html">Privacy Policy</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="soap-page">
+    <div class="soap-intro">
+      <p class="eyebrow">Chemistry simulation</p>
+      <h1>How Soap Works</h1>
+      <p>Soap cleans because one end likes water and the other end likes oil.</p>
+      <a class="companion" href="how-soap-is-made.html">Next: How Soap Is Made</a>
+      <nav class="soap-jumps" aria-label="On this page">
+        <a href="#molecule">The molecule</a>
+        <a href="#dissolve">What mixes</a>
+        <a href="#wash">Washing</a>
+        <a href="#ideas">Key ideas</a>
+      </nav>
+    </div>
+
+    <noscript>
+      <p class="rule">This simulation uses JavaScript for the animations. The labeled diagrams and key ideas below still explain the science.</p>
+    </noscript>
+
+    <section class="panel" id="molecule" aria-labelledby="molecule-heading">
+      <h2 id="molecule-heading">1. A soap molecule</h2>
+      <p class="lede">A soap molecule (sodium stearate) has two ends. Tap the head or the tail.</p>
+
+      <div class="model" id="model-lollipop">
+        <div class="stage">
+          <svg class="molecule-svg" viewBox="0 0 720 300" role="img" aria-label="Lollipop model of sodium stearate. A wavy tail is on the oil side and a round charged head is on the water side.">
+            <rect width="470" height="300" fill="#fff7ed"/>
+            <rect x="470" width="250" height="300" fill="#ecfdf5"/>
+            <line x1="470" y1="18" x2="470" y2="282" stroke="#94a3b8" stroke-dasharray="5 5" stroke-width="2"/>
+            <g data-part="tail">
+              <path class="tail-halo" d="M48 158 C120 78 150 236 236 158 S350 86 430 162 L534 156" fill="none" stroke="#1d4ed8" stroke-width="30" stroke-linecap="round"/>
+              <path class="tail-mark tail-hit" d="M48 158 C120 78 150 236 236 158 S350 86 430 162 L534 156" fill="none" stroke="#c2410c" stroke-width="18" stroke-linecap="round"/>
+              <path d="M48 158 C120 78 150 236 236 158 S350 86 430 162 L534 156" fill="none" stroke="#ffedd5" stroke-width="4" stroke-linecap="round" pointer-events="none"/>
+            </g>
+            <g data-part="head">
+              <circle class="head-halo" cx="578" cy="154" r="62" fill="none" stroke="#1d4ed8" stroke-width="5"/>
+              <circle class="head-mark" cx="578" cy="154" r="52" fill="#0f766e" stroke="#134e4a" stroke-width="3"/>
+              <text x="578" y="160" text-anchor="middle" fill="#ffffff" font-family="Nunito, sans-serif" font-size="22" font-weight="800">COO⁻</text>
+              <circle cx="668" cy="72" r="24" fill="#fef9c3" stroke="#a16207" stroke-width="2"/>
+              <text x="668" y="78" text-anchor="middle" fill="#713f12" font-family="Nunito, sans-serif" font-size="16" font-weight="800">Na⁺</text>
+            </g>
+            <text class="svg-caption" x="200" y="278" text-anchor="middle" fill="#9a3412" font-family="Nunito, sans-serif" font-size="16" font-weight="800">likes oil and grease</text>
+            <text class="svg-caption" x="590" y="278" text-anchor="middle" fill="#115e59" font-family="Nunito, sans-serif" font-size="16" font-weight="800">likes water</text>
+          </svg>
+        </div>
+        <p class="hint">The stick is the tail. The circle is the head.</p>
+      </div>
+
+      <div class="part-buttons" role="group" aria-label="Parts of the soap molecule">
+        <button type="button" class="part-btn" id="btn-tail" data-part="tail" aria-pressed="false">
+          <span>Tail</span>
+          Water-fearing
+        </button>
+        <button type="button" class="part-btn" id="btn-head" data-part="head" aria-pressed="false">
+          <span>Head</span>
+          Water-loving
+        </button>
+      </div>
+      <div class="explain" id="molecule-explain">
+        <h3 id="molecule-kicker">Two opposite ends</h3>
+        <p id="molecule-copy">Tap the head or the tail. They act in opposite ways around water.</p>
+      </div>
+      <p id="molecule-live" class="sr-only" aria-live="polite"></p>
+
+      <details class="learn-more" id="molecule-more">
+        <summary>Learn more</summary>
+        <p>The science name is sodium stearate. In water, the sodium (Na⁺) floats off. The rest stays together: a charged head and a long tail of carbon and hydrogen.</p>
+        <div class="formula">
+          <p class="eq">CH<sub>3</sub>(CH<sub>2</sub>)<sub>16</sub>COONa</p>
+        </div>
+        <div class="toggle" role="radiogroup" aria-label="Molecule picture">
+          <button type="button" id="model-lollipop-btn" role="radio" aria-checked="true" data-model="lollipop">Simple picture</button>
+          <button type="button" id="model-structural-btn" role="radio" aria-checked="false" data-model="structural">Structural formula</button>
+        </div>
+        <div class="model" id="model-structural" hidden>
+        <div class="stage stage-scroll">
+          <svg class="molecule-svg structural-svg" viewBox="0 0 860 310" role="img" aria-label="Structural formula of sodium stearate. A 17-carbon zigzag tail ends in a COO minus head, with a separate sodium ion.">
+            <rect width="860" height="310" fill="#f8fafc"/>
+            <g data-part="tail">
+              <rect class="tail-halo" x="18" y="128" width="430" height="150" rx="16" fill="none" stroke="#1d4ed8" stroke-width="4"/>
+              <polyline class="tail-mark" points="46,176 68,222 90,176 112,222 134,176 156,222 178,176 200,222 222,176 244,222 266,176 288,222 310,176 332,222 354,176 376,222 398,176" fill="none" stroke="#9a3412" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+              <polyline class="tail-hit" points="46,176 68,222 90,176 112,222 134,176 156,222 178,176 200,222 222,176 244,222 266,176 288,222 310,176 332,222 354,176 376,222 398,176" fill="none" stroke="transparent" stroke-width="26"/>
+              <g fill="#9a3412">
+                <circle cx="46" cy="176" r="4"/><circle cx="68" cy="222" r="4"/><circle cx="90" cy="176" r="4"/><circle cx="112" cy="222" r="4"/>
+                <circle cx="134" cy="176" r="4"/><circle cx="156" cy="222" r="4"/><circle cx="178" cy="176" r="4"/><circle cx="200" cy="222" r="4"/>
+                <circle cx="222" cy="176" r="4"/><circle cx="244" cy="222" r="4"/><circle cx="266" cy="176" r="4"/><circle cx="288" cy="222" r="4"/>
+                <circle cx="310" cy="176" r="4"/><circle cx="332" cy="222" r="4"/><circle cx="354" cy="176" r="4"/><circle cx="376" cy="222" r="4"/>
+                <circle cx="398" cy="176" r="4"/>
+              </g>
+              <text x="46" y="158" text-anchor="middle" fill="#7c2d12" font-family="Nunito, sans-serif" font-size="16" font-weight="800">CH₃</text>
+              <line x1="398" y1="176" x2="498" y2="199" stroke="#9a3412" stroke-width="3"/>
+              <path d="M46 252 v10 H398 v-10" fill="none" stroke="#9a3412" stroke-width="1.6"/>
+              <text x="222" y="282" text-anchor="middle" fill="#9a3412" font-family="Nunito, sans-serif" font-size="15" font-weight="800">water-fearing tail</text>
+            </g>
+            <g data-part="head">
+              <rect class="head-halo" x="470" y="78" width="360" height="180" rx="16" fill="none" stroke="#1d4ed8" stroke-width="4"/>
+              <line x1="492" y1="199" x2="492" y2="136" stroke="#0f766e" stroke-width="2.4"/>
+              <line x1="506" y1="199" x2="506" y2="136" stroke="#0f766e" stroke-width="2.4"/>
+              <line x1="499" y1="199" x2="560" y2="199" stroke="#0f766e" stroke-width="3"/>
+              <circle cx="499" cy="118" r="16" fill="#e0f2fe" stroke="#0369a1" stroke-width="2"/>
+              <text x="499" y="124" text-anchor="middle" fill="#0c4a6e" font-family="Nunito, sans-serif" font-size="16" font-weight="800">O</text>
+              <circle cx="578" cy="199" r="16" fill="#e0f2fe" stroke="#0369a1" stroke-width="2"/>
+              <text x="578" y="205" text-anchor="middle" fill="#0c4a6e" font-family="Nunito, sans-serif" font-size="16" font-weight="800">O⁻</text>
+              <circle cx="499" cy="199" r="5" fill="#115e59"/>
+              <circle cx="690" cy="168" r="24" fill="#fef9c3" stroke="#a16207" stroke-width="2"/>
+              <text x="690" y="174" text-anchor="middle" fill="#713f12" font-family="Nunito, sans-serif" font-size="16" font-weight="800">Na⁺</text>
+              <text x="620" y="252" text-anchor="middle" fill="#115e59" font-family="Nunito, sans-serif" font-size="15" font-weight="800">water-loving head</text>
+            </g>
+          </svg>
+        </div>
+        <p class="hint">Each bend is a carbon. Hydrogens on the tail are not drawn. Na⁺ sits nearby as its own ion. Swipe sideways on a small screen.</p>
+        </div>
+      </details>
+    </section>
+
+    <section class="panel" id="dissolve" aria-labelledby="dissolve-heading">
+      <h2 id="dissolve-heading">2. What mixes with water?</h2>
+      <p class="lede">Drop salt, sugar, oil, or more water into the beaker.</p>
+      <p class="rule">Like dissolves like. Water mixes with salt and sugar. Oil stays separate.</p>
+      <div class="dissolve-grid">
+        <div class="dissolve-side">
+          <figure class="water-card">
+            <h3 id="water-title">Water is polar (it has charged ends)</h3>
+            <svg viewBox="0 0 280 176" aria-hidden="true">
+              <line x1="140" y1="70" x2="89" y2="109" stroke="#0c4a6e" stroke-width="4" stroke-linecap="round"/>
+              <line x1="140" y1="70" x2="191" y2="109" stroke="#0c4a6e" stroke-width="4" stroke-linecap="round"/>
+              <circle cx="89" cy="109" r="18" fill="#f8fafc" stroke="#0c4a6e" stroke-width="2.5"/>
+              <circle cx="191" cy="109" r="18" fill="#f8fafc" stroke="#0c4a6e" stroke-width="2.5"/>
+              <circle cx="140" cy="70" r="26" fill="#0284c7" stroke="#0c4a6e" stroke-width="2.5"/>
+              <text x="140" y="76" text-anchor="middle" fill="#ffffff" font-family="Nunito, sans-serif" font-size="18" font-weight="800">O</text>
+              <text x="89" y="115" text-anchor="middle" fill="#0c4a6e" font-family="Nunito, sans-serif" font-size="16" font-weight="800">H</text>
+              <text x="191" y="115" text-anchor="middle" fill="#0c4a6e" font-family="Nunito, sans-serif" font-size="16" font-weight="800">H</text>
+              <text x="140" y="28" text-anchor="middle" fill="#0c4a6e" font-family="Nunito, sans-serif" font-size="18" font-weight="800">δ−</text>
+              <text x="52" y="124" text-anchor="middle" fill="#1e3a8a" font-family="Nunito, sans-serif" font-size="18" font-weight="800">δ+</text>
+              <text x="228" y="124" text-anchor="middle" fill="#1e3a8a" font-family="Nunito, sans-serif" font-size="18" font-weight="800">δ+</text>
+              <text x="140" y="162" text-anchor="middle" fill="#334155" font-family="Nunito, sans-serif" font-size="14" font-weight="800">about 104.5°</text>
+            </svg>
+            <p id="water-caption">The big circle is oxygen. It is a little negative (δ−). The small circles are hydrogen. They are a little positive (δ+).</p>
+            <details class="learn-more">
+              <summary>Learn more</summary>
+              <p>Oxygen pulls on the shared electrons more than hydrogen does. The bend, about 104.5°, keeps those pulls from canceling. δ means a partial charge, smaller than the full charge on Na⁺ or Cl⁻.</p>
+            </details>
+          </figure>
+          <ul class="substance-list" aria-label="Substances to test in water">
+            <li>
+              <button type="button" class="substance" data-mix="salt" aria-pressed="false">
+                <svg class="sub-icon" viewBox="0 0 36 36" aria-hidden="true">
+                  <circle cx="13" cy="18" r="8" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+                  <rect x="20" y="10" width="12" height="16" rx="2" fill="#ede9fe" stroke="#5b21b6" stroke-width="2"/>
+                </svg>
+                <span>
+                  <span class="sub-name">Salt</span>
+                  <span class="sub-meta">table salt</span>
+                </span>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="substance" data-mix="sugar" aria-pressed="false">
+                <svg class="sub-icon" viewBox="0 0 36 36" aria-hidden="true">
+                  <polygon points="18,4 31,11 31,25 18,32 5,25 5,11" fill="#fbcfe8" stroke="#9d174d" stroke-width="2"/>
+                </svg>
+                <span>
+                  <span class="sub-name">Sugar</span>
+                  <span class="sub-meta">table sugar</span>
+                </span>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="substance" data-mix="oil" aria-pressed="false">
+                <svg class="sub-icon" viewBox="0 0 36 36" aria-hidden="true">
+                  <ellipse cx="18" cy="20" rx="12" ry="8" fill="#fbbf24" stroke="#92400e" stroke-width="2"/>
+                </svg>
+                <span>
+                  <span class="sub-name">Oil / grease</span>
+                  <span class="sub-meta">cooking oil</span>
+                </span>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="substance" data-mix="water" aria-pressed="false">
+                <svg class="sub-icon" viewBox="0 0 36 36" aria-hidden="true">
+                  <line x1="18" y1="10" x2="10" y2="24" stroke="#0369a1" stroke-width="2"/>
+                  <line x1="18" y1="10" x2="26" y2="24" stroke="#0369a1" stroke-width="2"/>
+                  <circle cx="18" cy="10" r="5" fill="#0284c7"/>
+                  <circle cx="10" cy="24" r="3.5" fill="#f8fafc" stroke="#0369a1"/>
+                  <circle cx="26" cy="24" r="3.5" fill="#f8fafc" stroke="#0369a1"/>
+                </svg>
+                <span>
+                  <span class="sub-name">More water</span>
+                  <span class="sub-meta">H₂O</span>
+                </span>
+              </button>
+            </li>
+          </ul>
+          <p class="hint" id="mix-hint">Drag it into the beaker, or select it.</p>
+          <button type="button" class="text-btn" id="btn-empty">Empty the beaker</button>
+        </div>
+        <div class="dissolve-main">
+          <div class="canvas-frame" id="beaker-frame">
+            <canvas id="mix-canvas" class="beaker-canvas" aria-hidden="true"></canvas>
+          </div>
+          <ul class="legend">
+            <li><span class="swatch swatch-water"></span> Bent shape = water</li>
+            <li><span class="swatch swatch-na"></span> Circle = Na⁺</li>
+            <li><span class="swatch swatch-cl"></span> Square = Cl⁻</li>
+            <li><span class="swatch swatch-sugar"></span> Hexagon = sugar</li>
+            <li><span class="swatch swatch-oil"></span> Gold layer = oil</li>
+          </ul>
+          <div class="explain" id="mix-explain" aria-live="polite">
+            <p class="result-line"><span class="pill" id="mix-pill">Not tested</span> <strong id="mix-title">Nothing added yet</strong></p>
+            <p id="mix-copy">The beaker starts with water only. Add something to see if it dissolves.</p>
+          </div>
+          <ul class="mix-log" id="mix-log" aria-label="Results so far"></ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="wash" aria-labelledby="wash-heading">
+      <h2 id="wash-heading">3. How soap cleans</h2>
+      <p class="lede">Grease sticks to cloth. Water alone cannot pull it off. Add soap, scrub, then rinse.</p>
+      <ol class="steps" aria-label="Washing steps">
+        <li id="step-dirty" aria-current="step">1 · Water only</li>
+        <li id="step-soapy">2 · Soap added</li>
+        <li id="step-micelles">3 · Micelles</li>
+        <li id="step-clean">4 · Rinsed</li>
+      </ol>
+      <div class="controls">
+        <button type="button" class="action is-primary" id="btn-add">Add soap</button>
+        <button type="button" class="action" id="btn-stir" disabled>Stir / scrub</button>
+        <button type="button" class="action" id="btn-rinse" disabled>Rinse</button>
+        <button type="button" class="action is-reset" id="btn-reset">Reset (water only)</button>
+        <label class="speed" for="speed">Speed
+          <input id="speed" type="range" min="0.5" max="2" step="0.5" value="1">
+          <span id="speed-readout">1×</span>
+        </label>
+      </div>
+      <p class="motion-note">Motion is reduced on this device, so each button jumps straight to the next picture.</p>
+      <div class="wash-grid">
+        <div>
+          <div class="canvas-frame">
+            <canvas id="wash-canvas" class="wash-canvas" aria-hidden="true"></canvas>
+          </div>
+        </div>
+        <aside class="diagram-card">
+          <h3>Micelle cross-section</h3>
+          <svg viewBox="0 0 320 320" aria-hidden="true">
+            <circle cx="160" cy="160" r="148" fill="#e0f2fe"/>
+            <circle cx="160" cy="160" r="40" fill="#fbbf24" stroke="#92400e" stroke-width="2"/>
+            <text x="160" y="166" text-anchor="middle" fill="#78350f" font-family="Nunito, sans-serif" font-size="16" font-weight="800">oil</text>
+            <g fill="none" stroke="#b45309" stroke-width="4" stroke-linecap="round">
+              <line x1="160" y1="114" x2="160" y2="68"/>
+              <line x1="183" y1="120" x2="206" y2="80"/>
+              <line x1="199" y1="137" x2="240" y2="114"/>
+              <line x1="206" y1="160" x2="252" y2="160"/>
+              <line x1="199" y1="183" x2="240" y2="206"/>
+              <line x1="183" y1="200" x2="206" y2="240"/>
+              <line x1="160" y1="206" x2="160" y2="252"/>
+              <line x1="137" y1="200" x2="114" y2="240"/>
+              <line x1="121" y1="183" x2="80" y2="206"/>
+              <line x1="114" y1="160" x2="68" y2="160"/>
+              <line x1="121" y1="137" x2="80" y2="114"/>
+              <line x1="137" y1="120" x2="114" y2="80"/>
+            </g>
+            <g fill="#0f766e" stroke="#134e4a" stroke-width="2">
+              <circle cx="160" cy="52" r="13"/>
+              <circle cx="214" cy="66" r="13"/>
+              <circle cx="254" cy="106" r="13"/>
+              <circle cx="268" cy="160" r="13"/>
+              <circle cx="254" cy="214" r="13"/>
+              <circle cx="214" cy="254" r="13"/>
+              <circle cx="160" cy="268" r="13"/>
+              <circle cx="106" cy="254" r="13"/>
+              <circle cx="66" cy="214" r="13"/>
+              <circle cx="52" cy="160" r="13"/>
+              <circle cx="66" cy="106" r="13"/>
+              <circle cx="106" cy="66" r="13"/>
+            </g>
+          </svg>
+          <p id="micelle-caption">A micelle is a tiny soap ball. Heads point out, toward water. Tails point in and hold the grease.</p>
+        </aside>
+      </div>
+      <ul class="legend">
+        <li><span class="swatch swatch-head"></span> Circle = water-loving head</li>
+        <li><span class="swatch swatch-tail"></span> Line = water-fearing tail</li>
+        <li><span class="swatch swatch-oil"></span> Gold = oil or grease</li>
+        <li><span class="swatch swatch-water"></span> Bent molecule = water</li>
+      </ul>
+      <div class="explain">
+        <h3>What is happening</h3>
+        <p id="wash-status" aria-live="polite">This is water alone. The grease stays on the cloth. Water is polar (it has charged ends). Grease is nonpolar, so water cannot grab it.</p>
+      </div>
+    </section>
+
+    <section class="panel" id="ideas" aria-labelledby="ideas-heading">
+      <h2 id="ideas-heading">4. Key ideas</h2>
+      <ul class="ideas">
+        <li><strong>Water-loving and water-fearing.</strong> The head is hydrophilic (water-loving). The tail is hydrophobic (water-fearing). <a href="#molecule" data-jump-part="head">See the molecule</a></li>
+        <li><strong>Polar and nonpolar.</strong> Polar water has charged ends. Nonpolar oil does not, so they stay apart. <a href="#dissolve" data-jump-mix="oil">See oil</a></li>
+        <li><strong>Soluble and insoluble.</strong> Salt and sugar dissolve. Oil does not. <a href="#dissolve" data-jump-mix="salt">See salt</a></li>
+        <li><strong>Micelle.</strong> A tiny soap ball. Heads point out. Tails hold the grease inside. <a href="#wash" data-jump-wash="micelles">See it wash</a></li>
+      </ul>
+      <a class="companion" href="how-soap-is-made.html">Next: How Soap Is Made</a>
+    </section>
+  </main>
+
+  <div class="ad-banner-wrapper">
+    <span class="ad-label">Advertisement</span>
+    <div class="ad-banner-slot">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-4365444453795543"
+           data-ad-slot="4468511317"
+           data-ad-format="auto"
+           data-full-width-responsive="true"
+           data-tag-for-age-treatment="1"></ins>
+      <script>
+           (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>&copy; 2026 STEMSimulators.org. All rights reserved.</p>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="../index.html">Home</a>
+        <a href="../about.html">About</a>
+        <a href="../privacy.html">Privacy Policy</a>
+      </nav>
+    </div>
+  </footer>
+  <div id="drag-ghost" class="drag-ghost" hidden></div>
+  <script src="../assets/site.js" defer></script>
+  <script src="../assets/soap-and-micelles.js" defer></script>
+</body>
+</html>
