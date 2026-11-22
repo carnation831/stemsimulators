@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How Soap Is Made | STEM Simulators</title>
+  <meta name="description" content="Interactive saponification simulation. Watch a triglyceride and lye become glycerol and soap, then connect the new molecules to how soap cleans.">
+  <link rel="stylesheet" href="../assets/site.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4365444453795543"
+     crossorigin="anonymous"
+     data-tag-for-age-treatment="1"></script>
+  <style>
+    .make-page {
+      width: min(1120px, calc(100% - 1.5rem));
+      margin: 1.25rem auto 2rem;
+      flex: 1;
+    }
+
+    .make-intro { margin-bottom: 1.1rem; }
+
+    .make-intro h1 {
+      margin: 0.35rem 0 0.45rem;
+      font-size: clamp(1.7rem, 3vw, 2.2rem);
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+    }
+
+    .make-intro p {
+      margin: 0;
+      max-width: 70ch;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .companion {
+      text-decoration: none;
+      background: var(--blue);
+      color: #fff;
+      border-radius: 999px;
+      padding: 0.45rem 0.9rem;
+      font-weight: 800;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      margin-top: 0.85rem;
+    }
+
+    .companion:hover { background: var(--blue-dark); color: #fff; }
+
+    .safety {
+      background: #fff7ed;
+      border: 2px solid #c2410c;
+      border-radius: 14px;
+      padding: 0.85rem 1rem;
+      margin: 0 0 1.15rem;
+      max-width: 78ch;
+    }
+
+    .safety strong {
+      display: block;
+      color: #9a3412;
+      margin-bottom: 0.2rem;
+    }
+
+    .safety p { margin: 0; color: #7c2d12; }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 1px 2px rgba(20, 32, 51, 0.04);
+      padding: clamp(0.9rem, 2vw, 1.25rem);
+      margin: 0 0 1.15rem;
+      scroll-margin-top: 5.5rem;
+    }
+
+    .panel h2 {
+      margin: 0 0 0.3rem;
+      font-size: 1.35rem;
+      letter-spacing: -0.03em;
+    }
+
+    .lede { margin: 0 0 0.9rem; color: var(--muted); max-width: 78ch; }
+
+    .fat-card {
+      margin: 0 0 0.9rem;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 0.6rem 0.7rem 0.75rem;
+    }
+
+    .fat-card svg { width: min(100%, 720px); height: auto; display: block; }
+
+    .fat-card figcaption { margin: 0.45rem 0 0; color: var(--muted); }
+
+    .choices {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .choices fieldset {
+      margin: 0;
+      padding: 0.55rem;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      min-width: 0;
+    }
+
+    .choices legend {
+      font-weight: 800;
+      padding: 0 0.3rem;
+    }
+
+    .make-page button { font-family: inherit; cursor: pointer; }
+
+    .toggle { display: flex; flex-direction: column; gap: 0.35rem; }
+
+    .toggle button {
+      text-align: left;
+      background: #fff;
+      border: 2px solid var(--line);
+      border-radius: 12px;
+      min-height: 44px;
+      padding: 0.4rem 0.7rem;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    .toggle button[aria-checked="true"] {
+      border-color: var(--blue);
+      background: var(--blue-soft);
+      box-shadow: inset 0 0 0 2px var(--blue);
+    }
+
+    .toggle button:disabled { opacity: 0.55; cursor: not-allowed; }
+
+    .choice-note { margin: 0.2rem 0 0; color: var(--muted); font-size: 0.92rem; }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .action {
+      flex: 1 1 8.5rem;
+      min-height: 46px;
+      padding: 0.45rem 0.75rem;
+      border-radius: 12px;
+      border: 2px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      font-weight: 800;
+    }
+
+    .action.is-primary { background: var(--blue); border-color: var(--blue); color: #fff; }
+    .action.is-primary:hover:not(:disabled) { background: var(--blue-dark); }
+    .action.is-reset { color: #9f1239; border-color: #fecdd3; }
+    .action.is-primary.is-reset { background: var(--blue); border-color: var(--blue); color: #fff; }
+    .make-page button:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    .canvas-frame {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+      background: #e7f0f7;
+    }
+
+    .pot-canvas {
+      width: 100%;
+      height: 440px;
+      display: block;
+      touch-action: pan-y;
+    }
+
+    .meter-wrap { margin: 0.75rem 0 0.4rem; }
+
+    .meter {
+      height: 16px;
+      background: #e8eef5;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .meter span {
+      display: block;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #1d4ed8, #0f766e);
+    }
+
+    .meter-label { margin: 0.35rem 0 0; font-weight: 800; }
+
+    .formula {
+      font-family: var(--mono);
+      font-weight: 700;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 0.75rem 0.9rem;
+      overflow-x: auto;
+      margin: 0.75rem 0 0;
+    }
+
+    .formula p { margin: 0.2rem 0; }
+    .formula .eq { color: var(--ink); }
+
+    .explain {
+      margin-top: 0.75rem;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-left: 6px solid var(--blue);
+      border-radius: 12px;
+      padding: 0.85rem 1rem;
+      max-width: 78ch;
+    }
+
+    .explain h3 { margin: 0 0 0.25rem; font-size: 1.02rem; }
+    .explain p { margin: 0; color: var(--muted); }
+
+    .legend {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem 0.9rem;
+      margin: 0.7rem 0 0;
+      padding: 0;
+      color: var(--muted);
+      font-weight: 800;
+      font-size: 0.88rem;
+    }
+
+    .legend li { display: inline-flex; align-items: center; gap: 0.4rem; min-height: 28px; }
+
+    .swatch { width: 18px; height: 18px; flex: none; box-sizing: border-box; }
+    .swatch-chain { width: 22px; height: 0; border-top: 4px solid #c2410c; }
+    .swatch-ester { border: 2px solid #9a3412; border-radius: 50%; background: #fff; }
+    .swatch-glycerol { background: #0f766e; border-radius: 3px; width: 8px; height: 18px; }
+    .swatch-head { background: #0f766e; border: 2px solid #134e4a; border-radius: 50%; }
+    .swatch-oh { background: #dbeafe; border: 2px solid #1d4ed8; border-radius: 50%; }
+
+    .hint { margin: 0.45rem 0 0; color: var(--muted); font-size: 0.92rem; }
+
+    .motion-note { display: none; margin: 0 0 0.7rem; color: var(--muted); font-weight: 700; font-size: 0.9rem; }
+
+    .vocab {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 0.7rem;
+      margin: 0;
+    }
+
+    .vocab div {
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 0.75rem 0.85rem;
+    }
+
+    .vocab dt { font-weight: 800; margin-bottom: 0.2rem; }
+    .vocab dd { margin: 0; color: var(--muted); }
+    .vocab a { font-weight: 800; color: var(--blue); }
+
+    @media (max-width: 640px) {
+      .pot-canvas { height: 460px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .motion-note { display: block; }
+      .meter span { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="../index.html" class="logo">
+        <svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true">
+          <rect width="32" height="32" rx="9" fill="currentColor"/>
+          <circle cx="16" cy="16" r="3" fill="#fde68a"/>
+          <ellipse cx="16" cy="16" rx="11" ry="4.6" fill="none" stroke="#fff" stroke-width="1.6"/>
+          <ellipse cx="16" cy="16" rx="11" ry="4.6" fill="none" stroke="#fff" stroke-width="1.6" transform="rotate(60 16 16)"/>
+          <ellipse cx="16" cy="16" rx="11" ry="4.6" fill="none" stroke="#fff" stroke-width="1.6" transform="rotate(120 16 16)"/>
+        </svg>
+        <span class="logo-word">STEM<span>Simulators</span>.org</span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+        <span class="sr-only">Open menu</span>
+        <span></span><span></span><span></span>
+      </button>
+      <nav id="site-nav" class="site-nav" aria-label="Primary">
+        <a href="../index.html#simulations">Simulations</a>
+        <a href="../index.html#practice">Practice Problems</a>
+        <a href="../about.html">About</a>
+        <a href="../privacy.html">Privacy Policy</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="make-page">
+    <div class="make-intro">
+      <p class="eyebrow">Chemistry simulation</p>
+      <h1>How Soap Is Made</h1>
+      <p>A fat or oil and a strong base turn into soap and glycerol. This is the reaction that makes the soap molecules from <a href="soap-and-micelles.html">How Soap Works</a>. It is a follow-on demo, not a scored activity.</p>
+      <a class="companion" href="soap-and-micelles.html">Back: How Soap Works</a>
+    </div>
+
+    <aside class="safety" role="note">
+      <strong>Safety — virtual demo only</strong>
+      <p>Lye is caustic. Sodium hydroxide and potassium hydroxide can burn skin and eyes. Real soap-making needs an adult, goggles, and gloves, and a careful recipe. Do not mix lye from this page. Nothing here is a set of instructions for a real batch.</p>
+    </aside>
+
+    <noscript>
+      <p class="safety"><strong>JavaScript is off</strong> The pot animation needs JavaScript. The equation and the key ideas below still explain saponification.</p>
+    </noscript>
+
+    <section class="panel" id="lab" aria-labelledby="lab-heading">
+      <h2 id="lab-heading">Saponification in a pot</h2>
+      <p class="lede">Add a triglyceride and lye water, stir them together, then heat. Hydroxide breaks the ester links. Each fatty-acid chain leaves as a soap molecule, and glycerol is left behind. Afterward, bar soap is cured and can be salted out of the glycerol water.</p>
+      <p class="motion-note">Motion is reduced on this device, so each button jumps straight to the next picture.</p>
+
+      <figure class="fat-card">
+        <svg viewBox="0 0 640 150" aria-hidden="true">
+          <path d="M24 36 C90 18 120 54 210 36" fill="none" stroke="#c2410c" stroke-width="5" stroke-linecap="round"/>
+          <path d="M24 75 C90 58 130 96 210 75" fill="none" stroke="#c2410c" stroke-width="5" stroke-linecap="round"/>
+          <path d="M24 114 C90 98 120 132 210 114" fill="none" stroke="#c2410c" stroke-width="5" stroke-linecap="round"/>
+          <g fill="#fff" stroke="#9a3412" stroke-width="2.5">
+            <circle cx="232" cy="36" r="7"/>
+            <circle cx="232" cy="75" r="7"/>
+            <circle cx="232" cy="114" r="7"/>
+          </g>
+          <g stroke="#0f766e" stroke-width="4" stroke-linecap="round">
+            <line x1="240" y1="36" x2="278" y2="36"/>
+            <line x1="240" y1="75" x2="278" y2="75"/>
+            <line x1="240" y1="114" x2="278" y2="114"/>
+            <line x1="278" y1="30" x2="278" y2="120" stroke-width="8"/>
+          </g>
+          <text x="70" y="146" fill="#9a3412" font-family="Nunito, sans-serif" font-size="15" font-weight="800">fatty-acid chains</text>
+          <text x="214" y="16" fill="#9a3412" font-family="Nunito, sans-serif" font-size="15" font-weight="800">esters</text>
+          <text x="300" y="82" fill="#115e59" font-family="Nunito, sans-serif" font-size="15" font-weight="800">glycerol backbone</text>
+        </svg>
+        <figcaption>A fat molecule is a triglyceride: one glycerol backbone and three fatty-acid chains. An ester link holds each chain on. Real oils are mixtures of chains. This model uses one kind at a time.</figcaption>
+      </figure>
+
+      <div class="choices">
+        <fieldset>
+          <legend>Fat or oil</legend>
+          <div class="toggle" role="radiogroup" aria-label="Fat or oil" id="oil-group">
+            <button type="button" role="radio" data-oil="olive" aria-checked="false">Olive oil</button>
+            <button type="button" role="radio" data-oil="coconut" aria-checked="false">Coconut oil</button>
+            <button type="button" role="radio" data-oil="tallow" aria-checked="true">Animal fat</button>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Base</legend>
+          <div class="toggle" role="radiogroup" aria-label="Base" id="base-group">
+            <button type="button" role="radio" data-base="naoh" aria-checked="true">NaOH · bar soap</button>
+            <button type="button" role="radio" data-base="koh" aria-checked="false">KOH · liquid soap</button>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Amount of lye</legend>
+          <div class="toggle" role="radiogroup" aria-label="Amount of lye" id="lye-group">
+            <button type="button" role="radio" data-lye="low" aria-checked="false">Too little</button>
+            <button type="button" role="radio" data-lye="ok" aria-checked="true">Balanced · 3 per fat</button>
+            <button type="button" role="radio" data-lye="high" aria-checked="false">Too much</button>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Heat</legend>
+          <div class="toggle" role="radiogroup" aria-label="Heat" id="heat-group">
+            <button type="button" role="radio" data-heat="none" aria-checked="false">No extra heat</button>
+            <button type="button" role="radio" data-heat="warm" aria-checked="true">Warm · about 45°C</button>
+            <button type="button" role="radio" data-heat="hot" aria-checked="false">Hot · hot process</button>
+          </div>
+        </fieldset>
+      </div>
+      <p class="choice-note" id="choice-note"></p>
+      <p class="hint" id="lock-note" hidden>Reset the pot to choose a different fat, base, or amount of lye.</p>
+
+      <div class="controls">
+        <button type="button" class="action is-primary" id="btn-add">Add ingredients</button>
+        <button type="button" class="action" id="btn-mix" disabled>Mix / stir</button>
+        <button type="button" class="action" id="btn-heat" disabled>Heat</button>
+        <button type="button" class="action" id="btn-cure" disabled>Cure</button>
+        <button type="button" class="action is-reset" id="btn-reset">Reset</button>
+      </div>
+
+      <div class="canvas-frame">
+        <canvas id="pot-canvas" class="pot-canvas" aria-hidden="true"></canvas>
+      </div>
+      <ul class="legend">
+        <li><span class="swatch swatch-chain"></span> Wavy line = fatty-acid chain</li>
+        <li><span class="swatch swatch-ester"></span> Open circle = ester link</li>
+        <li><span class="swatch swatch-glycerol"></span> Green bar = glycerol</li>
+        <li><span class="swatch swatch-oh"></span> Blue circle = hydroxide, OH⁻</li>
+        <li><span class="swatch swatch-head"></span> Filled circle = soap head</li>
+      </ul>
+
+      <div class="meter-wrap">
+        <div class="meter" id="meter" role="meter" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0" aria-valuetext="No ester links broken yet">
+          <span id="meter-fill"></span>
+        </div>
+        <p class="meter-label" id="meter-label">0 of 3 ester links broken</p>
+      </div>
+
+      <div class="formula" id="equation">
+        <p class="eq" id="eq-words">triglyceride + 3 NaOH → glycerol + 3 sodium stearate</p>
+        <p class="eq" id="eq-symbols">C<sub>57</sub>H<sub>110</sub>O<sub>6</sub> + 3 NaOH → C<sub>3</sub>H<sub>5</sub>(OH)<sub>3</sub> + 3 C<sub>17</sub>H<sub>35</sub>COONa</p>
+        <p id="eq-note">Balanced saponification uses three base molecules for each triglyceride, one for each ester.</p>
+      </div>
+
+      <div class="explain">
+        <h3 id="status-title">Empty pot</h3>
+        <p id="make-status" aria-live="polite">Choose a fat, a base, and how much lye, then add them to the pot. Animal fat and a balanced amount of NaOH make sodium stearate, the soap molecule from How Soap Works.</p>
+      </div>
+    </section>
+
+    <section class="panel" id="ideas" aria-labelledby="ideas-heading">
+      <h2 id="ideas-heading">Key ideas</h2>
+      <p class="lede">Short meanings for the words in this reaction.</p>
+      <dl class="vocab">
+        <div>
+          <dt>Saponification</dt>
+          <dd>The reaction that makes soap. A triglyceride and a strong base become glycerol and three fatty-acid salts. <a href="#lab">See the pot</a></dd>
+        </div>
+        <div>
+          <dt>Triglyceride</dt>
+          <dd>A fat or oil molecule. One glycerol backbone holds three fatty-acid chains. The model animal fat is glyceryl tristearate, C<sub>57</sub>H<sub>110</sub>O<sub>6</sub>.</dd>
+        </div>
+        <div>
+          <dt>Ester</dt>
+          <dd>The link that joins each fatty acid to glycerol. The hydroxide ion breaks that link. A triglyceride has three esters, so it needs three hydroxide ions.</dd>
+        </div>
+        <div>
+          <dt>Base / lye</dt>
+          <dd>NaOH or KOH, dissolved in water. The hydroxide ion, OH⁻, does the chemistry. NaOH makes bar soap. KOH makes softer or liquid soap. Too much lye left over is caustic.</dd>
+        </div>
+        <div>
+          <dt>Glycerol</dt>
+          <dd>The small molecule left when the three chains break off, C<sub>3</sub>H<sub>5</sub>(OH)<sub>3</sub>. It is also called glycerin. It can stay in the soap or be separated by salting out.</dd>
+        </div>
+        <div>
+          <dt>Fatty acid salt</dt>
+          <dd>Soap. Sodium stearate is the sodium salt of stearic acid. Each one has a polar, charged head and a nonpolar tail. <a href="soap-and-micelles.html">See how that molecule cleans</a></dd>
+        </div>
+      </dl>
+      <a class="companion" href="soap-and-micelles.html">Back: How Soap Works</a>
+    </section>
+  </main>
+
+  <div class="ad-banner-wrapper">
+    <span class="ad-label">Advertisement</span>
+    <div class="ad-banner-slot">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-4365444453795543"
+           data-ad-slot="4468511317"
+           data-ad-format="auto"
+           data-full-width-responsive="true"
+           data-tag-for-age-treatment="1"></ins>
+      <script>
+           (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>&copy; 2026 STEMSimulators.org. All rights reserved.</p>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="../index.html">Home</a>
+        <a href="../about.html">About</a>
+        <a href="../privacy.html">Privacy Policy</a>
+      </nav>
+    </div>
+  </footer>
+  <script src="../assets/site.js" defer></script>
+  <script src="../assets/how-soap-is-made.js" defer></script>
+</body>
+</html>
