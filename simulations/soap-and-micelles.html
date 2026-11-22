@@ -121,6 +121,42 @@
       font-size: 1.02rem;
     }
 
+    .learn-more {
+      margin: 0.75rem 0 0;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #f8fafc;
+      padding: 0.15rem 0.9rem 0.75rem;
+    }
+
+    .learn-more summary {
+      cursor: pointer;
+      font-weight: 800;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+    }
+
+    .learn-more p {
+      margin: 0.35rem 0;
+      color: var(--muted);
+    }
+
+    .ideas {
+      margin: 0;
+      padding-left: 1.15rem;
+      max-width: 68ch;
+    }
+
+    .ideas li {
+      margin: 0.45rem 0;
+      color: var(--muted);
+    }
+
+    .ideas strong {
+      color: var(--ink);
+    }
+
     .toggle {
       display: inline-flex;
       flex-wrap: wrap;
@@ -743,13 +779,13 @@
     <div class="soap-intro">
       <p class="eyebrow">Chemistry simulation</p>
       <h1>How Soap Works</h1>
-      <p>Look at a soap molecule, test what mixes with water, and then wash a greasy spot. Soap works because one end is attracted to water and the other end mixes with oil.</p>
+      <p>Soap cleans because one end likes water and the other end likes oil.</p>
       <a class="companion" href="how-soap-is-made.html">Next: How Soap Is Made</a>
       <nav class="soap-jumps" aria-label="On this page">
-        <a href="#molecule">1 · Soap molecule</a>
-        <a href="#dissolve">2 · What dissolves</a>
-        <a href="#wash">3 · Micelles</a>
-        <a href="#ideas">4 · Key ideas</a>
+        <a href="#molecule">The molecule</a>
+        <a href="#dissolve">What mixes</a>
+        <a href="#wash">Washing</a>
+        <a href="#ideas">Key ideas</a>
       </nav>
     </div>
 
@@ -758,17 +794,8 @@
     </noscript>
 
     <section class="panel" id="molecule" aria-labelledby="molecule-heading">
-      <h2 id="molecule-heading">1. Soap molecule explorer</h2>
-      <p class="lede">Sodium stearate is one real soap, made from stearic acid. Bar soap is a mix of similar molecules. Every one of them has a long tail and a charged head.</p>
-      <div class="formula">
-        <p class="eq">Sodium stearate · CH<sub>3</sub>(CH<sub>2</sub>)<sub>16</sub>COONa</p>
-        <p>In water the sodium ion leaves: CH<sub>3</sub>(CH<sub>2</sub>)<sub>16</sub>COO<sup>−</sup> + Na<sup>+</sup></p>
-      </div>
-
-      <div class="toggle" role="radiogroup" aria-label="Molecule model">
-        <button type="button" id="model-lollipop-btn" role="radio" aria-checked="true" data-model="lollipop">Lollipop model</button>
-        <button type="button" id="model-structural-btn" role="radio" aria-checked="false" data-model="structural">Structural formula</button>
-      </div>
+      <h2 id="molecule-heading">1. A soap molecule</h2>
+      <p class="lede">A soap molecule (sodium stearate) has two ends. Tap the head or the tail.</p>
 
       <div class="model" id="model-lollipop">
         <div class="stage">
@@ -788,14 +815,40 @@
               <circle cx="668" cy="72" r="24" fill="#fef9c3" stroke="#a16207" stroke-width="2"/>
               <text x="668" y="78" text-anchor="middle" fill="#713f12" font-family="Nunito, sans-serif" font-size="16" font-weight="800">Na⁺</text>
             </g>
-            <text class="svg-caption" x="200" y="278" text-anchor="middle" fill="#9a3412" font-family="Nunito, sans-serif" font-size="16" font-weight="800">oil side · nonpolar tail</text>
-            <text class="svg-caption" x="590" y="278" text-anchor="middle" fill="#115e59" font-family="Nunito, sans-serif" font-size="16" font-weight="800">water side · polar head</text>
+            <text class="svg-caption" x="200" y="278" text-anchor="middle" fill="#9a3412" font-family="Nunito, sans-serif" font-size="16" font-weight="800">likes oil and grease</text>
+            <text class="svg-caption" x="590" y="278" text-anchor="middle" fill="#115e59" font-family="Nunito, sans-serif" font-size="16" font-weight="800">likes water</text>
           </svg>
         </div>
-        <p class="hint">Simplified model. The stick is the hydrocarbon tail. The circle is the charged head. Na⁺ is a separate ion, not stuck on by a covalent bond. On a small screen, use the buttons under the picture.</p>
+        <p class="hint">The stick is the tail. The circle is the head.</p>
       </div>
 
-      <div class="model" id="model-structural" hidden>
+      <div class="part-buttons" role="group" aria-label="Parts of the soap molecule">
+        <button type="button" class="part-btn" id="btn-tail" data-part="tail" aria-pressed="false">
+          <span>Tail</span>
+          Water-fearing
+        </button>
+        <button type="button" class="part-btn" id="btn-head" data-part="head" aria-pressed="false">
+          <span>Head</span>
+          Water-loving
+        </button>
+      </div>
+      <div class="explain" id="molecule-explain">
+        <h3 id="molecule-kicker">Two opposite ends</h3>
+        <p id="molecule-copy">Tap the head or the tail. They act in opposite ways around water.</p>
+      </div>
+      <p id="molecule-live" class="sr-only" aria-live="polite"></p>
+
+      <details class="learn-more" id="molecule-more">
+        <summary>Learn more</summary>
+        <p>The science name is sodium stearate. In water, the sodium (Na⁺) floats off. The rest stays together: a charged head and a long tail of carbon and hydrogen.</p>
+        <div class="formula">
+          <p class="eq">CH<sub>3</sub>(CH<sub>2</sub>)<sub>16</sub>COONa</p>
+        </div>
+        <div class="toggle" role="radiogroup" aria-label="Molecule picture">
+          <button type="button" id="model-lollipop-btn" role="radio" aria-checked="true" data-model="lollipop">Simple picture</button>
+          <button type="button" id="model-structural-btn" role="radio" aria-checked="false" data-model="structural">Structural formula</button>
+        </div>
+        <div class="model" id="model-structural" hidden>
         <div class="stage stage-scroll">
           <svg class="molecule-svg structural-svg" viewBox="0 0 860 310" role="img" aria-label="Structural formula of sodium stearate. A 17-carbon zigzag tail ends in a COO minus head, with a separate sodium ion.">
             <rect width="860" height="310" fill="#f8fafc"/>
@@ -813,7 +866,7 @@
               <text x="46" y="158" text-anchor="middle" fill="#7c2d12" font-family="Nunito, sans-serif" font-size="16" font-weight="800">CH₃</text>
               <line x1="398" y1="176" x2="498" y2="199" stroke="#9a3412" stroke-width="3"/>
               <path d="M46 252 v10 H398 v-10" fill="none" stroke="#9a3412" stroke-width="1.6"/>
-              <text x="222" y="282" text-anchor="middle" fill="#9a3412" font-family="Nunito, sans-serif" font-size="15" font-weight="800">hydrophobic tail · nonpolar · 17 carbons</text>
+              <text x="222" y="282" text-anchor="middle" fill="#9a3412" font-family="Nunito, sans-serif" font-size="15" font-weight="800">water-fearing tail</text>
             </g>
             <g data-part="head">
               <rect class="head-halo" x="470" y="78" width="360" height="180" rx="16" fill="none" stroke="#1d4ed8" stroke-width="4"/>
@@ -827,38 +880,23 @@
               <circle cx="499" cy="199" r="5" fill="#115e59"/>
               <circle cx="690" cy="168" r="24" fill="#fef9c3" stroke="#a16207" stroke-width="2"/>
               <text x="690" y="174" text-anchor="middle" fill="#713f12" font-family="Nunito, sans-serif" font-size="16" font-weight="800">Na⁺</text>
-              <text x="620" y="252" text-anchor="middle" fill="#115e59" font-family="Nunito, sans-serif" font-size="15" font-weight="800">hydrophilic head · polar, ionic</text>
+              <text x="620" y="252" text-anchor="middle" fill="#115e59" font-family="Nunito, sans-serif" font-size="15" font-weight="800">water-loving head</text>
             </g>
           </svg>
         </div>
-        <p class="hint">Skeletal formula. Each corner or end of the zigzag is a carbon atom, and hydrogens on those carbons are not drawn. The two lines up to oxygen are a double bond. Na⁺ sits nearby as its own ion. Swipe sideways on a small screen to follow the chain.</p>
-      </div>
-
-      <div class="part-buttons" role="group" aria-label="Parts of the soap molecule">
-        <button type="button" class="part-btn" id="btn-tail" data-part="tail" aria-pressed="false">
-          <span>Tail</span>
-          Hydrophobic · nonpolar
-        </button>
-        <button type="button" class="part-btn" id="btn-head" data-part="head" aria-pressed="false">
-          <span>Head</span>
-          Hydrophilic · polar and ionic
-        </button>
-      </div>
-      <div class="explain" id="molecule-explain">
-        <h3 id="molecule-kicker">Two opposite ends</h3>
-        <p id="molecule-copy">Select the head or the tail. Hover or tap the drawing, or use the buttons. The two ends behave in opposite ways around water.</p>
-      </div>
-      <p id="molecule-live" class="sr-only" aria-live="polite"></p>
+        <p class="hint">Each bend is a carbon. Hydrogens on the tail are not drawn. Na⁺ sits nearby as its own ion. Swipe sideways on a small screen.</p>
+        </div>
+      </details>
     </section>
 
     <section class="panel" id="dissolve" aria-labelledby="dissolve-heading">
-      <h2 id="dissolve-heading">2. Polar or nonpolar, soluble or insoluble</h2>
-      <p class="lede">Water is the liquid in the beaker. Add salt, sugar, oil, or more water and watch what happens. The close-up shows the partial charges that decide the result.</p>
-      <p class="rule">Like dissolves like. Polar water dissolves polar and ionic substances. It does not dissolve nonpolar oil and grease.</p>
+      <h2 id="dissolve-heading">2. What mixes with water?</h2>
+      <p class="lede">Drop salt, sugar, oil, or more water into the beaker.</p>
+      <p class="rule">Like dissolves like. Water mixes with salt and sugar. Oil stays separate.</p>
       <div class="dissolve-grid">
         <div class="dissolve-side">
           <figure class="water-card">
-            <h3 id="water-title">Water is polar</h3>
+            <h3 id="water-title">Water is polar (it has charged ends)</h3>
             <svg viewBox="0 0 280 176" aria-hidden="true">
               <line x1="140" y1="70" x2="89" y2="109" stroke="#0c4a6e" stroke-width="4" stroke-linecap="round"/>
               <line x1="140" y1="70" x2="191" y2="109" stroke="#0c4a6e" stroke-width="4" stroke-linecap="round"/>
@@ -873,7 +911,11 @@
               <text x="228" y="124" text-anchor="middle" fill="#1e3a8a" font-family="Nunito, sans-serif" font-size="18" font-weight="800">δ+</text>
               <text x="140" y="162" text-anchor="middle" fill="#334155" font-family="Nunito, sans-serif" font-size="14" font-weight="800">about 104.5°</text>
             </svg>
-            <p id="water-caption">Oxygen holds the shared electrons more tightly than hydrogen does. Chemists call that pull electronegativity. Oxygen is partly negative (δ−) and each hydrogen is partly positive (δ+). The bend keeps those pulls from canceling. δ means a partial charge, smaller than the full charge on Na⁺ or Cl⁻. The bigger circle is oxygen. The smaller circles are hydrogen.</p>
+            <p id="water-caption">The big circle is oxygen. It is a little negative (δ−). The small circles are hydrogen. They are a little positive (δ+).</p>
+            <details class="learn-more">
+              <summary>Learn more</summary>
+              <p>Oxygen pulls on the shared electrons more than hydrogen does. The bend, about 104.5°, keeps those pulls from canceling. δ means a partial charge, smaller than the full charge on Na⁺ or Cl⁻.</p>
+            </details>
           </figure>
           <ul class="substance-list" aria-label="Substances to test in water">
             <li>
@@ -884,7 +926,7 @@
                 </svg>
                 <span>
                   <span class="sub-name">Salt</span>
-                  <span class="sub-meta">NaCl · ionic</span>
+                  <span class="sub-meta">table salt</span>
                 </span>
               </button>
             </li>
@@ -895,7 +937,7 @@
                 </svg>
                 <span>
                   <span class="sub-name">Sugar</span>
-                  <span class="sub-meta">C₁₂H₂₂O₁₁ · polar</span>
+                  <span class="sub-meta">table sugar</span>
                 </span>
               </button>
             </li>
@@ -906,7 +948,7 @@
                 </svg>
                 <span>
                   <span class="sub-name">Oil / grease</span>
-                  <span class="sub-meta">nonpolar · hydrophobic</span>
+                  <span class="sub-meta">cooking oil</span>
                 </span>
               </button>
             </li>
@@ -921,12 +963,12 @@
                 </svg>
                 <span>
                   <span class="sub-name">More water</span>
-                  <span class="sub-meta">H₂O · polar</span>
+                  <span class="sub-meta">H₂O</span>
                 </span>
               </button>
             </li>
           </ul>
-          <p class="hint" id="mix-hint">Drag a substance into the beaker, or select it. On a keyboard, Tab to a substance and press Enter.</p>
+          <p class="hint" id="mix-hint">Drag it into the beaker, or select it.</p>
           <button type="button" class="text-btn" id="btn-empty">Empty the beaker</button>
         </div>
         <div class="dissolve-main">
@@ -942,7 +984,7 @@
           </ul>
           <div class="explain" id="mix-explain" aria-live="polite">
             <p class="result-line"><span class="pill" id="mix-pill">Not tested</span> <strong id="mix-title">Nothing added yet</strong></p>
-            <p id="mix-copy">The beaker starts with water only. Add a substance to see whether it is soluble or insoluble.</p>
+            <p id="mix-copy">The beaker starts with water only. Add something to see if it dissolves.</p>
           </div>
           <ul class="mix-log" id="mix-log" aria-label="Results so far"></ul>
         </div>
@@ -950,8 +992,8 @@
     </section>
 
     <section class="panel" id="wash" aria-labelledby="wash-heading">
-      <h2 id="wash-heading">3. How soap cleans: micelles</h2>
-      <p class="lede">A greasy spot is stuck to cloth. Water alone leaves it there. Add soap, scrub so micelles can form, and rinse them away. The cross-section shows the same pattern up close: heads out, tails in.</p>
+      <h2 id="wash-heading">3. How soap cleans</h2>
+      <p class="lede">Grease sticks to cloth. Water alone cannot pull it off. Add soap, scrub, then rinse.</p>
       <ol class="steps" aria-label="Washing steps">
         <li id="step-dirty" aria-current="step">1 · Water only</li>
         <li id="step-soapy">2 · Soap added</li>
@@ -1010,58 +1052,29 @@
               <circle cx="106" cy="66" r="13"/>
             </g>
           </svg>
-          <p id="micelle-caption">A slice through a micelle. Real micelles are tiny balls, far too small to see. This picture enlarges one. Circle heads face outward, toward water. Line tails face inward. Grease sits in the nonpolar center.</p>
+          <p id="micelle-caption">A micelle is a tiny soap ball. Heads point out, toward water. Tails point in and hold the grease.</p>
         </aside>
       </div>
       <ul class="legend">
-        <li><span class="swatch swatch-head"></span> Circle = hydrophilic head (polar, charged)</li>
-            <li><span class="swatch swatch-tail"></span> Line = hydrophobic tail (nonpolar)</li>
+        <li><span class="swatch swatch-head"></span> Circle = water-loving head</li>
+        <li><span class="swatch swatch-tail"></span> Line = water-fearing tail</li>
         <li><span class="swatch swatch-oil"></span> Gold = oil or grease</li>
         <li><span class="swatch swatch-water"></span> Bent molecule = water</li>
       </ul>
       <div class="explain">
         <h3>What is happening</h3>
-        <p id="wash-status" aria-live="polite">Water alone is in the basin, and the grease is still on the cloth. Grease is nonpolar and hydrophobic. Water is polar. Nothing in plain water can grab the grease, so the spot stays.</p>
+        <p id="wash-status" aria-live="polite">This is water alone. The grease stays on the cloth. Water is polar (it has charged ends). Grease is nonpolar, so water cannot grab it.</p>
       </div>
     </section>
 
     <section class="panel" id="ideas" aria-labelledby="ideas-heading">
       <h2 id="ideas-heading">4. Key ideas</h2>
-      <p class="lede">Short meanings for the words in this simulation. Each link jumps to the picture that shows it.</p>
-      <dl class="vocab">
-        <div>
-          <dt>Hydrophobic</dt>
-          <dd>Water-fearing. The soap tail, oil, and grease are hydrophobic. They stay away from water. <a href="#molecule" data-jump-part="tail">See the tail</a></dd>
-        </div>
-        <div>
-          <dt>Hydrophilic</dt>
-          <dd>Water-loving. The charged soap head is hydrophilic. It is attracted to water. <a href="#molecule" data-jump-part="head">See the head</a></dd>
-        </div>
-        <div>
-          <dt>Polar</dt>
-          <dd>Charge is uneven, often drawn as δ+ and δ−. Water is polar. The soap head is polar and ionic, which is a full charge rather than a partial one. <a href="#dissolve">See water</a></dd>
-        </div>
-        <div>
-          <dt>Nonpolar</dt>
-          <dd>Electrons are shared more evenly, so there are no charged ends. Oil, grease, and the soap tail are nonpolar. <a href="#dissolve" data-jump-mix="oil">See oil</a></dd>
-        </div>
-        <div>
-          <dt>Soluble</dt>
-          <dd>Able to dissolve and spread through a liquid. Salt and sugar are soluble in water. <a href="#dissolve" data-jump-mix="salt">See salt dissolve</a></dd>
-        </div>
-        <div>
-          <dt>Insoluble</dt>
-          <dd>Not able to dissolve. Oil is insoluble in water and stays as its own layer. Soap carries grease off inside micelles, but the grease itself is still insoluble. <a href="#dissolve" data-jump-mix="oil">See oil separate</a></dd>
-        </div>
-        <div>
-          <dt>Micelle</dt>
-          <dd>A tiny cluster of soap. Hydrophilic heads point out toward water. Hydrophobic tails point in and hold grease in the middle. <a href="#wash" data-jump-wash="micelles">See micelles</a></dd>
-        </div>
-        <div>
-          <dt>Surfactant</dt>
-          <dd>A surface-active molecule, such as soap. One end is hydrophilic and the other is hydrophobic, so it can sit between oil and water. Surfactants also help water spread and wet a surface. <a href="#wash" data-jump-wash="soapy">See soap at the grease</a></dd>
-        </div>
-      </dl>
+      <ul class="ideas">
+        <li><strong>Water-loving and water-fearing.</strong> The head is hydrophilic (water-loving). The tail is hydrophobic (water-fearing). <a href="#molecule" data-jump-part="head">See the molecule</a></li>
+        <li><strong>Polar and nonpolar.</strong> Polar water has charged ends. Nonpolar oil does not, so they stay apart. <a href="#dissolve" data-jump-mix="oil">See oil</a></li>
+        <li><strong>Soluble and insoluble.</strong> Salt and sugar dissolve. Oil does not. <a href="#dissolve" data-jump-mix="salt">See salt</a></li>
+        <li><strong>Micelle.</strong> A tiny soap ball. Heads point out. Tails hold the grease inside. <a href="#wash" data-jump-wash="micelles">See it wash</a></li>
+      </ul>
       <a class="companion" href="how-soap-is-made.html">Next: How Soap Is Made</a>
     </section>
   </main>

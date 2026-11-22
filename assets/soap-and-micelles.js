@@ -87,15 +87,15 @@
   var moleculeCopy = {
     none: {
       title: "Two opposite ends",
-      text: "Sodium stearate has a long nonpolar tail and a charged head. Select either end. The lollipop model shows the idea quickly. The structural formula shows the atoms. Both pictures are enlarged: a real molecule is much smaller, and the tail can bend."
+      text: "Tap the head or the tail. They act in opposite ways around water."
     },
     tail: {
-      title: "Hydrophobic tail",
-      text: "This is the hydrophobic tail. Hydrophobic means water-fearing. It is a nonpolar chain of carbon and hydrogen, 17 carbons long in sodium stearate. Electrons are shared evenly along the chain, so water has no charged end to hold. The tail mixes with nonpolar oil and grease instead."
+      title: "Water-fearing tail",
+      text: "This tail is hydrophobic (water-fearing). It is nonpolar, so it has no charged ends. It mixes with oil and grease, not with water."
     },
     head: {
-      title: "Hydrophilic head",
-      text: "This is the hydrophilic head. Hydrophilic means water-loving. It is a carboxylate group, COO⁻, so it is ionic and polar. The negative charge is shared by the two oxygen atoms; drawings often place the minus sign on one oxygen. In solid soap a sodium ion, Na⁺, sits nearby. In water that sodium ion drifts away. The charged head is attracted to polar water."
+      title: "Water-loving head",
+      text: "This head is hydrophilic (water-loving). It is polar and charged, so water holds onto it. The sodium (Na⁺) floats away in water."
     }
   };
 
@@ -131,6 +131,8 @@
     $("model-structural").hidden = lollipop;
     $("model-lollipop-btn").setAttribute("aria-checked", lollipop ? "true" : "false");
     $("model-structural-btn").setAttribute("aria-checked", lollipop ? "false" : "true");
+    var more = $("molecule-more");
+    if (more && !lollipop) more.open = true;
   }
 
   function bindMolecule() {
@@ -177,6 +179,13 @@
         pinPart(link.getAttribute("data-jump-part"));
       });
     });
+
+    var more = $("molecule-more");
+    if (more) {
+      more.addEventListener("toggle", function () {
+        if (!more.open) setModel("lollipop");
+      });
+    }
   }
 
   /* ---------- dissolve lab ---------- */
@@ -186,29 +195,29 @@
       pill: "Soluble",
       pillClass: "pill-yes",
       title: "Table salt in water",
-      log: "Salt (NaCl): soluble · ionic",
-      text: "Salt dissolves, so it is soluble. Sodium chloride is ionic. It splits into Na⁺ and Cl⁻ ions, and those ions spread through the water. In the close-up, water's partly negative oxygen (δ−) points toward Na⁺, and the partly positive hydrogens (δ+) point toward Cl⁻. Polar water dissolves ionic salt. Like dissolves like."
+      log: "Salt: dissolves",
+      text: "Salt dissolves. It is soluble. It splits into charged pieces, Na⁺ and Cl⁻. Water's negative end (δ−) faces Na⁺. The positive ends (δ+) face Cl⁻."
     },
     sugar: {
       pill: "Soluble",
       pillClass: "pill-yes",
       title: "Sugar in water",
-      log: "Sugar: soluble · polar",
-      text: "Sugar dissolves, so it is soluble. A sugar molecule stays whole. It does not split into ions the way salt does. Sugar is polar because it has many O–H groups, and those groups are attracted to polar water. The molecules spread through the beaker."
+      log: "Sugar: dissolves",
+      text: "Sugar dissolves. It is soluble. The molecules stay whole. Sugar is polar, so water can hold it."
     },
     oil: {
       pill: "Insoluble",
       pillClass: "pill-no",
       title: "Oil and grease in water",
-      log: "Oil / grease: insoluble · nonpolar",
-      text: "Oil and grease do not dissolve, so they are insoluble. They are nonpolar and hydrophobic: charge is spread evenly, with no δ+ or δ− ends for water to hold. The oil stays as its own layer. The liquids touch and still separate. Like dissolves like, and these two are not alike."
+      log: "Oil: stays separate",
+      text: "Oil does not dissolve. It is insoluble. Oil is nonpolar and hydrophobic (water-fearing), so it stays in its own layer."
     },
     water: {
       pill: "Mixes",
       pillClass: "pill-yes",
       title: "More water",
-      log: "Water: mixes · polar",
-      text: "The added water mixes straight in. Water is polar, so it dissolves in water. Every molecule has the same partial charges, δ− on oxygen and δ+ on hydrogen, so the new water does not form a separate layer."
+      log: "Water: mixes",
+      text: "More water just mixes in. Water dissolves in water because both are polar."
     }
   };
 
@@ -701,13 +710,13 @@
   };
 
   var WASH_TEXT = {
-    dirty: "Water alone is in the basin, and the grease is still on the cloth. Grease is nonpolar and hydrophobic. Water is polar. Nothing in plain water can grab the grease, so the spot stays. Next: add soap.",
-    soapyDuring: "Soap is entering the water. Watch the tails turn toward the grease. The heads stay out in the water.",
-    soapy: "Soap is at the edge of the grease. Each hydrophobic tail sticks into the nonpolar grease, and each hydrophilic head stays in the water. Soap is a surfactant: it can touch oil and water at the same time. A few soap ions also float in the water. Next: stir or scrub.",
-    micellesDuring: "Scrubbing breaks the grease into smaller drops. Soap surrounds each drop and lifts it off the cloth.",
-    micelles: "Micelles have lifted off the cloth. Hydrophobic tails point inward and trap the grease. Hydrophilic heads point outward, toward the water. Grease is still insoluble. It is packaged so water can carry it. That package is a micelle. Next: rinse.",
-    cleanDuring: "Rinse water is carrying the micelles away. The grease rides inside them.",
-    clean: "The cloth is clean. The micelles left with the rinse water, and the grease went with them. Reset to run water alone again and compare."
+    dirty: "Water alone cannot grab the grease. Grease is nonpolar. Water is polar. Next: add soap.",
+    soapyDuring: "Soap is moving in. Tails turn toward the grease. Heads stay in the water.",
+    soapy: "The water-fearing tails stick into the grease. The water-loving heads stay in the water. Soap can touch both. Next: stir or scrub.",
+    micellesDuring: "Scrubbing breaks the grease into small drops. Soap surrounds each drop.",
+    micelles: "Micelles have lifted off. Tails point in and hold the grease. Heads point out toward the water. Next: rinse.",
+    cleanDuring: "Rinse water carries the micelles away.",
+    clean: "The cloth is clean. The grease left with the soapy water. Reset to try water alone again."
   };
 
   var washName = "dirty";

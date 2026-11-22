@@ -210,6 +210,40 @@
     .formula p { margin: 0.2rem 0; }
     .formula .eq { color: var(--ink); }
 
+    .learn-more {
+      margin: 0.7rem 0 0;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #f8fafc;
+      padding: 0.15rem 0.9rem 0.7rem;
+    }
+
+    .learn-more summary {
+      cursor: pointer;
+      font-weight: 800;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+    }
+
+    .learn-more p { margin: 0.35rem 0; color: var(--muted); }
+
+    .ideas { margin: 0; padding-left: 1.15rem; max-width: 68ch; }
+    .ideas li { margin: 0.45rem 0; color: var(--muted); }
+    .ideas strong { color: var(--ink); }
+
+    .controls .toggle.row {
+      flex: 0 0 auto;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      gap: 0.35rem;
+    }
+
+    .controls .toggle.row button {
+      flex: 0 0 auto;
+      min-width: 4.75rem;
+    }
+
     .explain {
       margin-top: 0.75rem;
       background: #f8fafc;
@@ -307,13 +341,13 @@
     <div class="make-intro">
       <p class="eyebrow">Chemistry simulation</p>
       <h1>How Soap Is Made</h1>
-      <p>A fat or oil and a strong base turn into soap and glycerol. This is the reaction that makes the soap molecules from <a href="soap-and-micelles.html">How Soap Works</a>. It is a follow-on demo, not a scored activity.</p>
+      <p>Fat plus lye makes soap. Then see how that soap cleans in <a href="soap-and-micelles.html">How Soap Works</a>.</p>
       <a class="companion" href="soap-and-micelles.html">Back: How Soap Works</a>
     </div>
 
     <aside class="safety" role="note">
       <strong>Safety — virtual demo only</strong>
-      <p>Lye is caustic. Sodium hydroxide and potassium hydroxide can burn skin and eyes. Real soap-making needs an adult, goggles, and gloves, and a careful recipe. Do not mix lye from this page. Nothing here is a set of instructions for a real batch.</p>
+      <p>Lye can burn skin and eyes. Real soap-making needs an adult, goggles, and gloves. Do not mix lye from this page.</p>
     </aside>
 
     <noscript>
@@ -321,8 +355,8 @@
     </noscript>
 
     <section class="panel" id="lab" aria-labelledby="lab-heading">
-      <h2 id="lab-heading">Saponification in a pot</h2>
-      <p class="lede">Add a triglyceride and lye water, stir them together, then heat. Hydroxide breaks the ester links. Each fatty-acid chain leaves as a soap molecule, and glycerol is left behind. Afterward, bar soap is cured and can be salted out of the glycerol water.</p>
+      <h2 id="lab-heading">Make soap</h2>
+      <p class="lede">Add fat and lye. Stir, then heat. You get soap and glycerol.</p>
       <p class="motion-note">Motion is reduced on this device, so each button jumps straight to the next picture.</p>
 
       <figure class="fat-card">
@@ -341,11 +375,10 @@
             <line x1="240" y1="114" x2="278" y2="114"/>
             <line x1="278" y1="30" x2="278" y2="120" stroke-width="8"/>
           </g>
-          <text x="70" y="146" fill="#9a3412" font-family="Nunito, sans-serif" font-size="15" font-weight="800">fatty-acid chains</text>
-          <text x="214" y="16" fill="#9a3412" font-family="Nunito, sans-serif" font-size="15" font-weight="800">esters</text>
-          <text x="300" y="82" fill="#115e59" font-family="Nunito, sans-serif" font-size="15" font-weight="800">glycerol backbone</text>
+          <text x="70" y="146" fill="#9a3412" font-family="Nunito, sans-serif" font-size="15" font-weight="800">tails</text>
+          <text x="300" y="82" fill="#115e59" font-family="Nunito, sans-serif" font-size="15" font-weight="800">backbone</text>
         </svg>
-        <figcaption>A fat molecule is a triglyceride: one glycerol backbone and three fatty-acid chains. An ester link holds each chain on. Real oils are mixtures of chains. This model uses one kind at a time.</figcaption>
+        <figcaption>A fat has three tails on a backbone. Lye cuts the tails off. Those pieces become soap.</figcaption>
       </figure>
 
       <div class="choices">
@@ -360,24 +393,16 @@
         <fieldset>
           <legend>Base</legend>
           <div class="toggle" role="radiogroup" aria-label="Base" id="base-group">
-            <button type="button" role="radio" data-base="naoh" aria-checked="true">NaOH · bar soap</button>
-            <button type="button" role="radio" data-base="koh" aria-checked="false">KOH · liquid soap</button>
+            <button type="button" role="radio" data-base="naoh" aria-checked="true">NaOH · bar</button>
+            <button type="button" role="radio" data-base="koh" aria-checked="false">KOH · liquid</button>
           </div>
         </fieldset>
         <fieldset>
           <legend>Amount of lye</legend>
           <div class="toggle" role="radiogroup" aria-label="Amount of lye" id="lye-group">
             <button type="button" role="radio" data-lye="low" aria-checked="false">Too little</button>
-            <button type="button" role="radio" data-lye="ok" aria-checked="true">Balanced · 3 per fat</button>
+            <button type="button" role="radio" data-lye="ok" aria-checked="true">Just right</button>
             <button type="button" role="radio" data-lye="high" aria-checked="false">Too much</button>
-          </div>
-        </fieldset>
-        <fieldset>
-          <legend>Heat</legend>
-          <div class="toggle" role="radiogroup" aria-label="Heat" id="heat-group">
-            <button type="button" role="radio" data-heat="none" aria-checked="false">No extra heat</button>
-            <button type="button" role="radio" data-heat="warm" aria-checked="true">Warm · about 45°C</button>
-            <button type="button" role="radio" data-heat="hot" aria-checked="false">Hot · hot process</button>
           </div>
         </fieldset>
       </div>
@@ -388,6 +413,10 @@
         <button type="button" class="action is-primary" id="btn-add">Add ingredients</button>
         <button type="button" class="action" id="btn-mix" disabled>Mix / stir</button>
         <button type="button" class="action" id="btn-heat" disabled>Heat</button>
+        <div class="toggle row" role="radiogroup" aria-label="Heat" id="heat-group">
+          <button type="button" role="radio" data-heat="warm" aria-checked="true">Warm</button>
+          <button type="button" role="radio" data-heat="hot" aria-checked="false">Hot</button>
+        </div>
         <button type="button" class="action" id="btn-cure" disabled>Cure</button>
         <button type="button" class="action is-reset" id="btn-reset">Reset</button>
       </div>
@@ -396,61 +425,48 @@
         <canvas id="pot-canvas" class="pot-canvas" aria-hidden="true"></canvas>
       </div>
       <ul class="legend">
-        <li><span class="swatch swatch-chain"></span> Wavy line = fatty-acid chain</li>
-        <li><span class="swatch swatch-ester"></span> Open circle = ester link</li>
-        <li><span class="swatch swatch-glycerol"></span> Green bar = glycerol</li>
-        <li><span class="swatch swatch-oh"></span> Blue circle = hydroxide, OH⁻</li>
+        <li><span class="swatch swatch-chain"></span> Wavy line = fat tail</li>
+        <li><span class="swatch swatch-glycerol"></span> Green bar = backbone</li>
+        <li><span class="swatch swatch-oh"></span> Blue circle = lye (OH⁻)</li>
         <li><span class="swatch swatch-head"></span> Filled circle = soap head</li>
       </ul>
 
       <div class="meter-wrap">
-        <div class="meter" id="meter" role="meter" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0" aria-valuetext="No ester links broken yet">
+        <div class="meter" id="meter" role="meter" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0" aria-valuetext="No tails cut free yet">
           <span id="meter-fill"></span>
         </div>
-        <p class="meter-label" id="meter-label">0 of 3 ester links broken</p>
+        <p class="meter-label" id="meter-label">0 of 3 tails cut free</p>
       </div>
 
       <div class="formula" id="equation">
-        <p class="eq" id="eq-words">triglyceride + 3 NaOH → glycerol + 3 sodium stearate</p>
-        <p class="eq" id="eq-symbols">C<sub>57</sub>H<sub>110</sub>O<sub>6</sub> + 3 NaOH → C<sub>3</sub>H<sub>5</sub>(OH)<sub>3</sub> + 3 C<sub>17</sub>H<sub>35</sub>COONa</p>
-        <p id="eq-note">Balanced saponification uses three base molecules for each triglyceride, one for each ester.</p>
+        <p class="eq" id="eq-words">Fat/oil + Lye → Soap + Glycerol</p>
+        <details class="learn-more">
+          <summary>Show the chemistry</summary>
+          <p class="eq" id="eq-symbols">C<sub>57</sub>H<sub>110</sub>O<sub>6</sub> + 3 NaOH → C<sub>3</sub>H<sub>5</sub>(OH)<sub>3</sub> + 3 C<sub>17</sub>H<sub>35</sub>COONa</p>
+          <p id="eq-note">A balanced batch uses 3 lye molecules for each fat, one for each tail.</p>
+        </details>
       </div>
 
       <div class="explain">
         <h3 id="status-title">Empty pot</h3>
-        <p id="make-status" aria-live="polite">Choose a fat, a base, and how much lye, then add them to the pot. Animal fat and a balanced amount of NaOH make sodium stearate, the soap molecule from How Soap Works.</p>
+        <p id="make-status" aria-live="polite">Pick a fat and a lye. Then add them to the pot.</p>
       </div>
+      <details class="learn-more">
+        <summary>Learn more</summary>
+        <p>A fat molecule is a triglyceride. Three tails are held on by ester links. Lye cuts those links.</p>
+        <p>In this model, animal fat is glyceryl tristearate. Olive oil has bent oleic tails, so the soap is softer. Coconut oil has shorter lauric tails, so it makes more bubbles.</p>
+        <p>NaOH makes bar soap. KOH makes liquid soap. After the reaction, salt can pull the soap out of the glycerol water. That is called salting out. A bar then cures: it dries and hardens.</p>
+      </details>
     </section>
 
     <section class="panel" id="ideas" aria-labelledby="ideas-heading">
       <h2 id="ideas-heading">Key ideas</h2>
-      <p class="lede">Short meanings for the words in this reaction.</p>
-      <dl class="vocab">
-        <div>
-          <dt>Saponification</dt>
-          <dd>The reaction that makes soap. A triglyceride and a strong base become glycerol and three fatty-acid salts. <a href="#lab">See the pot</a></dd>
-        </div>
-        <div>
-          <dt>Triglyceride</dt>
-          <dd>A fat or oil molecule. One glycerol backbone holds three fatty-acid chains. The model animal fat is glyceryl tristearate, C<sub>57</sub>H<sub>110</sub>O<sub>6</sub>.</dd>
-        </div>
-        <div>
-          <dt>Ester</dt>
-          <dd>The link that joins each fatty acid to glycerol. The hydroxide ion breaks that link. A triglyceride has three esters, so it needs three hydroxide ions.</dd>
-        </div>
-        <div>
-          <dt>Base / lye</dt>
-          <dd>NaOH or KOH, dissolved in water. The hydroxide ion, OH⁻, does the chemistry. NaOH makes bar soap. KOH makes softer or liquid soap. Too much lye left over is caustic.</dd>
-        </div>
-        <div>
-          <dt>Glycerol</dt>
-          <dd>The small molecule left when the three chains break off, C<sub>3</sub>H<sub>5</sub>(OH)<sub>3</sub>. It is also called glycerin. It can stay in the soap or be separated by salting out.</dd>
-        </div>
-        <div>
-          <dt>Fatty acid salt</dt>
-          <dd>Soap. Sodium stearate is the sodium salt of stearic acid. Each one has a polar, charged head and a nonpolar tail. <a href="soap-and-micelles.html">See how that molecule cleans</a></dd>
-        </div>
-      </dl>
+      <ul class="ideas">
+        <li><strong>Fat + lye → soap + glycerol.</strong> This reaction is called saponification. <a href="#lab">See the pot</a></li>
+        <li><strong>Bar or liquid.</strong> NaOH makes bar soap. KOH makes liquid soap.</li>
+        <li><strong>Lye amount matters.</strong> Too little leaves greasy soap. Too much leaves lye, which can burn.</li>
+        <li><strong>Two ends.</strong> Each soap molecule has a water-loving head and a water-fearing tail. <a href="soap-and-micelles.html">See it clean</a></li>
+      </ul>
       <a class="companion" href="soap-and-micelles.html">Back: How Soap Works</a>
     </section>
   </main>

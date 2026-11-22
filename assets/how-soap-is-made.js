@@ -64,19 +64,19 @@
       count: 2,
       break: 2,
       name: "Too little lye",
-      result: "Two ester links break, and one fatty-acid chain stays attached. Leftover oil makes greasy soap. A tiny bit of extra oil is sometimes left on purpose to make a milder bar. Too much leftover oil stays greasy."
+      result: "Not enough lye. One tail stays stuck, so the soap is greasy."
     },
     ok: {
       count: 3,
       break: 3,
-      name: "Balanced lye",
-      result: "Each triglyceride meets three hydroxide ions, one for each ester. The fat becomes three soap molecules and glycerol. Each soap molecule has a polar head and a nonpolar tail, the same pattern that lifts grease in How Soap Works."
+      name: "Just right",
+      result: "You get soap and glycerol. Each soap molecule has a water-loving head and a water-fearing tail."
     },
     high: {
       count: 5,
       break: 3,
       name: "Too much lye",
-      result: "All three esters break, and hydroxide is left over. Leftover lye is caustic. It can burn skin. Real recipes weigh the lye so this does not happen."
+      result: "Leftover lye can burn skin. Real recipes measure lye carefully."
     }
   };
 
@@ -197,18 +197,23 @@
     var o = oil();
     var b = base();
     var L = lye();
-    $("choice-note").textContent = o.name + " is " + o.model + ". " + o.tail + " " + b.note;
-    $("eq-words").textContent = "triglyceride + 3 " + b.symbol + " → glycerol + 3 " + soapName();
-    $("eq-symbols").innerHTML = o.formula + " + 3 " + b.symbol + " → C<sub>3</sub>H<sub>5</sub>(OH)<sub>3</sub> + 3 " + o.soapStem + b.metal;
-    var note = "The balanced equation uses 3 " + b.symbol + " for each " + o.fatName + ", one hydroxide for each ester.";
-    if (state.lye === "low") note += " This pot has only 2, so one ester cannot break.";
-    if (state.lye === "high") note += " This pot has 5, so hydroxide is left over after the three esters break.";
+    var shortOil = {
+      olive: "Olive oil makes a softer soap.",
+      coconut: "Coconut oil makes lots of bubbles.",
+      tallow: "Animal fat makes a hard bar."
+    };
+    $("choice-note").textContent = shortOil[state.oil] + " " + (state.base === "naoh" ? "NaOH makes bar soap." : "KOH makes liquid soap.");
+    $("eq-words").textContent = "Fat/oil + Lye → Soap + Glycerol";
+    $("eq-symbols").innerHTML = o.fatName + " + 3 " + b.symbol + " → glycerol + 3 " + soapName() + "<br>" + o.formula + " + 3 " + b.symbol + " → C<sub>3</sub>H<sub>5</sub>(OH)<sub>3</sub> + 3 " + o.soapStem + b.metal;
+    var note = "A balanced batch uses 3 " + b.symbol + " for each fat, one for each tail.";
+    if (state.lye === "low") note += " This pot has only 2, so one tail stays on.";
+    if (state.lye === "high") note += " This pot has 5, so some lye is left over.";
     $("eq-note").textContent = note;
 
     var whole = Math.floor(brokenCount() + 0.001);
-    var label = whole + " of 3 ester links broken";
+    var label = whole + " of 3 tails cut free";
     if (state.lye === "low" && whole >= 2 && state.stage !== "empty") {
-      label = "2 of 3 ester links broken · one chain still attached";
+      label = "2 of 3 tails cut free · one tail still attached";
     }
     $("meter-label").textContent = label;
     $("meter-fill").style.width = (brokenCount() / 3 * 100) + "%";
@@ -216,27 +221,27 @@
     $("meter").setAttribute("aria-valuetext", label);
 
     var title = "Empty pot";
-    var text = "Choose a fat, a base, and how much lye, then add them. Animal fat with a balanced amount of NaOH makes sodium stearate, the soap molecule from How Soap Works.";
+    var text = "Pick a fat and a lye. Then add them to the pot.";
     if (state.stage === "layered") {
       title = "Ingredients added";
-      text = "The fat floats on the lye water. Hydroxide has to reach the ester links, and the two layers barely touch. Stir them together. The water holds " + L.count + " OH⁻ ions and " + L.count + " " + b.ion + " ions for each fat molecule in this model.";
+      text = "The fat floats on the lye water. Stir so they can meet.";
     } else if (state.stage === "mixing") {
       title = "Stirring";
-      text = "Stirring mixes the fat into the lye water. Hydroxide can break an ester only where the fat and the lye water meet.";
+      text = "Stirring mixes the fat into the lye water.";
     } else if (state.stage === "mixed") {
       title = "Ready to heat";
-      text = "The fat and the lye water are mixed, so hydroxide can reach the ester links. Heat speeds the attack. With no extra heat, cold-process soap still reacts slowly and finishes while the bar cures. Temperature now: " + HEATS[state.heat].temp + ".";
+      text = "The fat and lye are mixed. Heat makes the reaction faster.";
     } else if (state.stage === "reacting") {
-      title = "Hydroxide is breaking esters";
-      text = "The hydroxide ion attacks an ester link and that link breaks. The fatty-acid chain leaves as a carboxylate, the soap, with " + b.ion + " nearby. The glycerol keeps an OH where the chain was attached. Heat is " + HEATS[state.heat].label.toLowerCase() + ", " + HEATS[state.heat].temp + ".";
+      title = "Lye is cutting the tails";
+      text = "Each tail that breaks off becomes a soap molecule. Glycerol is left behind.";
     } else if (state.stage === "done") {
       title = L.name;
-      text = L.result + " The base was " + b.symbol + ", which makes " + b.product + ".";
+      text = L.result;
     } else if (state.stage === "cured") {
-      title = state.base === "naoh" ? "Curing the bar" : "Liquid soap";
+      title = state.base === "naoh" ? "The bar is drying" : "Liquid soap";
       text = state.base === "naoh"
-        ? "The soap has been separated and the bar is curing. Water evaporates, the bar hardens, and the last bit of reaction can finish. Many bars cure for several weeks. Adding salt makes soap less soluble so it separates from the glycerol water. That step is called salting out."
-        : "Potassium soap stays soft. It is dissolved in more water to make liquid soap instead of cured into a hard bar. Salt can still separate the soap from the glycerol water. That step is called salting out.";
+        ? "The bar dries and gets harder. This is called curing."
+        : "This soap stays soft. Mix it with water to make liquid soap.";
     }
     $("status-title").textContent = title;
     $("make-status").textContent = text;
@@ -465,17 +470,17 @@ function drawFat(ctx, x, y, scale, parts, info, targets) {
 
       var narrow = w < 560;
       if (mix < 0.4) {
-        pill(ctx, narrow ? "fat" : "fat / triglyceride", p.cx - 20, p.top + 46, "middle");
-        pill(ctx, narrow ? "lye water" : "lye water · OH⁻", p.cx, p.bot - 36, "middle");
+        pill(ctx, "fat", p.cx - 20, p.top + 46, "middle");
+        pill(ctx, "lye water", p.cx, p.bot - 36, "middle");
       }
       var active = -1;
       for (var i = 0; i < 3; i++) if (parts[i] > 0.08 && parts[i] < 0.7) active = i;
       if (active >= 0) {
-        pill(ctx, narrow ? "OH⁻ attacks" : "hydroxide attacks the ester", p.tl + 8, p.top + 18, "start");
+        pill(ctx, "lye cuts a tail", p.tl + 8, p.top + 18, "start");
       }
       if (parts[0] + parts[1] + parts[2] > 2.2) {
         pill(ctx, "glycerol", fat.spineX + 16, fat.spineY, "start");
-        pill(ctx, narrow ? "soap molecules" : "polar heads, nonpolar tails", p.cx, p.bot - 22, "middle");
+        pill(ctx, "soap", p.cx, p.bot - 22, "middle");
       } else if (state.lye === "low" && parts[1] > 0.95) {
         pill(ctx, "chain still attached", fat.spineX - 20, fat.spineY + fat.gap + 22, "middle");
       }
@@ -522,24 +527,8 @@ function drawFat(ctx, x, y, scale, parts, info, targets) {
   function drawCured(ctx, w, h) {
     ctx.fillStyle = "#e7f0f7";
     ctx.fillRect(0, 0, w, h);
-    var narrow = w < 640;
-    var splitX = narrow ? w * 0.5 : w * 0.3;
-    var splitY = narrow ? h * 0.28 : h * 0.48;
-
-    traceRoundRect(ctx, splitX - 70, splitY - 78, 140, 150, 12);
-    ctx.fillStyle = "#e0f2fe";
-    ctx.fill();
-    ctx.fillStyle = "#fef3c7";
-    ctx.fillRect(splitX - 70, splitY - 78, 140, 58);
-    ctx.strokeStyle = "#64748b";
-    ctx.lineWidth = 2;
-    ctx.stroke();
-    pill(ctx, "soap", splitX, splitY - 50, "middle");
-    pill(ctx, "glycerol water", splitX, splitY + 28, "middle");
-    pill(ctx, "salting out", splitX, splitY - 96, "middle");
-
-    var px = narrow ? w * 0.5 : w * 0.7;
-    var py = narrow ? h * 0.72 : h * 0.5;
+    var px = w * 0.5;
+    var py = h * 0.48;
     if (state.base === "naoh") {
       traceRoundRect(ctx, px - 78, py - 28, 156, 64, 12);
       ctx.fillStyle = "#fde68a";
